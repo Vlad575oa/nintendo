@@ -3,114 +3,104 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Clear existing data
   await prisma.product.deleteMany({});
   await prisma.category.deleteMany({});
 
-  // Create Categories
   const xboxCategory = await prisma.category.create({
-    data: {
-      name: "Xbox",
-      slug: "xbox",
-    },
+    data: { name: "Xbox", slug: "xbox" },
   });
 
-  const psCategory = await prisma.category.create({
-    data: {
-      name: "PlayStation",
-      slug: "playstation",
-    },
-  });
-
-  const nintendoCategory = await prisma.category.create({
-    data: {
-      name: "Nintendo",
-      slug: "nintendo",
-    },
-  });
-
-  await prisma.category.createMany({
+  const categories = await prisma.category.createMany({
     data: [
+      { name: "PlayStation", slug: "playstation" },
+      { name: "Nintendo", slug: "nintendo" },
       { name: "Геймпады", slug: "gamepads" },
       { name: "Аксессуары", slug: "accessories" },
       { name: "Игры", slug: "games" },
     ],
   });
 
-  // Create Products for Xbox
   const products = [
     {
-      name: "Xbox Series X",
-      slug: "xbox-series-x",
-      description: "Самая мощная консоль Xbox в истории.",
-      price: 55000,
-      priceOld: 60000,
-      images: ["https://images.unsplash.com/photo-1621259182978-f09e5e2ca09a?q=80&w=1000"],
-      inStock: true,
-      isNew: true,
-      brand: "Microsoft",
-      color: "Black",
-      attributes: { "SSD": "1TB", "Resolution": "4K" },
-      categoryId: xboxCategory.id,
-    },
-    {
-      name: "Xbox Series S",
-      slug: "xbox-series-s",
-      description: "Компактная и мощная игровая консоль.",
-      price: 30000,
-      priceOld: 35000,
+      name: "Microsoft Xbox Series S Robot White 512GB SSD",
+      slug: "xbox-series-s-white-512gb",
+      description: "Игровая приставка Microsoft Xbox Series S Robot White 512 Гб SSD. Самая компактная консоль нового поколения.",
+      price: 39989,
+      priceOld: 44990,
       images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
-      inStock: true,
-      isNew: false,
       brand: "Microsoft",
       color: "White",
-      attributes: { "SSD": "512GB", "Resolution": "1440p" },
+      attributes: { "Память": "512Гб", "Цвет": "Белый" },
       categoryId: xboxCategory.id,
+      isNew: true,
     },
     {
-      name: "Геймпад Xbox Deep Pink",
-      slug: "xbox-controller-pink",
-      description: "Беспроводной геймпад Xbox.",
-      price: 6500,
-      images: ["https://images.unsplash.com/photo-1592840496694-26d035b52b48?q=80&w=1000"],
-      brand: "Microsoft",
-      color: "Deep Pink",
-      categoryId: xboxCategory.id,
-    },
-    {
-      name: "Xbox Game Pass Ultimate",
-      slug: "xbox-game-pass-ultimate",
-      description: "Подписка на 12 месяцев.",
-      price: 12000,
-      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
-      brand: "Microsoft",
-      categoryId: xboxCategory.id,
-    },
-    {
-      name: "Зарядная станция для геймпадов",
-      slug: "xbox-charging-station",
-      description: "Зарядная станция на два геймпада.",
-      price: 2500,
+      name: "Microsoft Xbox Series S Carbon Black 1TB SSD",
+      slug: "xbox-series-s-black-1tb",
+      description: "Игровая приставка Microsoft Xbox Series S Carbon Black 1 Тб SSD. Полностью цифровая консоль в стильном черном цвете.",
+      price: 45045,
+      priceOld: 49990,
       images: ["https://images.unsplash.com/photo-1621259182978-f09e5e2ca09a?q=80&w=1000"],
       brand: "Microsoft",
+      color: "Black",
+      attributes: { "Память": "1Тб", "Цвет": "Черный" },
+      categoryId: xboxCategory.id,
+      isSale: true,
+    },
+    {
+      name: "Microsoft Xbox Series S Robot White 1TB SSD",
+      slug: "xbox-series-s-white-1tb",
+      description: "Игровая приставка Microsoft Xbox Series S Robot White 1 Тб SSD. Теперь с увеличенным объемом памяти для ваших игр.",
+      price: 46800,
+      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
+      brand: "Microsoft",
+      color: "White",
+      attributes: { "Память": "1Тб", "Цвет": "Белый" },
+      categoryId: xboxCategory.id,
+    },
+    {
+      name: "Microsoft Xbox Series S + Game Pass на 3 месяца",
+      slug: "xbox-series-s-game-pass-bundle",
+      description: "Комплект Xbox Series S с подпиской Game Pass Ultimate на 3 месяца. Начните играть сразу!",
+      price: 33787,
+      priceOld: 38500,
+      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
+      brand: "Microsoft",
+      color: "White",
+      attributes: { "Подписка": "3 месяца", "Память": "512Гб" },
+      categoryId: xboxCategory.id,
+    },
+    {
+      name: "Xbox Series S + 2-й геймпад Carbon Black + Зарядная станция",
+      slug: "xbox-series-s-bundle-black",
+      description: "Полный игровой комплект: консоль Xbox Series S, дополнительный черный геймпад и зарядная станция iPega.",
+      price: 47148,
+      images: ["/xbox_series_s_bundles_1776268493407.png"],
+      brand: "Microsoft",
+      color: "White/Black",
+      attributes: { "Геймпады": "2 шт", "Аксессуары": "Зарядная станция" },
+      categoryId: xboxCategory.id,
+    },
+    {
+      name: "Xbox Series S + 2-й геймпад Pulse Red + Зарядная станция",
+      slug: "xbox-series-s-bundle-red",
+      description: "Яркий комплект: консоль Xbox Series S, дополнительный красный геймпад Pulse Red и зарядная станция.",
+      price: 46989,
+      images: ["/xbox_series_s_bundles_1776268493407.png"],
+      brand: "Microsoft",
+      color: "White/Red",
+      attributes: { "Геймпады": "2 шт", "Цвет геймпада": "Pulse Red" },
       categoryId: xboxCategory.id,
     },
   ];
 
   for (const product of products) {
-    await prisma.product.create({
-      data: product,
-    });
+    await prisma.product.create({ data: product });
   }
 
-  console.log("Seed completed!");
+  console.log("Seed completed with parsed data!");
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch((e) => console.error(e))
+  .finally(async () => await prisma.$disconnect());
