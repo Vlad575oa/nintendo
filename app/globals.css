@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #e60012;
+  --secondary: #2d2d2d;
+}
+
+body {
+  @apply bg-white;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
