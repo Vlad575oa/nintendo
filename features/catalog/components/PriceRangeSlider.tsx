@@ -1,6 +1,6 @@
 "use client";
 
-import * as Slider from "@radix-ui/react-slider";
+import { Slider } from "@/components/ui/Slider";
 
 interface PriceRangeSliderProps {
   min: number;
@@ -11,6 +11,10 @@ interface PriceRangeSliderProps {
   onChangeMax: (v: number) => void;
 }
 
+/**
+ * Premium Price Range Slider for the Catalog Sidebar
+ * Integrates the global premium Slider component with smooth movement
+ */
 export const PriceRangeSlider = ({
   min,
   max,
@@ -20,27 +24,22 @@ export const PriceRangeSlider = ({
   onChangeMax,
 }: PriceRangeSliderProps) => {
   return (
-    <div className="py-4 px-1">
-      <Slider.Root
-        className="relative flex items-center select-none touch-none w-full"
-        style={{ height: 24 }}
-        value={[valueMin, valueMax]}
+    <div className="px-1">
+      <Slider
         min={min}
         max={max}
-        step={100}
-        minStepsBetweenThumbs={10}
+        value={[valueMin, valueMax]}
         onValueChange={([newMin, newMax]) => {
           onChangeMin(newMin);
           onChangeMax(newMax);
         }}
-      >
-        <Slider.Track className="relative grow rounded-full h-[3px] bg-neutral-100">
-          <Slider.Range className="absolute rounded-full h-full bg-primary" />
-        </Slider.Track>
-
-        <Slider.Thumb className="block w-[22px] h-[22px] bg-white border-[2.5px] border-primary rounded-full shadow-[0_2px_10px_rgba(230,0,18,0.28)] focus:outline-none hover:scale-110 active:scale-95 transition-transform cursor-grab active:cursor-grabbing" />
-        <Slider.Thumb className="block w-[22px] h-[22px] bg-white border-[2.5px] border-primary rounded-full shadow-[0_2px_10px_rgba(230,0,18,0.28)] focus:outline-none hover:scale-110 active:scale-95 transition-transform cursor-grab active:cursor-grabbing" />
-      </Slider.Root>
+        // "Free" movement: step 1 for price range up to 200k is very smooth
+        step={1}
+        // Minimal distance between thumbs to prevent overlap
+        minStepsBetweenThumbs={1000} 
+        showValueLabel={false}
+        className="py-2"
+      />
     </div>
   );
 };

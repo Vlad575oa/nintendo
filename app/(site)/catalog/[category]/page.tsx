@@ -3,7 +3,9 @@ import { ProductCard } from "@/features/product/components/ProductCard";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { SortingSelect } from "@/features/catalog/components/SortingSelect";
 import { ActiveFiltersBar } from "@/features/catalog/components/ActiveFiltersBar";
+import { CATEGORY_FILTERS } from "@/features/catalog/config/categoryFilters";
 import { Metadata } from "next";
+import { Prisma } from "@prisma/client";
 
 export const revalidate = 3600;
 
@@ -24,56 +26,73 @@ export async function generateMetadata({
 
 interface CatalogPageProps {
   params: { category: string };
-  searchParams: {
-    priceMin?: string;
-    priceMax?: string;
-    color?: string;
-    status?: string;
-    sort?: string;
-    page?: string;
-  };
+  searchParams: Record<string, string | undefined>;
 }
 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: CatalogPageProps) {
+export default async function CategoryPage({ params, searchParams }: CatalogPageProps) {
   const { category } = params;
   const { priceMin, priceMax, color, status, sort, page = "1" } = searchParams;
 
   const pageSize = 12;
   const skip = (parseInt(page) - 1) * pageSize;
 
-  // ── Build Prisma where filter ──────────────────────────────────────────────
-  const where: any = {};
+  // ── Common filters ─────────────────────────────────────────────────────────
+  const andConditions: Prisma.ProductWhereInput[] = [];
 
   if (category !== "all") {
-    where.category = { slug: category };
+    andConditions.push({ category: { slug: category } });
   }
 
   if (priceMin || priceMax) {
-    where.price = {
-      ...(priceMin ? { gte: parseInt(priceMin) * 100 } : {}),
-      ...(priceMax ? { lte: parseInt(priceMax) * 100 } : {}),
-    };
+    andConditions.push({
+      price: {
+        ...(priceMin ? { gte: parseInt(priceMin) * 100 } : {}),
+        ...(priceMax ? { lte: parseInt(priceMax) * 100 } : {}),
+      },
+    });
   }
 
   if (color) {
     const colorValues = color.split(",").filter(Boolean);
-    where.color = colorValues.length === 1 ? colorValues[0] : { in: colorValues };
+    andConditions.push({
+      color: colorValues.length === 1 ? colorValues[0] : { in: colorValues },
+    });
   }
 
   if (status) {
     const statusValues = status.split(",").filter(Boolean);
     const wantsInStock = statusValues.includes("inStock");
     const wantsOnOrder = statusValues.includes("onOrder");
-    // Apply only when one option is selected (both = no restriction)
-    if (wantsInStock && !wantsOnOrder) where.inStock = true;
-    if (wantsOnOrder && !wantsInStock) where.inStock = false;
+    if (wantsInStock && !wantsOnOrder) andConditions.push({ inStock: true });
+    if (wantsOnOrder && !wantsInStock) andConditions.push({ inStock: false });
   }
 
+  // ── Category-specific attribute filters ───────────────────────────────────
+  const categoryFilterSections = CATEGORY_FILTERS[category] ?? [];
+  for (const section of categoryFilterSections) {
+    const raw = searchParams[section.paramKey];
+    if (!raw) continue;
+    const values = raw.split(",").filter(Boolean);
+    if (!values.length) continue;
+
+    // Use JSON path filtering on the attributes field
+    // For multi-value → OR across values
+    const attrKey = section.paramKey.replace("attr_", "");
+    andConditions.push({
+      OR: values.map((v) => ({
+        attributes: {
+          path: [attrKey],
+          string_contains: v,
+        },
+      })),
+    });
+  }
+
+  const where: Prisma.ProductWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
   // ── Sorting ────────────────────────────────────────────────────────────────
-  let orderBy: any = { createdAt: "desc" };
+  let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "desc" };
   if (sort === "price-asc") orderBy = { price: "asc" };
   if (sort === "price-desc") orderBy = { price: "desc" };
   if (sort === "newest") orderBy = { createdAt: "desc" };
@@ -87,7 +106,9 @@ export default async function CategoryPage({
       : Promise.resolve({ name: "Весь каталог" }),
   ]);
 
-  const hasFilters = !!(priceMin || priceMax || color || status);
+  const hasFilters = Object.keys(searchParams).some(
+    (k) => k !== "sort" && k !== "page" && searchParams[k]
+  );
 
   return (
     <main className="container py-12">
@@ -111,7 +132,6 @@ export default async function CategoryPage({
             <SortingSelect />
           </div>
 
-          {/* Active filter chips */}
           <ActiveFiltersBar />
 
           {products.length > 0 ? (

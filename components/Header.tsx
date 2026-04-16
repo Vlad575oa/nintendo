@@ -1,11 +1,12 @@
 "use client";
 
 import { useCartStore } from "@/features/cart/store/useCartStore";
-import { ShoppingCart, Menu, User, LogOut, ChevronDown } from "lucide-react";
+import { ShoppingCart, Menu, User, LogOut, ChevronDown, Package, Heart } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Search } from "@/features/search/components/Search";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface CurrentUser {
   id: number;
@@ -23,14 +24,12 @@ export const Header = () => {
 
   useEffect(() => {
     setMounted(true);
-    // Fetch current auth state
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then((data) => setUser(data))
       .catch(() => {});
   }, []);
 
-  // Close menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -49,117 +48,121 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100">
-      <div className="container px-6 h-20 flex items-center">
-        {/* Mobile Menu */}
-        <button className="lg:hidden p-2 text-neutral-600 mr-4">
-          <Menu size={24} />
-        </button>
-
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-            <span className="text-white font-black text-xl italic">N</span>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-neutral-100 h-[84px] flex items-center shadow-sm">
+      <div className="container px-4 flex items-center gap-4 xl:gap-8">
+        
+        {/* Logo - Sleek & Modern */}
+        <Link href="/" className="flex items-center gap-2 group shrink-0">
+          <div className="w-11 h-11 bg-primary rounded-[14px] flex items-center justify-center shadow-[0_5px_15px_rgba(230,0,18,0.25)] transition-all group-hover:scale-105 active:scale-95 overflow-hidden relative">
+            <span className="text-white font-black text-2xl italic leading-none ml-0.5 z-10">N</span>
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-black/10 transition-transform group-hover:translate-y-full" />
           </div>
-          <span className="text-xl font-black text-secondary tracking-tighter uppercase hidden xl:block">
-            Nintendo <span className="text-primary">Shop</span>
-          </span>
+          <div className="hidden lg:flex flex-col leading-none -space-y-0.5">
+            <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em] mb-0.5">Official</span>
+            <span className="text-[17px] font-black text-secondary tracking-tighter uppercase">
+                Nintendo<span className="text-primary italic">.</span>Shop
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-6 ml-8 mr-4 shrink-0">
-          <Link
-            href="/catalog/playstation"
-            className="text-sm font-bold text-neutral-600 hover:text-primary transition-colors"
-          >
-            PlayStation
-          </Link>
-          <Link
-            href="/catalog/xbox"
-            className="text-sm font-bold text-neutral-600 hover:text-primary transition-colors"
-          >
-            Xbox
-          </Link>
-          <Link
-            href="/catalog/nintendo"
-            className="text-sm font-bold text-neutral-600 hover:text-primary transition-colors"
-          >
-            Nintendo
-          </Link>
-        </nav>
+        {/* Ozon-style Catalog Button */}
+        <button className="hidden lg:flex items-center gap-2 px-6 h-11 bg-primary hover:bg-red-700 text-white rounded-[14px] font-black text-sm uppercase tracking-tighter shadow-[0_5px_15px_rgba(230,0,18,0.2)] transition-all group shrink-0">
+          <Menu size={18} className="transition-transform group-hover:rotate-90" />
+          <span>Каталог</span>
+        </button>
 
-        {/* Search Bar */}
-        <div className="hidden md:flex flex-1 justify-center">
+        {/* Central Search Bar - Ozon Style Integration */}
+        <div className="flex-1 min-w-[300px] max-w-3xl">
           <Search />
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-4">
-          {/* Auth area */}
-          {mounted && user ? (
-            <div className="relative hidden sm:block" ref={menuRef}>
-              <button
+        {/* Action Icons Panel - Ozon Style with Labels */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          
+          {/* Auth Area */}
+          <div className="relative" ref={menuRef}>
+            {mounted && user ? (
+              <button 
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-neutral-50 transition-colors"
+                className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-50 transition-all group"
               >
-                <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User size={14} className="text-primary" />
+                <div className="relative">
+                    <User size={24} className="text-secondary group-hover:text-primary transition-colors" />
+                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white" />
                 </div>
-                <span className="text-sm font-bold text-secondary max-w-[100px] truncate">
-                  {user.name ?? user.email ?? "Профиль"}
+                <span className="text-[10px] font-bold text-neutral-400 mt-1.5 transition-colors group-hover:text-secondary truncate max-w-full px-1">
+                    {user.name?.split(' ')[0] ?? "Профиль"}
                 </span>
-                <ChevronDown
-                  size={14}
-                  className={`text-neutral-300 transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
-                />
+                
+                {/* User Dropdown */}
+                {userMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl border border-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2 z-[60] animate-in fade-in slide-in-from-top-2">
+                         <div className="px-3 py-3 mb-2 bg-neutral-50 rounded-xl">
+                            <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest leading-none">Личный кабинет</p>
+                            <p className="text-sm font-black text-secondary mt-1 truncate">{user.name ?? user.email}</p>
+                        </div>
+                        <ul className="space-y-1">
+                            <li>
+                                <button className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-neutral-600 hover:bg-neutral-50 rounded-xl transition-all">
+                                    <Package size={16} />
+                                    Мои заказы
+                                </button>
+                            </li>
+                            <li>
+                                <button className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-neutral-600 hover:bg-neutral-50 rounded-xl transition-all">
+                                    <Heart size={16} />
+                                    Избранное
+                                </button>
+                            </li>
+                            <li className="pt-2 border-t border-neutral-50">
+                                <button 
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                >
+                                    <LogOut size={16} />
+                                    Выйти из профиля
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                )}
               </button>
-
-              {/* Dropdown */}
-              {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl border border-neutral-100 shadow-xl shadow-neutral-100/50 overflow-hidden z-50">
-                  <div className="px-4 py-3 border-b border-neutral-50">
-                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                      Аккаунт
-                    </p>
-                    <p className="text-sm font-black text-secondary mt-0.5 truncate">
-                      {user.name ?? user.email}
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-neutral-500 hover:bg-neutral-50 hover:text-secondary transition-colors"
-                  >
-                    <LogOut size={16} />
-                    Выйти
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link
-              href="/auth/login"
-              className="p-2 text-neutral-600 hover:bg-neutral-50 rounded-full transition-colors hidden sm:flex items-center gap-2"
-            >
-              <User size={20} />
-              <span className="text-sm font-bold hidden lg:block">Войти</span>
-            </Link>
-          )}
-
-          {/* Cart */}
-          <Link
-            href="/cart"
-            className="relative group p-2 bg-neutral-50 hover:bg-primary/5 rounded-full transition-all"
-          >
-            <ShoppingCart
-              size={20}
-              className="text-secondary group-hover:text-primary transition-colors"
-            />
-            {mounted && totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-primary text-white text-[10px] font-black rounded-full ring-4 ring-white">
-                {totalItems}
-              </span>
+            ) : (
+                <Link 
+                    href="/auth/login"
+                    className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-50 transition-all group"
+                >
+                    <User size={24} className="text-secondary group-hover:text-primary transition-colors" />
+                    <span className="text-[10px] font-bold text-neutral-400 mt-1.5 transition-colors group-hover:text-secondary">Войти</span>
+                </Link>
             )}
+          </div>
+
+          {/* Orders / History Link */}
+          <Link 
+            href="/orders" 
+            className="hidden sm:flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-50 transition-all group"
+          >
+            <Package size={24} className="text-secondary group-hover:text-primary transition-colors" />
+            <span className="text-[10px] font-bold text-neutral-400 mt-1.5 transition-colors group-hover:text-secondary">Заказы</span>
           </Link>
+
+          {/* Cart with Ozon style Badge */}
+          <Link 
+            href="/cart" 
+            className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-100 transition-all group relative"
+          >
+            <div className="relative">
+                <ShoppingCart size={24} className="text-secondary group-hover:text-primary transition-colors" />
+                {mounted && totalItems > 0 && (
+                    <span className="absolute -top-1.5 -right-2.5 bg-primary text-white text-[9px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-white animate-in zoom-in h-[15px] flex items-center justify-center">
+                        {totalItems}
+                    </span>
+                )}
+            </div>
+            <span className="text-[10px] font-bold text-neutral-400 mt-1.5 transition-colors group-hover:text-secondary">Корзина</span>
+          </Link>
+
         </div>
       </div>
     </header>

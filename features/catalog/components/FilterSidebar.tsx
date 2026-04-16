@@ -5,8 +5,10 @@ import { useCallback, useState } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PriceRangeSlider } from "./PriceRangeSlider";
+import { motion, AnimatePresence } from "framer-motion";
+import { CATEGORY_FILTERS } from "../config/categoryFilters";
 
-const MAX_PRICE = 200000; // rubles
+const MAX_PRICE = 200000;
 
 const COLOR_OPTIONS = [
   { label: "Белый", value: "White", hex: "#FFFFFF" },
@@ -27,6 +29,108 @@ const CATEGORIES = [
   { label: "Аксессуары", slug: "accessories" },
 ];
 
+// ─── Sub-components defined OUTSIDE FilterSidebar to prevent remount on state change ──
+
+interface FilterSectionProps {
+  title: string;
+  id: string;
+  children: React.ReactNode;
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+const FilterSection = ({ title, children, isOpen, onToggle }: FilterSectionProps) => (
+  <div className="border-b border-neutral-100 last:border-0">
+    <button
+      onClick={onToggle}
+      className="flex items-center justify-between w-full py-5 text-left group"
+    >
+      <h3 className="text-sm font-black text-secondary group-hover:text-primary transition-colors duration-200">
+        {title}
+      </h3>
+      <motion.div
+        animate={{ rotate: isOpen ? 180 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className={cn(
+          "w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-300",
+          isOpen ? "bg-primary/8" : "bg-neutral-50"
+        )}
+      >
+        <ChevronDown
+          size={14}
+          className={cn(
+            "transition-colors duration-300",
+            isOpen ? "text-primary" : "text-neutral-300"
+          )}
+        />
+      </motion.div>
+    </button>
+
+    <AnimatePresence initial={false}>
+      {isOpen && (
+        <motion.div
+          key="content"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
+          <div className="pb-5 space-y-3">{children}</div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
+interface CheckboxOptionProps {
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+  colorHex?: string;
+}
+
+const CheckboxOption = ({ label, checked, onChange, colorHex }: CheckboxOptionProps) => (
+  <label className="flex items-center gap-3 cursor-pointer group px-1">
+    <div
+      className={cn(
+        "w-5 h-5 rounded-lg border-2 transition-all flex items-center justify-center flex-shrink-0",
+        checked
+          ? "bg-primary border-primary"
+          : "border-neutral-200 group-hover:border-primary/40"
+      )}
+      onClick={onChange}
+    >
+      {checked && (
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path
+            d="M1 4L3.5 6.5L9 1"
+            stroke="white"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      )}
+    </div>
+    {colorHex && (
+      <div
+        className="w-4 h-4 rounded-full flex-shrink-0 border border-neutral-200 shadow-sm"
+        style={{ backgroundColor: colorHex }}
+      />
+    )}
+    <span
+      className={cn(
+        "text-[13px] font-bold transition-colors",
+        checked ? "text-secondary" : "text-neutral-400 group-hover:text-secondary"
+      )}
+    >
+      {label}
+    </span>
+  </label>
+);
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
 interface FilterSidebarProps {
   currentCategory: string;
   totalCount: number;
@@ -37,13 +141,11 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // Initialize all state from URL params
-  const [priceMin, setPriceMin] = useState(
-    Number(searchParams.get("priceMin") ?? 0)
-  );
-  const [priceMax, setPriceMax] = useState(
-    Number(searchParams.get("priceMax") ?? MAX_PRICE)
-  );
+  const categoryFilterSections = CATEGORY_FILTERS[currentCategory] ?? [];
+
+  // ── Common filter state ────────────────────────────────────────────────────
+  const [priceMin, setPriceMin] = useState(Number(searchParams.get("priceMin") ?? 0));
+  const [priceMax, setPriceMax] = useState(Number(searchParams.get("priceMax") ?? MAX_PRICE));
   const [colors, setColors] = useState<string[]>(
     searchParams.get("color")?.split(",").filter(Boolean) ?? []
   );
@@ -51,27 +153,51 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
     searchParams.get("status")?.split(",").filter(Boolean) ?? []
   );
 
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+  // ── Category-specific filter state (keyed by paramKey) ────────────────────
+  const [attrValues, setAttrValues] = useState<Record<string, string[]>>(() => {
+    const init: Record<string, string[]> = {};
+    for (const section of categoryFilterSections) {
+      init[section.paramKey] = searchParams.get(section.paramKey)?.split(",").filter(Boolean) ?? [];
+    }
+    return init;
+  });
+
+  // ── Open/close sections ────────────────────────────────────────────────────
+  const defaultOpen: Record<string, boolean> = {
     category: true,
     price: true,
-    color: true,
-    status: true,
-  });
+    color: false,
+    status: false,
+  };
+  for (const section of categoryFilterSections) {
+    defaultOpen[section.id] = ["ps_model", "xbox_model", "ns_model"].includes(section.id);
+  }
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(defaultOpen);
 
   const toggleSection = (id: string) =>
     setOpenSections((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const toggleValue = (
-    arr: string[],
-    setArr: (v: string[]) => void,
-    value: string
-  ) =>
-    setArr(
-      arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]
-    );
+  const toggleValue = (arr: string[], setArr: (v: string[]) => void, value: string) =>
+    setArr(arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]);
+
+  const toggleAttr = (paramKey: string, value: string) => {
+    setAttrValues((prev) => {
+      const current = prev[paramKey] ?? [];
+      return {
+        ...prev,
+        [paramKey]: current.includes(value)
+          ? current.filter((v) => v !== value)
+          : [...current, value],
+      };
+    });
+  };
 
   const hasActiveFilters =
-    priceMin > 0 || priceMax < MAX_PRICE || colors.length > 0 || statuses.length > 0;
+    priceMin > 0 ||
+    priceMax < MAX_PRICE ||
+    colors.length > 0 ||
+    statuses.length > 0 ||
+    Object.values(attrValues).some((v) => v.length > 0);
 
   const createQueryString = useCallback(
     (params: Record<string, string | null>) => {
@@ -86,14 +212,17 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
   );
 
   const handleApply = () => {
-    router.push(
-      `${pathname}?${createQueryString({
-        priceMin: priceMin > 0 ? String(priceMin) : null,
-        priceMax: priceMax < MAX_PRICE ? String(priceMax) : null,
-        color: colors.length ? colors.join(",") : null,
-        status: statuses.length ? statuses.join(",") : null,
-      })}`
-    );
+    const params: Record<string, string | null> = {
+      priceMin: priceMin > 0 ? String(priceMin) : null,
+      priceMax: priceMax < MAX_PRICE ? String(priceMax) : null,
+      color: colors.length ? colors.join(",") : null,
+      status: statuses.length ? statuses.join(",") : null,
+    };
+    for (const section of categoryFilterSections) {
+      const vals = attrValues[section.paramKey] ?? [];
+      params[section.paramKey] = vals.length ? vals.join(",") : null;
+    }
+    router.push(`${pathname}?${createQueryString(params)}`);
   };
 
   const handleClear = () => {
@@ -101,121 +230,25 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
     setPriceMax(MAX_PRICE);
     setColors([]);
     setStatuses([]);
+    const cleared: Record<string, string[]> = {};
+    for (const section of categoryFilterSections) {
+      cleared[section.paramKey] = [];
+    }
+    setAttrValues(cleared);
     router.push(pathname);
   };
-
-  // ─── Sub-components ────────────────────────────────────────────────────────
-
-  const FilterSection = ({
-    title,
-    id,
-    children,
-  }: {
-    title: string;
-    id: string;
-    children: React.ReactNode;
-  }) => {
-    const isOpen = openSections[id];
-    return (
-      <div className="border-b border-neutral-100 last:border-0">
-        <button
-          onClick={() => toggleSection(id)}
-          className="flex items-center justify-between w-full py-5 text-left group"
-        >
-          <h3 className="text-sm font-black text-secondary group-hover:text-primary transition-colors duration-200">
-            {title}
-          </h3>
-          <div
-            className={cn(
-              "w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300",
-              isOpen ? "bg-primary/8 rotate-180" : "bg-neutral-50 rotate-0"
-            )}
-          >
-            <ChevronDown
-              size={14}
-              className={cn(
-                "transition-colors duration-300",
-                isOpen ? "text-primary" : "text-neutral-300"
-              )}
-            />
-          </div>
-        </button>
-
-        {/* grid-rows accordion — animates to actual content height, no overflow clipping */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateRows: isOpen ? "1fr" : "0fr",
-            opacity: isOpen ? 1 : 0,
-            transition: "grid-template-rows 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
-          }}
-        >
-          <div style={{ overflow: "hidden" }}>
-            <div className="pb-5 space-y-3">{children}</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const CheckboxOption = ({
-    label,
-    checked,
-    onChange,
-    colorHex,
-  }: {
-    label: string;
-    checked: boolean;
-    onChange: () => void;
-    colorHex?: string;
-  }) => (
-    <label className="flex items-center gap-3 cursor-pointer group px-1">
-      <div
-        className={cn(
-          "w-5 h-5 rounded-lg border-2 transition-all flex items-center justify-center flex-shrink-0",
-          checked
-            ? "bg-primary border-primary"
-            : "border-neutral-200 group-hover:border-primary/40"
-        )}
-        onClick={onChange}
-      >
-        {checked && (
-          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-            <path
-              d="M1 4L3.5 6.5L9 1"
-              stroke="white"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-      </div>
-      {colorHex && (
-        <div
-          className="w-4 h-4 rounded-full flex-shrink-0 border border-neutral-200 shadow-sm"
-          style={{ backgroundColor: colorHex }}
-        />
-      )}
-      <span
-        className={cn(
-          "text-[13px] font-bold transition-colors",
-          checked
-            ? "text-secondary"
-            : "text-neutral-400 group-hover:text-secondary"
-        )}
-      >
-        {label}
-      </span>
-    </label>
-  );
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="bg-white rounded-[32px] border border-neutral-100 p-6 shadow-sm sticky top-24">
+    <div className="bg-white rounded-[32px] border border-neutral-100 p-6 shadow-sm sticky top-[132px]">
       {/* ── Категории ── */}
-      <FilterSection title="Категория" id="category">
+      <FilterSection
+        title="Категория"
+        id="category"
+        isOpen={openSections.category}
+        onToggle={() => toggleSection("category")}
+      >
         <ul className="space-y-1">
           {CATEGORIES.map(({ label, slug }) => (
             <li key={slug}>
@@ -236,9 +269,13 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
       </FilterSection>
 
       {/* ── Цена ── */}
-      <FilterSection title="Цена" id="price">
+      <FilterSection
+        title="Цена"
+        id="price"
+        isOpen={openSections.price}
+        onToggle={() => toggleSection("price")}
+      >
         <div className="space-y-4">
-          {/* Number inputs */}
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
               <input
@@ -251,9 +288,7 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
                 }}
                 className="w-full pl-4 pr-7 py-3 bg-neutral-50 border border-neutral-100 focus:border-primary/30 focus:bg-white rounded-2xl text-[13px] font-black transition-all placeholder:text-neutral-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-300 font-bold pointer-events-none">
-                ₽
-              </span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-300 font-bold pointer-events-none">₽</span>
             </div>
             <span className="text-neutral-200 font-bold text-sm">—</span>
             <div className="flex-1 relative">
@@ -267,13 +302,9 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
                 }}
                 className="w-full pl-4 pr-7 py-3 bg-neutral-50 border border-neutral-100 focus:border-primary/30 focus:bg-white rounded-2xl text-[13px] font-black transition-all placeholder:text-neutral-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-300 font-bold pointer-events-none">
-                ₽
-              </span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-neutral-300 font-bold pointer-events-none">₽</span>
             </div>
           </div>
-
-          {/* Slider */}
           <PriceRangeSlider
             min={0}
             max={MAX_PRICE}
@@ -285,8 +316,33 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
         </div>
       </FilterSection>
 
+      {/* ── Category-specific attribute sections ── */}
+      {categoryFilterSections.map((section) => (
+        <FilterSection
+          key={section.id}
+          title={section.title}
+          id={section.id}
+          isOpen={openSections[section.id] ?? false}
+          onToggle={() => toggleSection(section.id)}
+        >
+          {section.options.map(({ label, value }) => (
+            <CheckboxOption
+              key={value}
+              label={label}
+              checked={(attrValues[section.paramKey] ?? []).includes(value)}
+              onChange={() => toggleAttr(section.paramKey, value)}
+            />
+          ))}
+        </FilterSection>
+      ))}
+
       {/* ── Цвет ── */}
-      <FilterSection title="Цвет" id="color">
+      <FilterSection
+        title="Цвет"
+        id="color"
+        isOpen={openSections.color}
+        onToggle={() => toggleSection("color")}
+      >
         {COLOR_OPTIONS.map(({ label, value, hex }) => (
           <CheckboxOption
             key={value}
@@ -299,7 +355,12 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
       </FilterSection>
 
       {/* ── Статус ── */}
-      <FilterSection title="Статус товара" id="status">
+      <FilterSection
+        title="Статус товара"
+        id="status"
+        isOpen={openSections.status}
+        onToggle={() => toggleSection("status")}
+      >
         {STATUS_OPTIONS.map(({ label, value }) => (
           <CheckboxOption
             key={value}

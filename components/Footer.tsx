@@ -74,15 +74,16 @@ export const Footer = () => {
           {/* Social & Support */}
           <div className="space-y-6">
             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">На связи</h4>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="flex flex-wrap gap-2.5">
               <Link 
                 href="https://t.me/max_support" 
                 target="_blank"
                 className="group relative"
+                title="Support"
               >
-                <div className="w-10 h-10 bg-[#9000FF] rounded-xl flex items-center justify-center shadow-[0_5px_15px_rgba(144,0,255,0.2)] transition-all group-hover:scale-110 active:scale-95">
-                  <div className="w-5 h-5 rounded-full border-[3px] border-white flex items-center justify-center">
-                    <div className="w-1 h-1 bg-white rounded-full" />
+                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#9000FF]/20 group-hover:border-[#9000FF]/50 group-hover:shadow-[0_0_15px_rgba(144,0,255,0.3)] group-hover:scale-110 active:scale-95">
+                  <div className="w-4 h-4 rounded-full border-[2.5px] border-neutral-400 group-hover:border-white transition-colors flex items-center justify-center">
+                    <div className="w-0.5 h-0.5 bg-neutral-400 group-hover:bg-white rounded-full" />
                   </div>
                 </div>
               </Link>
@@ -90,27 +91,30 @@ export const Footer = () => {
                 href="https://t.me/nintendo_shop" 
                 target="_blank"
                 className="group relative"
+                title="Telegram"
               >
-                <div className="w-10 h-10 bg-[#26A5E4] rounded-xl flex items-center justify-center shadow-[0_5px_15px_rgba(38,165,228,0.2)] transition-all group-hover:scale-110 active:scale-95">
-                  <Send size={18} fill="white" className="text-white ml-0.5 mt-0.5" />
+                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#26A5E4]/20 group-hover:border-[#26A5E4]/50 group-hover:shadow-[0_0_15px_rgba(38,165,228,0.3)] group-hover:scale-110 active:scale-95">
+                  <Send size={16} className="text-neutral-400 group-hover:text-white transition-colors ml-0.5" />
                 </div>
               </Link>
               <Link 
                 href="https://vk.com/nintendo_shop" 
                 target="_blank"
                 className="group relative"
+                title="VK"
               >
-                <div className="w-10 h-10 bg-[#0077FF] rounded-xl flex items-center justify-center shadow-[0_5px_15px_rgba(0,119,255,0.2)] transition-all group-hover:scale-110 active:scale-95">
-                  <div className="text-white font-black text-sm">VK</div>
+                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#4C75A3]/20 group-hover:border-[#4C75A3]/50 group-hover:shadow-[0_0_15px_rgba(76,117,163,0.3)] group-hover:scale-110 active:scale-95">
+                  <div className="text-neutral-400 group-hover:text-white font-black text-[10px] transition-colors">VK</div>
                 </div>
               </Link>
               <Link 
                 href="https://youtube.com/nintendo_shop" 
                 target="_blank"
                 className="group relative"
+                title="YouTube"
               >
-                <div className="w-10 h-10 bg-[#FF0000] rounded-xl flex items-center justify-center shadow-[0_5px_15px_rgba(255,0,0,0.2)] transition-all group-hover:scale-110 active:scale-95">
-                  <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-white border-b-[5px] border-b-transparent ml-0.5" />
+                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#FF0000]/20 group-hover:border-[#FF0000]/50 group-hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] group-hover:scale-110 active:scale-95">
+                  <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[6px] border-l-neutral-400 group-hover:border-l-white border-b-[4px] border-b-transparent ml-0.5 transition-colors" />
                 </div>
               </Link>
             </div>
