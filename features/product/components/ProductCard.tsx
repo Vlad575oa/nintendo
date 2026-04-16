@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   product: {
@@ -51,11 +52,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-lg font-bold text-neutral-900">
-            {product.price.toLocaleString("ru-RU")} ₽
+            {formatPrice(product.price)}
           </span>
           {product.priceOld && (
             <span className="text-xs text-neutral-400 line-through">
-              {product.priceOld.toLocaleString("ru-RU")} ₽
+              {formatPrice(product.priceOld)}
             </span>
           )}
         </div>

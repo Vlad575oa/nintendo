@@ -10,12 +10,16 @@ export async function POST(req: Request) {
     if (event === "payment.succeeded") {
       const paymentId = object.id;
       
-      await prisma.order.update({
-        where: { paymentId: paymentId },
-        data: { status: "paid" },
-      });
+      const order = await prisma.order.findUnique({ where: { paymentId: paymentId } });
       
-      console.log(`Payment confirmed for order with paymentId ${paymentId}`);
+      // Idempotency check: if already paid, just ignore
+      if (order && order.status !== "paid") {
+        await prisma.order.update({
+          where: { paymentId: paymentId },
+          data: { status: "paid" },
+        });
+        console.log(`Payment confirmed for order with paymentId ${paymentId}`);
+      }
     }
 
     if (event === "payment.canceled") {
@@ -26,9 +30,9 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error("Webhook Error:", error);
-    return NextResponse.json({ error: "Webhook failed" }, { status: 400 });
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Webhook Error:", error.message);
+    return NextResponse.json({ success: false, error: "Webhook failed" }, { status: 400 });
   }
 }

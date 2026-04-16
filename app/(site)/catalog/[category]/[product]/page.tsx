@@ -1,13 +1,16 @@
-import prisma from "@/lib/prisma";
+import { getProductBySlug } from "@/lib/queries";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import { AddToCartButton } from "@/features/cart/components/AddToCartButton";
 import { Metadata } from "next";
+import { formatPrice } from "@/lib/utils";
+
+export const revalidate = 1800;
 
 export async function generateMetadata({ params }: { params: { product: string } }): Promise<Metadata> {
-  const product = await prisma.product.findUnique({ where: { slug: params.product } });
+  const product = await getProductBySlug(params.product);
   if (!product) return { title: "Товар не найден" };
   return {
     title: `${product.name} | Nintendo Shop`,
@@ -16,10 +19,7 @@ export async function generateMetadata({ params }: { params: { product: string }
 }
 
 export default async function ProductPage({ params }: { params: { product: string } }) {
-  const product = await prisma.product.findUnique({
-    where: { slug: params.product },
-    include: { category: true },
-  });
+  const product = await getProductBySlug(params.product);
 
   if (!product) notFound();
 
@@ -90,11 +90,11 @@ export default async function ProductPage({ params }: { params: { product: strin
           <div className="mb-10">
             <div className="flex items-baseline gap-4 mb-2">
               <span className="text-4xl font-black text-secondary">
-                {product.price.toLocaleString("ru-RU")} ₽
+                {formatPrice(product.price)}
               </span>
               {product.priceOld && (
                 <span className="text-xl text-neutral-300 line-through">
-                  {product.priceOld.toLocaleString("ru-RU")} ₽
+                  {formatPrice(product.priceOld)}
                 </span>
               )}
             </div>

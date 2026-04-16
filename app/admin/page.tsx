@@ -1,14 +1,13 @@
-import prisma from "@/lib/prisma";
+import { getOrdersCount, getProductsCount, getRecentOrders } from "@/lib/queries";
 import Link from "next/link";
 import { Plus, Package, ShoppingBag, Settings, LogOut } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
-  const ordersCount = await prisma.order.count();
-  const productsCount = await prisma.product.count();
-  const recentOrders = await prisma.order.findMany({
-    take: 5,
-    orderBy: { createdAt: "desc" },
-  });
+  const ordersCount = await getOrdersCount();
+  const productsCount = await getProductsCount({});
+  const recentOrders = await getRecentOrders(5);
 
   return (
     <div className="flex min-h-screen bg-neutral-50">

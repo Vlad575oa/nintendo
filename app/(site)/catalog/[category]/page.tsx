@@ -1,12 +1,14 @@
-import prisma from "@/lib/prisma";
+import { getCategoryBySlug, getProducts, getProductsCount } from "@/lib/queries";
 import { ProductCard } from "@/features/product/components/ProductCard";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { SortingSelect } from "@/features/catalog/components/SortingSelect";
 
 import { Metadata } from "next";
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-  const category = await prisma.category.findUnique({ where: { slug: params.category } });
+  const category = await getCategoryBySlug(params.category);
   const title = category ? `${category.name} | Nintendo Shop` : "Каталог | Nintendo Shop";
   return {
     title,
@@ -56,17 +58,10 @@ export default async function CategoryPage({ params, searchParams }: CatalogPage
   if (sort === "price-desc") orderBy = { price: "desc" };
   if (sort === "newest") orderBy = { createdAt: "desc" };
 
-  const products = await prisma.product.findMany({
-    where,
-    orderBy,
-    skip,
-    take: pageSize,
-    include: { category: true },
-  });
-
-  const totalCount = await prisma.product.count({ where });
+  const products = await getProducts(where, orderBy, skip, pageSize);
+  const totalCount = await getProductsCount(where);
   const categoryData = category !== "all" 
-    ? await prisma.category.findUnique({ where: { slug: category } })
+    ? await getCategoryBySlug(category)
     : { name: "Весь каталог" };
 
   return (

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { getCategories, getNewProducts } from "@/lib/queries";
 import { Hero } from "@/features/catalog/components/Hero";
 import { CategoryCard } from "@/features/catalog/components/CategoryCard";
 import { ProductCard } from "@/features/product/components/ProductCard";
@@ -6,15 +6,8 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default async function HomePage() {
-  const categories = await prisma.category.findMany({
-    take: 6,
-  });
-
-  const newProducts = await prisma.product.findMany({
-    where: { isNew: true },
-    take: 8,
-    orderBy: { createdAt: "desc" },
-  });
+  const categories = await getCategories();
+  const newProducts = await getNewProducts(8);
 
   return (
     <main className="container pb-20">
