@@ -84,3 +84,34 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Action
     return { success: false, error: error.message || "Something went wrong" };
   }
 }
+
+export async function searchProductsAction(query: string) {
+  if (!query || query.length < 2) return [];
+
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { category: { name: { contains: query, mode: "insensitive" } } },
+        ],
+      },
+      take: 8,
+      include: {
+        category: { select: { name: true, slug: true } },
+      },
+    });
+
+    return products.map(p => ({
+        id: p.id,
+        name: p.name,
+        slug: p.slug,
+        category: p.category.name,
+        categorySlug: p.category.slug,
+        image: p.images[0] || "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=200",
+    }));
+  } catch (error) {
+    console.error("Search Error:", error);
+    return [];
+  }
+}

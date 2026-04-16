@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { FloatingContact } from "@/components/FloatingContact";
+import { CookieBanner } from "@/components/CookieBanner";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -17,11 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${inter.className} bg-white text-secondary antialiased`}>
+      <body className={`${inter.className} bg-white text-secondary antialiased flex flex-col min-h-screen`}>
         <Header />
-        {children}
-        {/* Footer could go here */}
+        <main className="flex-grow">
+          {children}
+        </main>
+        <Footer />
+        <FloatingContact />
+        <CookieBanner />
       </body>
     </html>
   );
 }
+

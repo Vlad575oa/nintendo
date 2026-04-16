@@ -13,9 +13,10 @@ interface AddToCartButtonProps {
     price: number;
     images: string[];
   };
+  className?: string;
 }
 
-export const AddToCartButton = ({ product }: AddToCartButtonProps) => {
+export const AddToCartButton = ({ product, className }: AddToCartButtonProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -36,11 +37,18 @@ export const AddToCartButton = ({ product }: AddToCartButtonProps) => {
   return (
     <Button 
       size="lg" 
-      className={`rounded-2xl h-16 transition-all gap-3 ${isAdded ? "bg-green-600 hover:bg-green-700" : ""}`}
+      className={cn(
+        "rounded-2xl h-16 transition-all gap-3",
+        isAdded && "bg-green-600 hover:bg-green-700",
+        className
+      )}
       onClick={handleAdd}
     >
       {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
-      <span>{isAdded ? "Добавлено!" : "Добавить в корзину"}</span>
+      <span>{isAdded ? "В корзине" : "В корзину"}</span>
     </Button>
   );
 };
+
+import { cn } from "@/lib/utils";
+

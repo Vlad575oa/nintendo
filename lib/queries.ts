@@ -11,9 +11,9 @@ export const getCategoryBySlug = cache(async (slug: string) => {
 });
 
 export const getProducts = cache(async (
-  where: Prisma.ProductWhereInput, 
-  orderBy: Prisma.ProductOrderByWithRelationInput, 
-  skip: number, 
+  where: Prisma.ProductWhereInput,
+  orderBy: Prisma.ProductOrderByWithRelationInput,
+  skip: number,
   take: number
 ) => {
   return await prisma.product.findMany({
@@ -37,6 +37,15 @@ export const getNewProducts = cache(async (take: number = 8) => {
     where: { isNew: true },
     take,
     orderBy: { createdAt: "desc" },
+    include: { category: true },
+  });
+});
+
+export const getAllProducts = cache(async (take: number = 48) => {
+  return await prisma.product.findMany({
+    take,
+    orderBy: { createdAt: "desc" },
+    include: { category: true },
   });
 });
 

@@ -1,11 +1,12 @@
 import { getProductBySlug } from "@/lib/queries";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/Button";
-import { ShoppingCart, ShieldCheck, Truck, RefreshCw } from "lucide-react";
-import { AddToCartButton } from "@/features/cart/components/AddToCartButton";
 import { Metadata } from "next";
-import { formatPrice } from "@/lib/utils";
+import { ProductGallery } from "@/features/product/components/ProductGallery";
+import { PurchaseBlock } from "@/features/product/components/PurchaseBlock";
+import { ProductMeta } from "@/features/product/components/ProductMeta";
+import { TrackView } from "@/features/product/components/TrackView";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export const revalidate = 1800;
 
@@ -31,7 +32,7 @@ export default async function ProductPage({ params }: { params: { product: strin
     "description": product.description || product.name,
     "brand": {
       "@type": "Brand",
-      "name": product.brand || "Gaming"
+      "name": product.brand || "Microsoft"
     },
     "offers": {
       "@type": "Offer",
@@ -42,116 +43,63 @@ export default async function ProductPage({ params }: { params: { product: strin
   };
 
   return (
-    <main className="container py-12 lg:py-20">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        {/* Gallery */}
-        <div className="space-y-6">
-          <div className="aspect-square bg-neutral-50 rounded-[40px] overflow-hidden border border-neutral-100 relative shadow-sm">
-            <Image
-              src={product.images[0] || "/placeholder.jpg"}
-              alt={product.name}
-              fill
-              className="object-contain p-12"
-              priority
-            />
-          </div>
-          <div className="grid grid-cols-4 gap-4">
-            {product.images.slice(1, 5).map((img, i) => (
-              <div key={i} className="aspect-square bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-100 cursor-pointer hover:border-primary/30 transition-colors">
-                <Image src={img} alt={product.name} width={200} height={200} className="object-contain p-4" />
-              </div>
-            ))}
-          </div>
+    <div className="bg-[#fcfcfc] min-h-screen">
+      <main className="container py-8 lg:py-12">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 text-[10px] font-bold text-neutral-300 uppercase tracking-widest mb-6 overflow-x-auto no-scrollbar whitespace-nowrap">
+          <Link href="/" className="hover:text-primary transition-colors">Главная страница</Link>
+          <ChevronRight size={10} className="text-neutral-200" />
+          <Link href="/catalog" className="hover:text-primary transition-colors">Каталог</Link>
+          <ChevronRight size={10} className="text-neutral-200" />
+          <Link href={`/catalog/${product.category.slug}`} className="hover:text-primary transition-colors">{product.category.name}</Link>
+          <ChevronRight size={10} className="text-neutral-200" />
+          <span className="text-neutral-400">{product.name}</span>
+        </nav>
+
+        {/* Track this product as recently viewed */}
+        <TrackView productId={product.id} />
+
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl lg:text-4xl font-black text-secondary leading-tight mb-4 max-w-4xl">
+            {product.name}
+          </h1>
+          <ProductMeta productId={product.id} />
         </div>
 
-        {/* Info */}
-        <div className="flex flex-col">
-          <div className="mb-8">
-            <Link href={`/catalog/${product.category.slug}`} className="text-sm font-bold text-primary uppercase tracking-widest mb-4 inline-block hover:underline">
-              {product.category.name}
-            </Link>
-            <h1 className="text-5xl font-black text-secondary leading-tight mb-4">
-              {product.name}
-            </h1>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <span key={s} className="text-yellow-400">★</span>
-                ))}
-              </div>
-              <span className="text-sm font-medium text-neutral-400">4.9 (120 отзывов)</span>
+        {/* Product Content Grid */}
+        <div className="flex flex-col lg:flex-row gap-12 mb-20">
+          <div className="flex-1 min-w-0">
+            <ProductGallery images={product.images} name={product.name} />
+            
+            {/* Description Tab (Mock) */}
+            <div className="mt-16">
+                 <div className="flex gap-10 border-b border-neutral-100 mb-8">
+                    <button className="text-sm font-black text-secondary pb-4 border-b-2 border-primary -mb-[1px]">Описание</button>
+                    <button className="text-sm font-bold text-neutral-400 pb-4 hover:text-secondary transition-all">Характеристики</button>
+                    <button className="text-sm font-bold text-neutral-400 pb-4 hover:text-secondary transition-all">Отзывы</button>
+                 </div>
+                 <div className="prose prose-neutral max-w-none">
+                    <p className="text-neutral-600 leading-relaxed text-sm">
+                        {product.description || "Описание товара временно недоступно."}
+                    </p>
+                 </div>
             </div>
           </div>
 
-          <div className="mb-10">
-            <div className="flex items-baseline gap-4 mb-2">
-              <span className="text-4xl font-black text-secondary">
-                {formatPrice(product.price)}
-              </span>
-              {product.priceOld && (
-                <span className="text-xl text-neutral-300 line-through">
-                  {formatPrice(product.priceOld)}
-                </span>
-              )}
+          <aside className="w-full lg:w-[380px] flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+                <PurchaseBlock product={product as any} />
             </div>
-            <p className="text-green-600 text-sm font-bold flex items-center gap-1">
-              <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
-              В наличии в 14 магазинах
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-            <AddToCartButton product={product} />
-            <Button variant="secondary" size="lg" className="rounded-2xl h-16">
-              Купить в 1 клик
-            </Button>
-          </div>
-
-          {/* Benefits */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 border-y border-neutral-100 mb-10">
-            <div className="flex items-center gap-3">
-              <Truck size={24} className="text-primary" />
-              <div>
-                <p className="text-xs font-bold text-secondary">Доставка</p>
-                <p className="text-[10px] text-neutral-500 font-medium">Завтра, от 290₽</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <ShieldCheck size={24} className="text-primary" />
-              <div>
-                <p className="text-xs font-bold text-secondary">Гарантия</p>
-                <p className="text-[10px] text-neutral-500 font-medium">1 год от производителя</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <RefreshCw size={24} className="text-primary" />
-              <div>
-                <p className="text-xs font-bold text-secondary">Возврат</p>
-                <p className="text-[10px] text-neutral-500 font-medium">14 дней без проблем</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Characteristics */}
-          <div>
-            <h3 className="text-lg font-black text-secondary mb-6">Характеристики</h3>
-            <div className="space-y-4">
-              {product.attributes && Object.entries(product.attributes as any).map(([key, value]) => (
-                <div key={key} className="flex justify-between text-sm py-2 border-b border-neutral-50 last:border-0">
-                  <span className="text-neutral-400 font-medium">{key}</span>
-                  <span className="text-secondary font-bold">{value as string}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          </aside>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
 
-import Link from "next/link";

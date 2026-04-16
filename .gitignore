@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# project specific
+/scratch
+/prisma/seed.js
+/Sony PlayStation 5 Pro
+

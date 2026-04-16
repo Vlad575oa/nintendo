@@ -1,3 +1,5 @@
+"use client";
+
 import { getOrdersCount, getProductsCount, getRecentOrders } from "@/lib/queries";
 import Link from "next/link";
 import { Plus, Package, ShoppingBag, Settings, LogOut } from "lucide-react";
@@ -36,7 +38,13 @@ export default async function AdminDashboard() {
             <Link href="/admin/settings" className="flex items-center gap-3 text-sm font-bold p-3 rounded-xl hover:bg-white/5 transition-colors">
               <Settings size={18} /> Настройки
             </Link>
-            <button className="w-full flex items-center gap-3 text-sm font-bold p-3 rounded-xl hover:bg-red-500/10 text-red-400 transition-colors">
+            <button 
+                onClick={async () => {
+                    await fetch("/api/admin/logout", { method: "POST" });
+                    window.location.href = "/admin/login";
+                }}
+                className="w-full flex items-center gap-3 text-sm font-bold p-3 rounded-xl hover:bg-red-500/10 text-red-400 transition-colors"
+            >
               <LogOut size={18} /> Выйти
             </button>
           </div>

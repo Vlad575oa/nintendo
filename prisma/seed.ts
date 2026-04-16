@@ -1,112 +1,105 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.product.deleteMany({});
-  await prisma.category.deleteMany({});
+  // Clear existing
+  await prisma.post.deleteMany({});
+  await prisma.fAQ.deleteMany({});
 
-  const xboxCategory = await prisma.category.create({
-    data: { name: "Xbox", slug: "xbox" },
-  });
-
-  const categories = await prisma.category.createMany({
-    data: [
-      { name: "PlayStation", slug: "playstation" },
-      { name: "Nintendo", slug: "nintendo" },
-      { name: "Геймпады", slug: "gamepads" },
-      { name: "Аксессуары", slug: "accessories" },
-      { name: "Игры", slug: "games" },
-    ],
-  });
-
-  const products = [
+  // Seed Blog Posts
+  const posts = [
     {
-      name: "Microsoft Xbox Series S Robot White 512GB SSD",
-      slug: "xbox-series-s-white-512gb",
-      description: "Игровая приставка Microsoft Xbox Series S Robot White 512 Гб SSD. Самая компактная консоль нового поколения.",
-      price: 3998900,
-      priceOld: 4499000,
-      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
-      brand: "Microsoft",
-      color: "White",
-      attributes: { "Память": "512Гб", "Цвет": "Белый" },
-      categoryId: xboxCategory.id,
-      isNew: true,
-      stock: 15,
+      title: "Sony PlayStation 5 Pro: Новая эра 4K гейминга",
+      slug: "ps5-pro-release-review",
+      excerpt: "Всё, что вам нужно знать о самой мощной консоли в истории. Разбираем PSSR, Ray Tracing и стоит ли обновляться сейчас.",
+      content: "## Будущее уже здесь\n\nSony официально представила PlayStation 5 Pro, и это не просто обновление — это настоящий прыжок в качестве изображения. Основное внимание уделено трем столпам: мощному GPU, продвинутому Ray Tracing и инновационному ИИ-апскейлингу PSSR.\n\n### Что такое PSSR?\nPlayStation Spectral Super Resolution — это технология ИИ, аналогичная DLSS от NVIDIA. Она позволяет играм работать в режиме производительности (60 FPS), сохраняя при этом четкость изображения 4K.\n\n### Стоит ли покупать?\nЕсли вы цените каждый пиксель и хотите видеть игры именно так, как их задумывали разработчики, PS5 Pro — ваш выбор. В нашем магазине вы можете заказать её с официальной гарантией 1 год.",
+      image: "/images/blog/ps5-pro.png",
+      category: "Обзоры",
+      isPublished: true,
+      metaTitle: "Обзор PS5 Pro 2024 | Купить PlayStation 5 Pro в России",
+      metaDesc: "Подробный обзор характеристик PS5 Pro. Сравнение с обычной версией, тесты производительности и информация о наличии."
     },
     {
-      name: "Microsoft Xbox Series S Carbon Black 1TB SSD",
-      slug: "xbox-series-s-black-1tb",
-      description: "Игровая приставка Microsoft Xbox Series S Carbon Black 1 Тб SSD. Полностью цифровая консоль в стильном черном цвете.",
-      price: 4504500,
-      priceOld: 4999000,
-      images: ["https://images.unsplash.com/photo-1621259182978-f09e5e2ca09a?q=80&w=1000"],
-      brand: "Microsoft",
-      color: "Black",
-      attributes: { "Память": "1Тб", "Цвет": "Черный" },
-      categoryId: xboxCategory.id,
-      isSale: true,
-      stock: 8,
+      title: "Nintendo Switch 2: Слухи против реальности",
+      slug: "nintendo-switch-2-leaks",
+      excerpt: "Когда ждать анонса? Обратная совместимость, новый OLED экран и мощность на уровне PS4 Pro. Собираем все факты воедино.",
+      content: "## Самый ожидаемый анонс десятилетия\n\nNintendo Switch стала легендой, но пришло время для преемника. По последним данным от поставщиков комплектующих, новая консоль получит 12 ГБ оперативной памяти и графику на архитектуре NVIDIA Ampere.\n\n### Обратная совместимость\nЭто главный вопрос для миллионов фанатов. Большинство инсайдеров сходятся во мнении, что Switch 2 будет поддерживать картриджи текущего поколения, что сделает переход на новую платформу максимально комфортным.\n\n### Дата выхода\nОжидается, что анонс состоится в конце 2024 года, а продажи начнут расти в первом квартале 2025-го. Мы будем одними из первых, кто привезет новинку в Россию.",
+      image: "/images/blog/switch-2.png",
+      category: "Новости",
+      isPublished: true,
+      metaTitle: "Nintendo Switch 2 дата выхода и характеристики | Новости Nintendo",
+      metaDesc: "Все последние утечки о Нинтендо Свитч 2. Поддержка игр от первой версии, цена и дата старта продаж."
     },
     {
-      name: "Microsoft Xbox Series S Robot White 1TB SSD",
-      slug: "xbox-series-s-white-1tb",
-      description: "Игровая приставка Microsoft Xbox Series S Robot White 1 Тб SSD. Теперь с увеличенным объемом памяти для ваших игр.",
-      price: 4680000,
-      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
-      brand: "Microsoft",
-      color: "White",
-      attributes: { "Память": "1Тб", "Цвет": "Белый" },
-      categoryId: xboxCategory.id,
-      stock: 12,
+      title: "Ретро-гейминг в 2024: Почему мы возвращаемся к классике?",
+      slug: "retro-gaming-trend-2024",
+      excerpt: "Магия пикселей и уют старых комнат. Разбираемся, как играть в ретро-игры сегодня: от оригинального железа до портативных эмуляторов.",
+      content: "## Ностальгия как стиль жизни\n\nВ эпоху фотореалистичной графики мы всё чаще тянемся к 8-битным приключениям. Почему? Потому что геймплей был в центре внимания.\n\n### Как играть в ретро сегодня?\n1. **Оригинал**: Поиск старых консолей на аукционах. Это дорого и сложно в подключении к современным ТВ.\n2. **Мини-консоли**: NES Classic, SNES Mini — отличный старт.\n3. **Портативки**: Современные устройства вроде Anbernic или Miyoo Mini позволяют носить всю библиотеку игр в кармане.\n\nВ Nintendo Shop мы ценим классику так же сильно, как и новинки.",
+      image: "/images/blog/retro.png",
+      category: "Гайды",
+      isPublished: true,
+      metaTitle: "Как начать играть в ретро-игры в 2024 году | Гайд для новичков",
+      metaDesc: "Лучшие способы приобщиться к ретро-геймингу. Обзор портативных консолей, эмуляторов и оригинального железа."
     },
     {
-      name: "Microsoft Xbox Series S + Game Pass на 3 месяца",
-      slug: "xbox-series-s-game-pass-bundle",
-      description: "Комплект Xbox Series S с подпиской Game Pass Ultimate на 3 месяца. Начните играть сразу!",
-      price: 3378700,
-      priceOld: 3850000,
-      images: ["https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=1000"],
-      brand: "Microsoft",
-      color: "White",
-      attributes: { "Подписка": "3 месяца", "Память": "512Гб" },
-      categoryId: xboxCategory.id,
-      stock: 20,
-    },
-    {
-      name: "Xbox Series S + 2-й геймпад Carbon Black + Зарядная станция",
-      slug: "xbox-series-s-bundle-black",
-      description: "Полный игровой комплект: консоль Xbox Series S, дополнительный черный геймпад и зарядная станция iPega.",
-      price: 4714800,
-      images: ["/xbox_series_s_bundles_1776268493407.png"],
-      brand: "Microsoft",
-      color: "White/Black",
-      attributes: { "Геймпады": "2 шт", "Аксессуары": "Зарядная станция" },
-      categoryId: xboxCategory.id,
-      stock: 5,
-    },
-    {
-      name: "Xbox Series S + 2-й геймпад Pulse Red + Зарядная станция",
-      slug: "xbox-series-s-bundle-red",
-      description: "Яркий комплект: консоль Xbox Series S, дополнительный красный геймпад Pulse Red и зарядная станция.",
-      price: 4698900,
-      images: ["/xbox_series_s_bundles_1776268493407.png"],
-      brand: "Microsoft",
-      color: "White/Red",
-      attributes: { "Геймпады": "2 шт", "Цвет геймпада": "Pulse Red" },
-      categoryId: xboxCategory.id,
-      stock: 3,
-    },
+      title: "Топ-5 аксессуаров, которые изменят ваш опыт на Nintendo Switch",
+      slug: "best-nintendo-switch-accessories",
+      excerpt: "От Pro Controller до защитных чехлов. Рассказываем, на чем нельзя экономить владельцу портативной консоли.",
+      content: "## Прокачай свою консоль\n\nNintendo Switch — прекрасное устройство, но правильные аксессуары делают его идеальным.\n\n### 1. Nintendo Switch Pro Controller\nЕсли вы играете в стационарном режиме, это обязательная покупка. Эргономика и точность стиков на голову выше Joy-Con.\n\n### 2. Защитное стекло\nЭкран Switch (особенно не OLED версии) очень нежный. Не рискуйте — наклейте стекло сразу после покупки.\n\n### 3. Карта памяти MicroSD\nИгры весят много, а памяти мало. Мы рекомендуем брать минимум 256 ГБ.",
+      image: "/images/blog/accessories.png",
+      category: "Гайды",
+      isPublished: true,
+      metaTitle: "Лучшие аксессуары для Nintendo Switch OLED | Что купить в 2024",
+      metaDesc: "Подборка необходимых аксессуаров для вашей приставки. Чехлы, контроллеры и карты памяти с доставкой."
+    }
   ];
 
-  for (const product of products) {
-    await prisma.product.create({ data: product });
+  for (const post of posts) {
+    await prisma.post.create({ data: post });
   }
 
-  console.log("Seed completed with parsed data!");
+  // Seed FAQs
+  const faqs = [
+    {
+      question: "Как проверить, что консоль новая и оригинальная?",
+      answer: "Все наши приставки поставляются в заводской упаковке с неповрежденными пломбами. Вы можете проверить серийный номер на официальном сайте производителя прямо при курьере. Мы продаем только 100% оригинал.",
+      order: 1
+    },
+    {
+      question: "Работает ли гарантия в России сейчас?",
+      answer: "Да, мы предоставляем собственную гарантию 1 год от нашего сервисного центра. В случае заводского брака мы осуществляем ремонт или замену устройства в кратчайшие сроки.",
+      order: 2
+    },
+    {
+      question: "Какие игры входят в комплект с консолью?",
+      answer: "Обычно консоли поставляются без игр, если это не специальное издание (Bundle). Однако мы часто проводим акции, где к приставке идет диск или код на загрузку в подарок. Проверяйте описание каждого товара.",
+      order: 3
+    },
+    {
+      question: "Можно ли покупать цифровые игры в PS Store и eShop?",
+      answer: "Да, вы можете покупать игры через турецкие, польские или американские аккаунты. Мы помогаем нашим клиентам с консультацией по созданию и пополнению таких аккаунтов.",
+      order: 4
+    },
+    {
+      question: "Как быстро работает доставка по Москве?",
+      answer: "При заказе до 14:00 доставка осуществляется в тот же день. После 14:00 — на следующий день. У нас есть собственная курьерская служба, которая работает бережно.",
+      order: 5
+    }
+  ];
+
+  for (const faq of faqs) {
+    await prisma.fAQ.create({ data: faq });
+  }
+
+  console.log('Seeding finished.');
 }
 
 main()
-  .catch((e) => console.error(e))
-  .finally(async () => await prisma.$disconnect());
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
