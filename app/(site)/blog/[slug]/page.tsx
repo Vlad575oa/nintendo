@@ -5,6 +5,7 @@ import { ru } from "date-fns/locale";
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { marked } from "marked";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
 
@@ -42,6 +43,34 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   if (!post) notFound();
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.excerpt || "",
+    "image": post.image ? [post.image] : [],
+    "datePublished": post.createdAt.toISOString(),
+    "dateModified": post.updatedAt.toISOString(),
+    "author": {
+      "@type": "Organization",
+      "name": "Nintendo Media Team",
+      "url": baseUrl,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nintendo Shop",
+      "url": baseUrl,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/favicon.png`,
+      },
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/blog/${post.slug}`,
+    },
+  };
+
   const relatedPosts = await prisma.post.findMany({
     where: { 
       isPublished: true,
@@ -53,6 +82,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <article className="bg-[#fcfcfd] min-h-screen pt-12 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="container">
         <div className="max-w-4xl mx-auto px-4 sm:px-0">
           {/* Minimal Breadcrumbs */}
@@ -131,7 +164,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             prose-img:rounded-[24px] prose-img:shadow-xl prose-img:my-8
             prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-black prose-blockquote:text-secondary prose-blockquote:not-italic
           ">
-            <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
+            <div dangerouslySetInnerHTML={{ __html: marked(post.content) as string }} />
           </div>
 
           {/* Social Proof & Interactive Footer */}
