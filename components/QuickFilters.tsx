@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SPECIAL_FILTERS = [
@@ -45,13 +45,17 @@ const QUICK_LINKS = [
 export const QuickFilters = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const checkScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    setCanScrollLeft(el.scrollLeft > 5);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 5);
   };
 
   useEffect(() => {
@@ -66,26 +70,87 @@ export const QuickFilters = () => {
     };
   }, []);
 
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+  // Mouse Drag Logic
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setIsDragging(true);
+    setStartX(e.pageX - el.offsetLeft);
+    setScrollLeft(el.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const el = scrollRef.current;
+    if (!el) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed
+    el.scrollLeft = scrollLeft - walk;
+  };
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const scrollAmount = 400;
+    scrollRef.current.scrollBy({ 
+      left: direction === "left" ? -scrollAmount : scrollAmount, 
+      behavior: "smooth" 
+    });
   };
 
   return (
     <div className="sticky top-[84px] z-40 bg-white border-b border-neutral-100 shadow-sm">
-      <div className="relative">
-        {/* Scrollable row */}
+      <div className="relative group/nav">
+        {/* Left Scroll Gradient & Button */}
+        {canScrollLeft && (
+          <div className="absolute left-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-r from-white via-white/80 to-transparent flex items-center pr-8">
+            <button
+              onClick={() => scroll("left")}
+              className="pointer-events-auto ml-2 w-8 h-8 rounded-full bg-white border border-neutral-100 shadow-lg flex items-center justify-center hover:bg-neutral-50 transition-all hover:scale-110 active:scale-95"
+            >
+              <ChevronLeft size={16} className="text-secondary" />
+            </button>
+          </div>
+        )}
+
+        {/* Scrollable container */}
         <div
           ref={scrollRef}
-          className="container flex items-center gap-2 overflow-x-auto scrollbar-none py-2.5 pr-10"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className={cn(
+            "container flex items-center gap-2 overflow-x-auto no-scrollbar py-2.5 transition-all scroll-smooth px-4",
+            isDragging ? "cursor-grabbing select-none scroll-auto" : "cursor-grab"
+          )}
+          style={{ 
+            scrollbarWidth: "none", 
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch"
+          }}
         >
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+
           {/* Special colored pills */}
           {SPECIAL_FILTERS.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-bold whitespace-nowrap transition-all shrink-0",
+                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-bold whitespace-nowrap transition-all shrink-0 active:scale-95 hover:brightness-95",
                 item.color
               )}
             >
@@ -95,7 +160,7 @@ export const QuickFilters = () => {
           ))}
 
           {/* Divider */}
-          <div className="w-px h-5 bg-neutral-200 shrink-0 mx-1" />
+          <div className="w-px h-5 bg-neutral-100 shrink-0 mx-1" />
 
           {/* Regular text links */}
           {QUICK_LINKS.map((item) => {
@@ -107,10 +172,10 @@ export const QuickFilters = () => {
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "text-[13px] font-bold whitespace-nowrap px-2 py-1.5 rounded-lg transition-all shrink-0",
+                  "text-[12px] font-bold whitespace-nowrap px-3 py-1.5 rounded-lg transition-all shrink-0 active:scale-95",
                   isActive
-                    ? "text-primary"
-                    : "text-neutral-600 hover:text-secondary"
+                    ? "bg-primary text-white"
+                    : "text-neutral-500 hover:text-secondary hover:bg-neutral-50"
                 )}
               >
                 {item.label}
@@ -119,16 +184,19 @@ export const QuickFilters = () => {
           })}
         </div>
 
-        {/* Scroll right button */}
+        {/* Right Scroll Gradient & Button */}
         {canScrollRight && (
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gradient-to-l from-white via-white/90 to-transparent"
-          >
-            <ChevronRight size={18} className="text-neutral-400" />
-          </button>
+          <div className="absolute right-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-l from-white via-white/80 to-transparent flex items-center justify-end pl-8">
+            <button
+              onClick={() => scroll("right")}
+              className="pointer-events-auto mr-2 w-8 h-8 rounded-full bg-white border border-neutral-100 shadow-lg flex items-center justify-center hover:bg-neutral-50 transition-all hover:scale-110 active:scale-95"
+            >
+              <ChevronRight size={16} className="text-secondary" />
+            </button>
+          </div>
         )}
       </div>
     </div>
   );
 };
+

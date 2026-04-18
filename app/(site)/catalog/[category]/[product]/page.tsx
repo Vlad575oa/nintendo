@@ -5,17 +5,32 @@ import { ProductGallery } from "@/features/product/components/ProductGallery";
 import { PurchaseBlock } from "@/features/product/components/PurchaseBlock";
 import { ProductMeta } from "@/features/product/components/ProductMeta";
 import { TrackView } from "@/features/product/components/TrackView";
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 export const revalidate = 1800;
 
-export async function generateMetadata({ params }: { params: { product: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { product: string, category: string } }): Promise<Metadata> {
   const product = await getProductBySlug(params.product);
   if (!product) return { title: "Товар не найден" };
+
+  const title = `${product.name} — Купить в Nintendo Shop`;
+  const description = product.description?.slice(0, 160) || `Закажите ${product.name} по выгодной цене с доставкой по всей России. Официальная гарантия и сервис.`;
+
   return {
-    title: `${product.name} | Nintendo Shop`,
-    description: product.description || `Купить ${product.name} по выгодной цене в Nintendo Shop.`,
+    title,
+    description,
+    alternates: {
+      canonical: `${baseUrl}/catalog/${params.category}/${params.product}`,
+    },
+    openGraph: {
+      title,
+      description,
+      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
+      type: 'article',
+    },
   };
 }
 
