@@ -48,10 +48,16 @@ export const Footer = () => {
                     <div>
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Экосистема</h4>
                         <ul className="space-y-4">
-                            {["Nintendo Switch", "PlayStation 5", "Xbox Series", "Retro Gaming", "Аксессуары"].map((item) => (
-                                <li key={item}>
-                                    <Link href="#" className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
-                                        {item}
+                            {[
+                                { name: "Nintendo Switch", href: "/catalog/nintendo" },
+                                { name: "PlayStation 5", href: "/catalog/playstation" },
+                                { name: "Xbox Series", href: "/catalog/xbox" },
+                                { name: "Retro Gaming", href: "/catalog/retro" },
+                                { name: "Аксессуары", href: "/catalog/accessories" }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link href={item.href} className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                        {item.name}
                                     </Link>
                                 </li>
                             ))}
@@ -62,10 +68,16 @@ export const Footer = () => {
                     <div>
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Информация</h4>
                         <ul className="space-y-4">
-                            {["О компании", "Блог игромана", "Доставка & Оплата", "Гарантия", "FAQ"].map((item) => (
-                                <li key={item}>
-                                    <Link href="#" className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
-                                        {item}
+                            {[
+                                { name: "О компании", href: "/about" },
+                                { name: "Блог игромана", href: "/blog" },
+                                { name: "Доставка & Оплата", href: "/info/delivery" },
+                                { name: "Гарантия", href: "/info/guarantee" },
+                                { name: "FAQ", href: "/faq" }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link href={item.href} className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                        {item.name}
                                     </Link>
                                 </li>
                             ))}
@@ -76,24 +88,24 @@ export const Footer = () => {
                     <div>
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Связь с нами</h4>
                         <div className="space-y-8">
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                                    <Phone size={16} className="text-neutral-400" />
+                            <Link href="tel:84952259922" className="flex items-start gap-4 group/item">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
+                                    <Phone size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-sm font-black text-white">8 495 225-99-22</p>
                                     <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">09:00 — 21:00 (ЕЖЕДНЕВНО)</p>
                                 </div>
-                            </div>
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                                    <Mail size={16} className="text-neutral-400" />
+                            </Link>
+                            <Link href="mailto:support@nintendo.shop" className="flex items-start gap-4 group/item">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
+                                    <Mail size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-sm font-black text-white">support@nintendo.shop</p>
                                     <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПО ЛЮБЫМ ВОПРОСАМ</p>
                                 </div>
-                            </div>
+                            </Link>
                             <div className="flex items-start gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
                                     <MapPin size={16} className="text-neutral-400" />
@@ -111,12 +123,12 @@ export const Footer = () => {
                 <div className="pt-12 border-t border-white/5">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
                         {[
-                            { name: "Публичная оферта", href: "/legal/offer" },
-                            { name: "Конфиденциальность", href: "/legal/privacy" },
-                            { name: "Условия использования", href: "/legal/terms" },
-                            { name: "Файлы Cookie", href: "/legal/cookies" },
-                            { name: "Карта сайта", href: "/sitemap-info" },
-                            { name: "Возврат товара", href: "/guarantee" }
+                            { name: "Публичная оферта", href: "/info/offer" },
+                            { name: "Конфиденциальность", href: "/info/privacy" },
+                            { name: "Условия использования", href: "/info/terms" },
+                            { name: "Файлы Cookie", href: "/info/cookies" },
+                            { name: "Карта сайта", href: "/sitemap.xml" },
+                            { name: "Возврат товара", href: "/info/guarantee" }
                         ].map((link) => (
                             <Link 
                                 key={link.name} 
