@@ -3,67 +3,147 @@
 @tailwind utilities;
 
 :root {
-  /* Electric Premium Palette */
-  --foreground-rgb: 26, 26, 26;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 235, 235, 240;
-  
+  /* ═══════════════════════════════════════════════
+     Soft Premium Light — Design Tokens
+     ═══════════════════════════════════════════════ */
+
+  /* Background — всегда светлая гамма */
+  --bg-base: #F0F2F5;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #E8EAED;
+  --bg-inset: #E2E4E8;
+
+  /* Text */
+  --text-primary: #1A1A2E;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+
+  /* Accent — Nintendo Red → Dark */
   --primary: #e60012;
-  --primary-glow: rgba(230, 0, 18, 0.15);
-  --secondary: #1a1a1a;
+  --primary-glow: rgba(230, 0, 18, 0.12);
+  --primary-soft: rgba(230, 0, 18, 0.06);
   --accent: #00f2ff;
-  
-  --surface: #ffffff;
-  --surface-border: rgba(0, 0, 0, 0.06);
-  --surface-glass: rgba(255, 255, 255, 0.82);
-  
-  /* Gradations */
-  --grad-premium: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-  --grad-electric: linear-gradient(90deg, #e60012 0%, #ff4d5a 100%);
+
+  /* Neumorphism Shadows (Light Theme) */
+  --shadow-light: rgba(255, 255, 255, 0.8);
+  --shadow-dark: rgba(166, 171, 184, 0.25);
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-dark-bg: rgba(10, 10, 14, 0.75);
+  --glass-dark-border: rgba(255, 255, 255, 0.08);
+
+  /* Gradients */
+  --grad-accent: linear-gradient(135deg, #e60012 0%, #2d2d2d 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 245, 245, 247;
-    --background-start-rgb: 24, 24, 24;
-    --background-end-rgb: 8, 8, 8;
-    
-    --surface: #121212;
-    --surface-border: rgba(255, 255, 255, 0.08);
-    --surface-glass: rgba(18, 18, 18, 0.85);
-  }
-}
-
+/* ───── BODY ───── */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      rgb(var(--background-start-rgb)) 0%,
-      rgb(var(--background-end-rgb)) 100%
-    );
-  background-attachment: scroll;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ───── Layout ───── */
 .container {
   @apply max-w-screen-2xl mx-auto px-8 md:px-16 lg:px-24;
 }
 
-/* Glassmorphism Utility */
-.glass {
-  background: var(--surface-glass);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--surface-border);
+/* ═══════════════════════════════════════════════
+   Neumorphism Utilities
+   ═══════════════════════════════════════════════ */
+
+/* Raised (convex) surface — cards, sections */
+.neu-raised {
+  background: var(--bg-surface);
+  box-shadow:
+    6px 6px 14px var(--shadow-dark),
+    -6px -6px 14px var(--shadow-light);
+  border-radius: 24px;
 }
 
-/* Premium Card Shadow */
+/* Sunken (concave) surface — inputs, search bars */
+.neu-inset {
+  background: var(--bg-inset);
+  box-shadow:
+    inset 4px 4px 8px var(--shadow-dark),
+    inset -4px -4px 8px var(--shadow-light);
+  border-radius: 16px;
+}
+
+/* Interactive button — raised → pressed on active */
+.neu-btn {
+  background: var(--bg-surface);
+  box-shadow:
+    4px 4px 10px var(--shadow-dark),
+    -4px -4px 10px var(--shadow-light);
+  border-radius: 16px;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+.neu-btn:hover {
+  box-shadow:
+    6px 6px 16px var(--shadow-dark),
+    -6px -6px 16px var(--shadow-light);
+}
+.neu-btn:active {
+  box-shadow:
+    inset 3px 3px 6px var(--shadow-dark),
+    inset -3px -3px 6px var(--shadow-light);
+  transform: scale(0.98);
+}
+
+/* ═══════════════════════════════════════════════
+   Glassmorphism Utilities
+   ═══════════════════════════════════════════════ */
+
+/* Light Glass — for floating cards over neumorphic surfaces */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+}
+
+/* Dark Glass — for Header */
+.glass-dark {
+  background: var(--glass-dark-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--glass-dark-border);
+}
+
+/* ═══════════════════════════════════════════════
+   Premium Utilities
+   ═══════════════════════════════════════════════ */
+
 .premium-shadow {
-  box-shadow: 0 32px 64px -16px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 50px -12px rgba(0,0,0,0.08);
+}
+
+/* Accent gradient text */
+.gradient-text {
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 ::selection {
   background-color: var(--primary);
   color: white;
+}
+
+/* Smooth scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--shadow-dark);
+  border-radius: 3px;
 }

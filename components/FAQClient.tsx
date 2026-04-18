@@ -142,7 +142,7 @@ export default function FAQClient({ faqs }: { faqs: FAQ[] }) {
       </div>
 
       {/* Category Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-20 mt-6 md:px-0">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-12 mt-6">
         {Object.keys(CAT_ICONS).map((slug) => {
           const Icon = CAT_ICONS[slug];
           const isActive = active === slug;
@@ -150,36 +150,32 @@ export default function FAQClient({ faqs }: { faqs: FAQ[] }) {
             <button
               key={slug}
               onClick={() => setActive(isActive ? "all" : slug)}
-              className={`group p-6 rounded-[32px] border text-left transition-all duration-300 cursor-pointer overflow-hidden relative ${
+              className={`group p-7 rounded-[28px] border text-left transition-all duration-300 cursor-pointer ${
                 isActive
-                  ? "bg-primary border-primary shadow-2xl shadow-primary/30"
-                  : "bg-white dark:bg-neutral-900 border-neutral-100 dark:border-white/5 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5"
+                  ? "bg-secondary border-secondary shadow-2xl shadow-secondary/20"
+                  : "bg-neutral-50 border-transparent hover:bg-white hover:border-neutral-100 hover:shadow-xl hover:shadow-neutral-200/50"
               }`}
             >
               <div
-                className={`w-11 h-11 rounded-2xl flex items-center justify-center mb-5 transition-all duration-300 ${
+                className={`w-13 h-13 w-12 h-12 rounded-[18px] flex items-center justify-center mb-5 transition-all duration-300 ${
                   isActive
                     ? "bg-white/20"
-                    : "bg-neutral-50 dark:bg-white/5 group-hover:bg-primary group-hover:text-white"
+                    : "bg-white shadow-sm group-hover:bg-primary group-hover:shadow-xl group-hover:shadow-primary/30"
                 }`}
               >
                 <Icon
-                  size={20}
+                  size={22}
                   className={`transition-colors ${
-                    isActive ? "text-white" : "text-neutral-400"
+                    isActive ? "text-white" : "text-neutral-300 group-hover:text-white"
                   }`}
                 />
               </div>
-              <h3 className={`text-sm font-black mb-1 uppercase tracking-tight ${isActive ? "text-white" : "text-secondary dark:text-white"}`}>
+              <h3 className={`text-lg font-black mb-1 ${isActive ? "text-white" : "text-secondary"}`}>
                 {slug}
               </h3>
-              <p className={`text-[10px] font-bold uppercase tracking-widest ${isActive ? "text-white/60" : "text-neutral-400 font-medium"}`}>
-                {counts[slug] ?? 0} ответов
+              <p className={`text-[11px] font-bold uppercase tracking-widest ${isActive ? "text-white/50" : "text-neutral-400"}`}>
+                {counts[slug] ?? 0} вопросов
               </p>
-              
-              {isActive && (
-                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              )}
             </button>
           );
         })}

@@ -107,16 +107,16 @@ export const QuickFilters = () => {
   };
 
   return (
-    <div className="sticky top-[84px] z-40 glass border-b border-neutral-100 dark:border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all">
+    <div className="sticky top-[72px] z-40 bg-[var(--bg-base)] border-b border-[var(--bg-elevated)]">
       <div className="relative group/nav">
         {/* Left Scroll Gradient & Button */}
         {canScrollLeft && (
-          <div className="absolute left-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-r from-white via-white/80 to-transparent flex items-center pr-8">
+          <div className="absolute left-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-r from-[var(--bg-base)] via-[var(--bg-base)]/80 to-transparent flex items-center pr-8">
             <button
               onClick={() => scroll("left")}
-              className="pointer-events-auto ml-2 w-8 h-8 rounded-full bg-white border border-neutral-100 shadow-lg flex items-center justify-center hover:bg-neutral-50 transition-all hover:scale-110 active:scale-95"
+              className="pointer-events-auto ml-2 w-8 h-8 rounded-full neu-btn flex items-center justify-center hover:scale-110 active:scale-95"
             >
-              <ChevronLeft size={16} className="text-secondary" />
+              <ChevronLeft size={16} className="text-[var(--text-primary)]" />
             </button>
           </div>
         )}
@@ -144,23 +144,23 @@ export const QuickFilters = () => {
             }
           `}</style>
 
-          {/* Special colored pills - Elite Upgrade */}
+          {/* Special colored pills */}
           {SPECIAL_FILTERS.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-2 px-6 py-2 rounded-full text-[11px] font-black whitespace-nowrap transition-all shrink-0 active:scale-95 hover:shadow-lg hover:-translate-y-0.5",
+                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-bold whitespace-nowrap transition-all shrink-0 active:scale-95 hover:brightness-95",
                 item.color
               )}
             >
-              <span className="text-sm">{item.icon}</span>
-              <span className="uppercase tracking-widest">{item.label}</span>
+              <span>{item.icon}</span>
+              {item.label}
             </Link>
           ))}
 
           {/* Divider */}
-          <div className="w-[1px] h-6 bg-neutral-100 dark:bg-white/10 shrink-0 mx-3" />
+          <div className="w-px h-5 bg-neutral-100 shrink-0 mx-1" />
 
           {/* Regular text links */}
           {QUICK_LINKS.map((item) => {
@@ -172,10 +172,10 @@ export const QuickFilters = () => {
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "text-[10px] font-bold uppercase tracking-widest whitespace-nowrap px-4 py-2 rounded-xl transition-all shrink-0 active:scale-95",
+                  "text-[12px] font-bold whitespace-nowrap px-3 py-1.5 rounded-lg transition-all shrink-0 active:scale-95",
                   isActive
-                    ? "bg-primary text-white shadow-xl shadow-primary/20"
-                    : "text-neutral-500 hover:text-secondary dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/5"
+                    ? "bg-primary text-white"
+                    : "text-neutral-500 hover:text-secondary hover:bg-neutral-50"
                 )}
               >
                 {item.label}
@@ -186,12 +186,12 @@ export const QuickFilters = () => {
 
         {/* Right Scroll Gradient & Button */}
         {canScrollRight && (
-          <div className="absolute right-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-l from-white via-white/80 to-transparent flex items-center justify-end pl-8">
+          <div className="absolute right-0 top-0 bottom-0 z-10 w-24 pointer-events-none bg-gradient-to-l from-[var(--bg-base)] via-[var(--bg-base)]/80 to-transparent flex items-center justify-end pl-8">
             <button
               onClick={() => scroll("right")}
-              className="pointer-events-auto mr-2 w-8 h-8 rounded-full bg-white border border-neutral-100 shadow-lg flex items-center justify-center hover:bg-neutral-50 transition-all hover:scale-110 active:scale-95"
+              className="pointer-events-auto mr-2 w-8 h-8 rounded-full neu-btn flex items-center justify-center hover:scale-110 active:scale-95"
             >
-              <ChevronRight size={16} className="text-secondary" />
+              <ChevronRight size={16} className="text-[var(--text-primary)]" />
             </button>
           </div>
         )}

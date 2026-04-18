@@ -48,81 +48,78 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 glass h-[84px] flex items-center transition-all duration-300">
+    <header className="sticky top-0 z-50 glass-dark h-[72px] flex items-center transition-all duration-300">
       <div className="container px-4 flex items-center gap-4 xl:gap-8">
         
-        {/* Logo - Sleek & Modern */}
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <div className="w-11 h-11 bg-primary rounded-2xl flex items-center justify-center shadow-[0_8px_20px_var(--primary-glow)] transition-all group-hover:scale-105 active:scale-95 overflow-hidden relative">
-            <span className="text-white font-black text-2xl italic leading-none ml-0.5 z-10 select-none">N</span>
+          <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center shadow-[0_6px_16px_var(--primary-glow)] transition-all group-hover:scale-105 active:scale-95 overflow-hidden relative">
+            <span className="text-white font-black text-xl italic leading-none ml-0.5 z-10 select-none">N</span>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
           </div>
           <div className="hidden lg:flex flex-col leading-none -space-y-0.5">
-            <span className="text-[10px] font-black text-neutral-400/80 uppercase tracking-[0.2em] mb-0.5">Premium Store</span>
-            <span className="text-[17px] font-black text-secondary tracking-tighter uppercase dark:text-white">
+            <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.2em] mb-0.5">Premium Store</span>
+            <span className="text-[16px] font-black text-white tracking-tighter uppercase">
                 Nintendo<span className="text-primary italic">.</span>Shop
             </span>
           </div>
         </Link>
 
-        {/* Catalog Button - Elite Production Upgrade */}
-        <button className="hidden lg:flex items-center gap-3 px-8 h-12 bg-gradient-to-r from-secondary to-[#222] text-white rounded-[18px] font-black text-xs uppercase tracking-[0.1em] shadow-2xl shadow-black/20 hover:from-primary hover:to-primary hover:shadow-[0_12px_32px_var(--primary-glow)] transition-all duration-500 group shrink-0 relative overflow-hidden active:scale-95">
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <Menu size={18} className="transition-transform duration-500 group-hover:rotate-180" />
-          <span className="relative z-10">Каталог</span>
-          {/* Subtle Shimmer Effect */}
-          <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[150%] transition-all duration-1000" />
+        {/* Catalog Button */}
+        <button className="hidden lg:flex items-center gap-2 px-5 h-10 bg-white/10 text-white/90 rounded-xl font-bold text-[13px] uppercase tracking-tight border border-white/10 hover:bg-primary hover:border-primary hover:shadow-[0_6px_16px_var(--primary-glow)] transition-all group shrink-0">
+          <Menu size={16} className="transition-transform group-hover:rotate-90" />
+          <span>Каталог</span>
         </button>
 
         {/* Central Search Bar */}
-        <div className="flex-1 min-w-[300px] max-w-3xl">
+        <div className="flex-1 min-w-[280px] max-w-3xl">
           <Search />
         </div>
 
-        {/* Action Icons Panel */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        {/* Action Icons */}
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           
           {/* Auth Area */}
           <div className="relative" ref={menuRef}>
             {mounted && user ? (
               <button 
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-100/50 transition-all group"
+                className="flex flex-col items-center justify-center w-14 h-14 rounded-xl hover:bg-white/10 transition-all group"
               >
                 <div className="relative">
-                    <User size={22} className="text-secondary dark:text-neutral-400 group-hover:text-primary transition-colors" />
-                    <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-neutral-900 shadow-sm" />
+                    <User size={20} className="text-white/70 group-hover:text-white transition-colors" />
+                    <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full ring-2 ring-black/50 shadow-sm" />
                 </div>
-                <span className="text-[9px] font-black text-neutral-400/80 uppercase tracking-widest mt-2 group-hover:text-secondary truncate max-w-full px-1">
+                <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest mt-1.5 group-hover:text-white/80 truncate max-w-full px-1">
                     {user.name?.split(' ')[0] ?? "Профиль"}
                 </span>
                 
                 {/* User Dropdown */}
                 {userMenuOpen && (
-                    <div className="absolute top-[calc(100%+12px)] right-0 w-64 glass rounded-[24px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] p-2 z-[60] animate-in fade-in slide-in-from-top-2">
-                         <div className="px-4 py-4 mb-2 bg-neutral-900 rounded-2xl">
-                            <p className="text-[9px] font-black text-white/40 uppercase tracking-widest leading-none">Личный кабинет</p>
-                            <p className="text-sm font-black text-white mt-1.5 truncate">{user.name ?? user.email}</p>
+                    <div className="absolute top-[calc(100%+8px)] right-0 w-60 glass rounded-2xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.15)] p-1.5 z-[60] animate-in fade-in slide-in-from-top-2">
+                         <div className="px-4 py-3 mb-1 bg-[var(--bg-base)] rounded-xl">
+                            <p className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest leading-none">Личный кабинет</p>
+                            <p className="text-sm font-black text-[var(--text-primary)] mt-1 truncate">{user.name ?? user.email}</p>
                         </div>
-                        <ul className="space-y-1">
+                        <ul className="space-y-0.5">
                             <li>
-                                <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-white/5 rounded-xl transition-all">
-                                    <Package size={16} className="text-neutral-400" />
+                                <button className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-base)] rounded-xl transition-all">
+                                    <Package size={15} className="text-[var(--text-muted)]" />
                                     Мои заказы
                                 </button>
                             </li>
                             <li>
-                                <button className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100/50 dark:hover:bg-white/5 rounded-xl transition-all">
-                                    <Heart size={16} className="text-neutral-400" />
+                                <button className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-base)] rounded-xl transition-all">
+                                    <Heart size={15} className="text-[var(--text-muted)]" />
                                     Избранное
                                 </button>
                             </li>
-                            <li className="pt-2 border-t border-neutral-100 dark:border-white/5">
+                            <li className="pt-1 border-t border-[var(--bg-elevated)]">
                                 <button 
                                     onClick={handleLogout}
-                                    className="w-full flex items-center gap-3 px-4 py-3 text-xs font-black text-primary hover:bg-primary/5 rounded-xl transition-all"
+                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/5 rounded-xl transition-all"
                                 >
-                                    <LogOut size={16} />
+                                    <LogOut size={15} />
                                     Выход
                                 </button>
                             </li>
@@ -133,10 +130,10 @@ export const Header = () => {
             ) : (
                 <Link 
                     href="/auth/login"
-                    className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-100/50 transition-all group"
+                    className="flex flex-col items-center justify-center w-14 h-14 rounded-xl hover:bg-white/10 transition-all group"
                 >
-                    <User size={22} className="text-secondary dark:text-neutral-400 group-hover:text-primary transition-colors" />
-                    <span className="text-[9px] font-black text-neutral-400/80 uppercase tracking-widest mt-2 group-hover:text-secondary">Войти</span>
+                    <User size={20} className="text-white/70 group-hover:text-white transition-colors" />
+                    <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest mt-1.5 group-hover:text-white/80">Войти</span>
                 </Link>
             )}
           </div>
@@ -144,26 +141,26 @@ export const Header = () => {
           {/* Orders Link */}
           <Link 
             href="/orders" 
-            className="hidden sm:flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-100/50 transition-all group"
+            className="hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-xl hover:bg-white/10 transition-all group"
           >
-            <Package size={22} className="text-secondary dark:text-neutral-400 group-hover:text-primary transition-colors" />
-            <span className="text-[9px] font-black text-neutral-400/80 uppercase tracking-widest mt-2 group-hover:text-secondary">Заказы</span>
+            <Package size={20} className="text-white/70 group-hover:text-white transition-colors" />
+            <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest mt-1.5 group-hover:text-white/80">Заказы</span>
           </Link>
 
-          {/* Cart with Premium Badge */}
+          {/* Cart */}
           <Link 
             href="/cart" 
-            className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl hover:bg-neutral-100/50 transition-all group relative bg-neutral-50 dark:bg-white/5"
+            className="flex flex-col items-center justify-center w-14 h-14 rounded-xl hover:bg-white/10 transition-all group relative bg-white/5"
           >
             <div className="relative">
-                <ShoppingCart size={22} className="text-secondary dark:text-neutral-300 group-hover:text-primary transition-colors" />
+                <ShoppingCart size={20} className="text-white/80 group-hover:text-white transition-colors" />
                 {mounted && totalItems > 0 && (
-                    <span className="absolute -top-1.5 -right-2.5 bg-primary text-white text-[9px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-white dark:ring-neutral-900 shadow-lg shadow-primary/20 animate-in zoom-in h-[16px] flex items-center justify-center">
+                    <span className="absolute -top-1.5 -right-2.5 bg-primary text-white text-[8px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-black/40 shadow-lg shadow-primary/20 animate-in zoom-in h-[14px] flex items-center justify-center">
                         {totalItems}
                     </span>
                 )}
             </div>
-            <span className="text-[9px] font-black text-neutral-400/80 uppercase tracking-widest mt-2 group-hover:text-secondary">Корзина</span>
+            <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest mt-1.5 group-hover:text-white/80">Корзина</span>
           </Link>
 
         </div>

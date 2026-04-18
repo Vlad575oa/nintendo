@@ -7,15 +7,9 @@ export const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative overflow-hidden bg-gradient-to-b from-transparent via-neutral-900/50 to-neutral-950 text-white pt-24 pb-12 border-t border-white/5">
-            {/* Premium Mesh Gradient Background */}
-            <div className="absolute inset-0 z-0 opacity-40">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,107,0,0.15)_0%,transparent_50%)]" />
-                <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_100%,rgba(255,107,0,0.08)_0%,transparent_40%)]" />
-            </div>
-
+        <footer className="bg-neutral-950 text-white pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
             {/* Glowing Accent */}
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/20 blur-[180px] rounded-full -translate-y-1/2 pointer-events-none opacity-50" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[150px] rounded-full -translate-y-1/2" />
 
             <div className="container relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-24">
@@ -51,8 +45,8 @@ export const Footer = () => {
                     </div>
 
                     {/* Navigation */}
-                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Экосистема</h4>
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Экосистема</h4>
                         <ul className="space-y-4">
                             {[
                                 { name: "Nintendo Switch", href: "/catalog/nintendo" },
@@ -69,10 +63,10 @@ export const Footer = () => {
                             ))}
                         </ul>
                     </div>
- 
+
                     {/* Info */}
-                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Информация</h4>
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Информация</h4>
                         <ul className="space-y-4">
                             {[
                                 { name: "О компании", href: "/about" },
@@ -91,9 +85,9 @@ export const Footer = () => {
                     </div>
 
                     {/* Contacts */}
-                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Связь с нами</h4>
-                        <div className="space-y-6">
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Связь с нами</h4>
+                        <div className="space-y-8">
                             <Link href="tel:84952259922" className="flex items-start gap-4 group/item">
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
                                     <Phone size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
@@ -108,11 +102,11 @@ export const Footer = () => {
                                     <Mail size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm font-black text-white italic">support@nintendo.shop</p>
+                                    <p className="text-sm font-black text-white">support@nintendo.shop</p>
                                     <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПО ЛЮБЫМ ВОПРОСАМ</p>
                                 </div>
                             </Link>
-                            <div className="flex items-start gap-4 pt-4 border-t border-white/[0.03]">
+                            <div className="flex items-start gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
                                     <MapPin size={16} className="text-neutral-400" />
                                 </div>
@@ -129,11 +123,11 @@ export const Footer = () => {
                 <div className="pt-12 border-t border-white/5">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
                         {[
-                            { name: "Публичная оферта", href: "/legal/offer" },
-                            { name: "Конфиденциальность", href: "/legal/privacy" },
-                            { name: "Условия использования", href: "/legal/terms" },
-                            { name: "Файлы Cookie", href: "/legal/cookies" },
-                            { name: "Карта сайта", href: "/sitemap-info" },
+                            { name: "Публичная оферта", href: "/info/offer" },
+                            { name: "Конфиденциальность", href: "/info/privacy" },
+                            { name: "Условия использования", href: "/info/terms" },
+                            { name: "Файлы Cookie", href: "/info/cookies" },
+                            { name: "Карта сайта", href: "/sitemap.xml" },
                             { name: "Возврат товара", href: "/info/guarantee" }
                         ].map((link) => (
                             <Link 

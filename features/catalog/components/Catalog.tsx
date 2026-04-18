@@ -124,7 +124,7 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
             <Pagination totalPages={totalPages} />
           </>
         ) : (
-          <div className="bg-white/40 dark:bg-white/[0.02] backdrop-blur-sm rounded-[32px] py-32 text-center border border-white/5">
+          <div className="bg-neutral-50 rounded-[32px] py-32 text-center">
             <p className="text-xl text-neutral-400 font-bold">Ничего не найдено</p>
             <p className="text-neutral-500 mt-2 text-sm">
               {hasFilters

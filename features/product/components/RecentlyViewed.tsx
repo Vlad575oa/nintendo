@@ -55,27 +55,27 @@ export function RecentlyViewed() {
 
   return (
     <section className="mt-28">
-      <div className="flex items-end justify-between mb-10 px-4">
+      <div className="flex items-end justify-between mb-8 px-4">
         <div>
-          <h2 className="text-3xl md:text-4xl font-black text-white leading-tight uppercase tracking-tighter italic">
-            Вы <span className="text-primary not-italic">просматривали</span>
+          <h2 className="text-3xl font-black text-neutral-900 leading-tight">
+            Вы просматривали
           </h2>
-          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-2">Товары, которые вас заинтересовали</p>
+          <p className="text-neutral-500 mt-2">Товары, которые вас заинтересовали</p>
         </div>
       </div>
 
-      {/* Category tabs — Elite Glassmorphism styling */}
+      {/* Category tabs — only show when there are 2+ categories */}
       {tabs.length > 2 && (
-        <div className="flex items-center gap-3 mb-10 px-4 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-2 mb-6 px-4 overflow-x-auto no-scrollbar">
           {tabs.map(({ label, slug }) => (
             <button
               key={String(slug)}
               onClick={() => setActiveSlug(slug)}
               className={cn(
-                "px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 border",
+                "px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all",
                 activeSlug === slug
-                  ? "bg-primary border-primary text-white shadow-xl shadow-primary/20"
-                  : "bg-white/5 border-white/5 text-neutral-400 hover:bg-white/10 hover:text-white"
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : "bg-neutral-50 text-neutral-500 hover:bg-neutral-100"
               )}
             >
               {label}

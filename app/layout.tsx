@@ -155,7 +155,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body className={`${inter.className} text-secondary antialiased flex flex-col min-h-screen relative`}>
+      <body className={`${inter.className} bg-[var(--bg-base)] text-[var(--text-primary)] antialiased flex flex-col min-h-screen`}>
         <TopBar />
         <Header />
         <Suspense fallback={null}>
