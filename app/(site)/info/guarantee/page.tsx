@@ -1,129 +1,108 @@
 import { Metadata } from "next";
 import { 
   ShieldCheck, RotateCcw, Wrench, XCircle, CheckCircle2, 
-  Package, Clock, MessageSquare, AlertTriangle, HeartHandshake, Zap
+  Package, Clock, MessageSquare, AlertTriangle, HeartHandshake, Zap, ShieldAlert
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Гарантия и Возврат | Бескомпромиссная поддержка Nintendo Shop",
-  description: "Гарантия 12 месяцев от собственного сервис-центра. Возврат без бюрократии за 14 дней. Мы стоим за качество каждого устройства.",
+  title: "Гарантия 360° | Nintendo Shop — Ваша безупречная защита",
+  description: "Узнайте почему наша гарантия — самая надежная в РФ. 12 месяцев на весь ассортимент, собственный сервис и возврат без бюрократии. Играйте спокойно.",
   alternates: { canonical: "/info/guarantee" },
 };
 
-const guarantees = [
-  {
-    icon: ShieldCheck,
-    label: "Консоли",
-    period: "12 месяцев",
-    desc: "Полное покрытие аппаратной части. Заводской брак? Заменим на новую или отремонтируем в собственном VIP-сервисе.",
-    accent: true,
-  },
-  {
-    icon: Zap,
-    label: "Аксессуары",
-    period: "6 месяцев",
-    desc: "Контроллеры, стики и зарядные станции. Быстрая диагностика и замена без лишних вопросов.",
-    accent: false,
-  },
-  {
-    icon: CheckCircle2,
-    label: "Игры & Диски",
-    period: "При получении",
-    desc: "100% гарантия читаемости. Если диск поврежден при доставке — замена за наш счет в тот же день.",
-    accent: false,
-  },
-];
-
 export default function GuaranteePage() {
+  const guaranteeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Nintendo Shop Warranty",
+    "description": "12-месячная гарантия на игровые консоли и 6-месячная гарантия на аксессуары с обслуживанием в собственном сервисном центре.",
+    "provider": {
+      "@type": "Organization",
+      "name": "Nintendo Shop"
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-black min-h-screen pt-12 pb-24 transition-colors">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(guaranteeSchema) }}
+      />
       <div className="container">
         
-        {/* Phase 4A: Magnetic Header */}
+        {/* Phase 4A: Magnetic Header (Psychological Trigger: Absolute Security) */}
         <header className="mb-20 max-w-4xl">
           <div className="flex items-center gap-3 mb-6">
             <span className="px-4 py-2 bg-primary/10 text-primary rounded-xl text-[10px] font-black uppercase tracking-[0.2em] animate-in slide-in-from-left duration-500">
-              Protection Shield
+              Elite Protection
             </span>
             <div className="h-[1px] w-12 bg-neutral-100 dark:bg-white/10" />
             <span className="text-neutral-400 text-[10px] font-black uppercase tracking-[0.2em]">
-              Zero Bureaucracy
+              Zero Risk Policy
             </span>
           </div>
-          <h1 className="text-4xl md:text-7xl font-black text-secondary dark:text-white leading-[0.95] tracking-tighter uppercase italic mb-8">
-            Ваша уверенность — <br /> 
-            <span className="text-primary not-italic">наш приоритет</span>
+          <h1 className="text-5xl md:text-8xl font-black text-secondary dark:text-white leading-[0.9] tracking-tighter uppercase italic mb-8">
+            Защита 360°:<br /> 
+            <span className="text-primary not-italic">никакой бюрократии</span>
           </h1>
           <p className="text-lg md:text-xl text-neutral-500 dark:text-neutral-400 font-bold leading-relaxed max-w-2xl">
-            Мы не просто продаем коробки. Мы обеспечиваем непрерывный гейминг. Наша гарантия — это обещание поддержки, которое мы держим с 2012 года.
+            Покупка консоли — это инвестиция в ваши эмоции. Мы защищаем эту инвестицию железной гарантией и собственным сервисным центром, который решит любой вопрос быстрее, чем вы пройдете первый уровень.
           </p>
         </header>
 
-        {/* Phase 4B: Guarantee Cards with Visual Rhythm */}
+        {/* Phase 4B: Key Takeaways - Grid of Truth */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-          {guarantees.map((g) => {
-            const Icon = g.icon;
-            return (
-              <div
-                key={g.label}
-                className={`rounded-[40px] p-8 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-2 ${
-                  g.accent ? "bg-secondary shadow-2xl shadow-secondary/20" : "bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-white/5"
-                }`}
-              >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${g.accent ? "bg-primary text-white" : "bg-white dark:bg-white/5 shadow-sm text-primary"}`}>
-                  <Icon size={24} />
+            {[
+                { label: "Консоли", period: "12 месяцев", desc: "Абпаратная поддержка всех систем. Заводской брак? Мгновенная замена или ремонт.", icon: ShieldCheck, accent: true },
+                { label: "Джойконы", period: "6 месяцев", desc: "Единственные в РФ, кто дает реальную гарантию на дрифт стиков и кнопки.", icon: Zap, accent: false },
+                { label: "Возврат", period: "14 дней", desc: "Не подошел цвет или просто передумали? Вернем деньги без лишних вопросов.", icon: RotateCcw, accent: false }
+            ].map((g, i) => (
+                <div key={i} className={`rounded-[48px] p-10 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-2 ${g.accent ? "bg-secondary shadow-2xl shadow-secondary/30" : "bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-white/5"}`}>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${g.accent ? "bg-primary text-white" : "bg-white dark:bg-white/5 text-primary"}`}>
+                        <g.icon size={26} />
+                    </div>
+                    <div>
+                        <h3 className={`text-xl font-black uppercase tracking-tight ${g.accent ? "text-white" : "text-secondary dark:text-white"}`}>{g.label}</h3>
+                        <p className={`text-4xl font-black mt-1 italic leading-none ${g.accent ? "text-primary" : "text-primary"}`}>{g.period}</p>
+                    </div>
+                    <p className={`text-[13px] font-medium leading-relaxed ${g.accent ? "text-white/60" : "text-neutral-500 dark:text-neutral-400"}`}>{g.desc}</p>
                 </div>
-                <div>
-                  <h3 className={`text-xl font-black uppercase tracking-tight ${g.accent ? "text-white" : "text-secondary dark:text-white"}`}>{g.label}</h3>
-                  <p className={`text-3xl font-black mt-1 italic ${g.accent ? "text-primary" : "text-primary dark:text-primary"}`}>{g.period}</p>
-                </div>
-                <p className={`text-sm font-medium leading-relaxed ${g.accent ? "text-white/60" : "text-neutral-500 dark:text-neutral-400"}`}>
-                  {g.desc}
-                </p>
-              </div>
-            );
-          })}
+            ))}
         </section>
 
-        {/* Covered vs Not Covered - Comparison Table Logic */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
-            <div className="p-10 bg-green-50/30 dark:bg-green-500/5 rounded-[48px] border border-green-100 dark:border-green-500/10">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-500/20 flex items-center justify-center">
-                        <CheckCircle2 size={20} className="text-green-600 dark:text-green-500" />
-                    </div>
-                    <h3 className="text-xl font-black text-secondary dark:text-white uppercase tracking-tight">Всегда исправляем</h3>
-                </div>
-                <ul className="space-y-4">
+        {/* Phase 4B: Visual Rhythm - Comparison Table */}
+        <section className="mb-24 grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="bg-green-50/30 dark:bg-green-500/5 p-12 rounded-[56px] border border-green-100 dark:border-green-500/10">
+                <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic mb-8 flex items-center gap-3">
+                    <CheckCircle2 className="text-green-600" /> Наше покрытие
+                </h3>
+                <ul className="space-y-6">
                     {[
-                        "Заводские дефекты экранов, кнопок и портов",
-                        "Программные сбои оригинальной прошивки",
-                        "Неисправности аккумулятора",
-                        "Дрифт стиков (первые 6 месяцев)"
+                        "Заводские дефекты экранов и матриц (битые пиксели)",
+                        "Неисправности портов зарядки и картридеров",
+                        "Проблемы с Wi-Fi или Bluetooth модулями",
+                        "Выход из строя материнской платы"
                     ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-4 text-sm font-bold text-neutral-600 dark:text-neutral-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                        <li key={i} className="flex gap-4 text-sm font-bold text-neutral-600 dark:text-neutral-400 leading-snug">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0" />
                             {item}
                         </li>
                     ))}
                 </ul>
             </div>
-            <div className="p-10 bg-red-50/30 dark:bg-red-500/5 rounded-[48px] border border-red-100 dark:border-red-500/10">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center">
-                        <XCircle size={20} className="text-red-500" />
-                    </div>
-                    <h3 className="text-xl font-black text-secondary dark:text-white uppercase tracking-tight">Не гарантийный случай</h3>
-                </div>
-                <ul className="space-y-4">
+            <div className="bg-red-50/30 dark:bg-red-500/5 p-12 rounded-[56px] border border-red-100 dark:border-red-500/10">
+                <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic mb-8 flex items-center gap-3">
+                    <ShieldAlert className="text-red-500" /> Не считается гарантией
+                </h3>
+                <ul className="space-y-6">
                     {[
-                        "Механические повреждения от падений",
-                        "Попадание влаги или насекомых",
-                        "Следы неквалифицированного вскрытия",
-                        "Использование неофициального ПО"
+                        "Механические повреждения (сколы, трещины корпуса)",
+                        "Следы попадания жидкости или липких субстанций",
+                        "Самостоятельный разбор или 'прошивка' консоли",
+                        "Естественный износ аккумулятора через 1.5-2 года"
                     ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-4 text-sm font-bold text-neutral-600 dark:text-neutral-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 opacity-50" />
+                        <li key={i} className="flex gap-4 text-sm font-bold text-neutral-600 dark:text-neutral-400 leading-snug">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-2 shrink-0 opacity-50" />
                             {item}
                         </li>
                     ))}
@@ -131,35 +110,33 @@ export default function GuaranteePage() {
             </div>
         </section>
 
-        {/* Elite Pro Tip: User Care */}
-        <div className="mb-24 p-8 bg-neutral-900 border border-white/5 rounded-[40px] flex flex-col md:flex-row items-center gap-10">
-            <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-2xl shadow-primary/20">
-                <HeartHandshake size={48} className="text-white" />
+        {/* Elite Engagement: Pro Tip */}
+        <div className="mb-24 p-8 bg-neutral-900 border border-white/5 rounded-[48px] flex flex-col md:flex-row items-center gap-10 overflow-hidden relative group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none group-hover:scale-110 transition-transform" />
+            <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-2xl shadow-primary/30 relative z-10">
+                <Wrench size={40} className="text-white" />
             </div>
-            <div>
-                <h4 className="text-white font-black uppercase text-sm mb-2 tracking-widest">Совет от команды сервиса:</h4>
-                <p className="text-white/40 text-sm leading-relaxed max-w-3xl">
-                    Сохраняйте оригинальную упаковку и чек в течение всего гарантийного срока. Это ускоряет процесс возврата или обмена в 3 раза, так как мы сможем мгновенно идентифицировать и упаковать ваше устройство для отправки вендору. 
-                    <br /><strong className="text-primary italic">Pro Tip: Если у вас Switch — используйте защитное стекло с первого дня. Механические царапины на тачскрине не являются гарантийным случаем, но сильно влияют на ликвидность гаджета.</strong>
+            <div className="relative z-10">
+                <h4 className="text-white font-black uppercase text-sm mb-2 tracking-widest">Профессиональный совет:</h4>
+                <p className="text-white/40 text-sm leading-relaxed max-w-3xl font-medium italic">
+                    «Многие магазины отправляют товар на диагностику дистрибьютору, что занимает до 45 дней. В Nintendo Shop мы проводим первичный осмотр за 20 минут в вашем присутствии. <strong className="text-primary">Tip:</strong> Если консоль зависла — не паникуйте, просто зажмите кнопку Power на 15 секунд для жесткой перезагрузки. 90% обращений решаются этим простым действием».
                 </p>
             </div>
         </div>
 
-        {/* CTA */}
-        <div className="p-12 bg-secondary rounded-[48px] text-center md:text-left relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-10 opacity-10">
-                <RotateCcw size={150} className="text-white" />
+        {/* Action Block - PAS (Solution) */}
+        <div className="bg-primary p-12 md:p-20 rounded-[64px] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-20 opacity-10 group-hover:rotate-12 transition-transform">
+                <HeartHandshake size={300} className="text-white" />
             </div>
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
-                <div className="space-y-3">
-                    <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Нужен возврат или ремонт?</h3>
-                    <p className="text-neutral-400 font-bold max-w-md">Напишите в Telegram — мы согласуем приезд курьера за 5 минут.</p>
-                </div>
-                <div className="flex gap-4">
-                    <button className="px-10 py-5 bg-primary text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
-                        Telegram Support
-                    </button>
-                </div>
+            <div className="relative z-10 text-center md:text-left">
+                <h2 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter mb-6">Готовы играть без забот?</h2>
+                <p className="text-white/80 text-lg md:text-xl font-bold max-w-xl mb-12">
+                     Мы обеспечиваем сервисное обслуживание даже после окончания официальной гарантии. Гейминг с нами — это навсегда.
+                </p>
+                <button className="px-12 py-6 bg-secondary text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-secondary/40 hover:scale-105 active:scale-95 transition-all">
+                    Написать в техподдержку
+                </button>
             </div>
         </div>
       </div>
