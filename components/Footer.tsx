@@ -129,11 +129,11 @@ export const Footer = () => {
                 <div className="pt-12 border-t border-white/5">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
                         {[
-                            { name: "Публичная оферта", href: "/info/offer" },
-                            { name: "Конфиденциальность", href: "/info/privacy" },
-                            { name: "Условия использования", href: "/info/terms" },
-                            { name: "Файлы Cookie", href: "/info/cookies" },
-                            { name: "Карта сайта", href: "/sitemap.xml" },
+                            { name: "Публичная оферта", href: "/legal/offer" },
+                            { name: "Конфиденциальность", href: "/legal/privacy" },
+                            { name: "Условия использования", href: "/legal/terms" },
+                            { name: "Файлы Cookie", href: "/legal/cookies" },
+                            { name: "Карта сайта", href: "/sitemap-info" },
                             { name: "Возврат товара", href: "/info/guarantee" }
                         ].map((link) => (
                             <Link 
