@@ -6,6 +6,7 @@ import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle, ChevronRight }
 import Link from "next/link";
 import { Metadata } from "next";
 import { marked } from "marked";
+import { BlogShareBar } from "@/components/BlogShareBar";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
 
@@ -169,26 +170,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {/* Social Proof & Interactive Footer */}
           <footer className="mt-20 pt-10 border-t border-neutral-100">
-            <div className="bg-white p-8 rounded-[32px] border border-neutral-100 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-               <div>
-                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em] mb-2 text-center md:text-left">Было полезно?</p>
-                  <div className="flex items-center gap-6 text-xl">
-                      <button className="hover:scale-125 transition-transform">🔥</button>
-                      <button className="hover:scale-125 transition-transform">🤩</button>
-                      <button className="hover:scale-125 transition-transform">🤔</button>
-                      <button className="hover:scale-125 transition-transform">👾</button>
-                  </div>
-               </div>
-               <div className="flex items-center gap-4">
-                  <div className="text-right hidden sm:block">
-                     <p className="text-xs font-black text-secondary">Поделись инсайдом</p>
-                     <p className="text-[10px] text-neutral-400 font-bold">1.2k репостов за неделю</p>
-                  </div>
-                  <button className="flex items-center gap-3 px-6 py-3.5 bg-primary text-white rounded-[18px] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20 active:scale-95">
-                      <Share2 size={14} /> Отправить другу
-                  </button>
-               </div>
-            </div>
+            <BlogShareBar
+              title={post.title}
+              url={`${baseUrl}/blog/${post.slug}`}
+            />
           </footer>
 
           {/* Related Material */}
