@@ -25,7 +25,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const productUrl = `/catalog/${product.category?.slug || "any"}/${product.slug}`;
 
   return (
-    <div className="group bg-white rounded-[32px] p-3 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-neutral-100 flex flex-col relative overflow-hidden h-full">
+    <div className="group bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm rounded-[32px] p-3 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-neutral-100 dark:hover:border-white/10 flex flex-col relative overflow-hidden h-full">
       {/* Badges */}
       <div className="absolute top-4 left-4 z-10 flex gap-1 font-black text-[8px] uppercase tracking-tighter">
         {product.isNew && <span className="bg-orange-500 text-white px-2 py-0.5 rounded-full shadow-sm">New</span>}
@@ -80,15 +80,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Bottom Actions - Icons row */}
           <div className="flex items-center gap-2 pt-3 mt-auto">
-            <button className="w-10 h-10 bg-neutral-50 rounded-2xl flex items-center justify-center text-neutral-400 hover:text-primary hover:bg-white hover:shadow-sm border border-transparent hover:border-neutral-100 transition-all active:scale-90">
+            <button className="w-10 h-10 bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl flex items-center justify-center text-neutral-400 hover:text-primary hover:bg-white hover:shadow-sm border border-transparent hover:border-neutral-100 transition-all active:scale-90">
                 <Scale size={16} />
             </button>
-            <button className="w-10 h-10 bg-neutral-50 rounded-2xl flex items-center justify-center text-neutral-400 hover:text-red-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-neutral-100 transition-all active:scale-90">
+            <button className="w-10 h-10 bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl flex items-center justify-center text-neutral-400 hover:text-red-500 hover:bg-white hover:shadow-sm border border-transparent hover:border-neutral-100 transition-all active:scale-90">
                 <Heart size={16} />
             </button>
             
             {/* Cart Button on the right */}
-            <button className="flex-1 h-10 bg-orange-50 border border-orange-100 text-orange-600 rounded-2xl flex items-center justify-center hover:bg-orange-600 hover:text-white transition-all active:scale-95">
+            <button className="flex-1 h-10 bg-orange-500/10 border border-orange-500/20 text-orange-600 rounded-2xl flex items-center justify-center hover:bg-orange-600 hover:text-white transition-all active:scale-95">
                 <ShoppingCart size={18} strokeWidth={2.5} />
             </button>
           </div>

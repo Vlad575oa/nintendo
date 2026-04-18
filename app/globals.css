@@ -5,8 +5,8 @@
 :root {
   /* Electric Premium Palette */
   --foreground-rgb: 26, 26, 26;
-  --background-start-rgb: 252, 252, 253;
-  --background-end-rgb: 255, 255, 255;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 235, 235, 240;
   
   --primary: #e60012;
   --primary-glow: rgba(230, 0, 18, 0.15);
@@ -25,8 +25,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 245, 245, 247;
-    --background-start-rgb: 10, 10, 10;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 24, 24, 24;
+    --background-end-rgb: 8, 8, 8;
     
     --surface: #121212;
     --surface-border: rgba(255, 255, 255, 0.08);
@@ -38,10 +38,10 @@ body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-start-rgb)) 0%,
+      rgb(var(--background-end-rgb)) 100%
+    );
+  background-attachment: scroll;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   -webkit-font-smoothing: antialiased;
 }
