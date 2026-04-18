@@ -107,7 +107,7 @@ export const QuickFilters = () => {
   };
 
   return (
-    <div className="sticky top-[84px] z-40 bg-white border-b border-neutral-100 shadow-sm">
+    <div className="sticky top-[84px] z-40 glass border-b border-neutral-100 dark:border-white/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all">
       <div className="relative group/nav">
         {/* Left Scroll Gradient & Button */}
         {canScrollLeft && (
@@ -144,23 +144,23 @@ export const QuickFilters = () => {
             }
           `}</style>
 
-          {/* Special colored pills */}
+          {/* Special colored pills - Elite Upgrade */}
           {SPECIAL_FILTERS.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-bold whitespace-nowrap transition-all shrink-0 active:scale-95 hover:brightness-95",
+                "flex items-center gap-2 px-6 py-2 rounded-full text-[11px] font-black whitespace-nowrap transition-all shrink-0 active:scale-95 hover:shadow-lg hover:-translate-y-0.5",
                 item.color
               )}
             >
-              <span>{item.icon}</span>
-              {item.label}
+              <span className="text-sm">{item.icon}</span>
+              <span className="uppercase tracking-widest">{item.label}</span>
             </Link>
           ))}
 
           {/* Divider */}
-          <div className="w-px h-5 bg-neutral-100 shrink-0 mx-1" />
+          <div className="w-[1px] h-6 bg-neutral-100 dark:bg-white/10 shrink-0 mx-3" />
 
           {/* Regular text links */}
           {QUICK_LINKS.map((item) => {
@@ -172,10 +172,10 @@ export const QuickFilters = () => {
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "text-[12px] font-bold whitespace-nowrap px-3 py-1.5 rounded-lg transition-all shrink-0 active:scale-95",
+                  "text-[10px] font-bold uppercase tracking-widest whitespace-nowrap px-4 py-2 rounded-xl transition-all shrink-0 active:scale-95",
                   isActive
-                    ? "bg-primary text-white"
-                    : "text-neutral-500 hover:text-secondary hover:bg-neutral-50"
+                    ? "bg-primary text-white shadow-xl shadow-primary/20"
+                    : "text-neutral-500 hover:text-secondary dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/5"
                 )}
               >
                 {item.label}

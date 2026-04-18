@@ -65,10 +65,13 @@ export const Header = () => {
           </div>
         </Link>
 
-        {/* Catalog Button - Refined */}
-        <button className="hidden lg:flex items-center gap-2 px-6 h-11 bg-secondary text-white rounded-2xl font-black text-sm uppercase tracking-tighter shadow-xl shadow-black/5 hover:bg-primary hover:shadow-[0_8px_20px_var(--primary-glow)] transition-all group shrink-0">
-          <Menu size={18} className="transition-transform group-hover:rotate-90" />
-          <span>Каталог</span>
+        {/* Catalog Button - Elite Production Upgrade */}
+        <button className="hidden lg:flex items-center gap-3 px-8 h-12 bg-gradient-to-r from-secondary to-[#222] text-white rounded-[18px] font-black text-xs uppercase tracking-[0.1em] shadow-2xl shadow-black/20 hover:from-primary hover:to-primary hover:shadow-[0_12px_32px_var(--primary-glow)] transition-all duration-500 group shrink-0 relative overflow-hidden active:scale-95">
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Menu size={18} className="transition-transform duration-500 group-hover:rotate-180" />
+          <span className="relative z-10">Каталог</span>
+          {/* Subtle Shimmer Effect */}
+          <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[150%] transition-all duration-1000" />
         </button>
 
         {/* Central Search Bar */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Search as SearchIcon, ChevronDown, X, Loader2, History, TrendingUp } from "lucide-react";
+import { Search as SearchIcon, ChevronDown, X, Loader2, History, TrendingUp, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -116,26 +116,27 @@ export const Search = () => {
 
           <div className="space-y-6">
             <section>
-              <h3 className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <TrendingUp size={12} />
-                {query.length >= 2 ? "Результаты поиска" : "Популярные товары"}
+              <h3 className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-[0.2em] mb-5 flex items-center gap-2">
+                <TrendingUp size={12} className="text-primary" />
+                {query.length >= 2 ? "Результаты поиска" : "Популярное"}
               </h3>
               
-              <div className="space-y-1">
+              <div className="grid grid-cols-1 gap-2">
                 {(query.length >= 2 ? results : POPULAR_ITEMS).map((item) => (
                   <Link 
                     key={item.id} 
                     href={`/catalog/${item.categorySlug || "any"}/${item.slug || ""}`}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-4 p-2.5 rounded-2xl hover:bg-neutral-50 transition-all group"
+                    className="flex items-center gap-4 p-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-white/5 transition-all group relative overflow-hidden"
                   >
-                    <div className="w-11 h-11 relative rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-100">
+                    <div className="w-14 h-14 relative rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-100 dark:border-white/5 transition-transform group-hover:scale-105">
                       <Image src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-bold text-secondary group-hover:text-primary transition-colors truncate">{item.name}</h4>
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">{item.category}</p>
+                      <h4 className="text-sm font-black text-secondary dark:text-white group-hover:text-primary transition-colors truncate">{item.name}</h4>
+                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">Раздел каталога</p>
                     </div>
+                    <ChevronDown size={14} className="text-neutral-200 group-hover:text-primary -rotate-90 transition-all opacity-0 group-hover:opacity-100 group-hover:translate-x-1" />
                   </Link>
                 ))}
               </div>
@@ -143,15 +144,21 @@ export const Search = () => {
 
             {query.length < 2 && (
                 <section>
-                    <h3 className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <History size={12} />
-                        История поиска
-                    </h3>
-                    <div className="flex flex-col">
-                        {["DualSense Edge", "Switch 2", "Xbox Controller"].map((history) => (
-                            <button key={history} className="flex items-center gap-3 p-2.5 text-xs font-bold text-neutral-500 hover:text-secondary hover:bg-neutral-50 rounded-xl transition-all text-left">
-                                <SearchIcon size={12} className="text-neutral-300" />
-                                {history}
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                            <History size={12} className="text-primary" />
+                            История
+                        </h3>
+                        <button className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline">Очистить</button>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        {["Sony PlayStation 5 Pro", "xbox", "Nintendo Switch 2"].map((history) => (
+                            <button key={history} className="flex items-center justify-between p-3 text-xs font-bold text-neutral-500 hover:text-secondary hover:bg-neutral-50 dark:hover:bg-white/5 rounded-xl transition-all text-left group">
+                                <div className="flex items-center gap-3">
+                                    <History size={14} className="text-neutral-300 group-hover:text-primary" />
+                                    <span>{history}</span>
+                                </div>
+                                <X size={14} className="text-neutral-200 hover:text-primary opacity-0 group-hover:opacity-100" />
                             </button>
                         ))}
                     </div>
@@ -159,9 +166,30 @@ export const Search = () => {
             )}
           </div>
           
-          <div className="mt-6 pt-5 border-t border-neutral-50">
-             <Link href="/catalog/all" onClick={() => setIsOpen(false)} className="block text-center text-xs font-black text-primary uppercase tracking-[0.1em] hover:text-red-700 transition-colors">
+          <div className="mt-8 pt-6 border-t border-neutral-100 dark:border-white/5 space-y-6">
+             <div className="flex flex-wrap gap-2">
+                {[
+                    "КУПИТЬ ШУТЕРЫ PLAYSTATION 5 PRO",
+                    "КУПИТЬ ПРИКЛЮЧЕНЧЕСКИЕ ИГРЫ PLAYSTATION 5 PRO",
+                    "КУПИТЬ РОЛЕВЫЕ ИГРЫ PLAYSTATION 5 PRO",
+                ].map((tag) => (
+                    <Link 
+                        key={tag} 
+                        href="/catalog/all" 
+                        className="px-4 py-2 bg-neutral-50 dark:bg-white/5 border border-neutral-100 dark:border-white/10 rounded-full text-[9px] font-black text-secondary dark:text-neutral-400 uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all active:scale-95"
+                    >
+                        {tag}
+                    </Link>
+                ))}
+             </div>
+
+             <Link 
+                href="/catalog/all" 
+                onClick={() => setIsOpen(false)} 
+                className="flex items-center justify-center gap-2 w-full h-12 bg-neutral-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.1em] hover:bg-primary hover:shadow-[0_12px_24px_var(--primary-glow)] transition-all"
+             >
                 Смотреть все результаты в каталоге
+                <ArrowRight size={14} />
              </Link>
           </div>
         </div>
