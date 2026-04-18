@@ -30,17 +30,17 @@ const MaxIcon = () => (
 
 export const TopBar = () => {
   return (
-    <div className="bg-white border-b border-neutral-100">
-      <div className="container px-4 h-9 flex items-center justify-between gap-4">
+    <div className="bg-white dark:bg-black border-b border-neutral-100 dark:border-white/5 transition-colors">
+      <div className="container px-4 h-10 flex items-center justify-between gap-4">
         {/* Left */}
         <div className="flex items-center gap-5">
-          <div className="flex items-center gap-1.5 text-neutral-500">
-            <MapPin size={13} className="text-neutral-400 shrink-0" />
-            <span className="text-[12px] font-semibold">Москва</span>
+          <div className="flex items-center gap-1.5 text-neutral-500/80">
+            <MapPin size={12} className="text-neutral-400 shrink-0" />
+            <span className="text-[11px] font-black uppercase tracking-wider">Москва</span>
           </div>
-          <div className="flex items-center gap-1.5 text-neutral-500">
-            <Clock size={13} className="text-neutral-400 shrink-0" />
-            <span className="text-[12px] font-semibold">с 9:00 до 21:00</span>
+          <div className="flex items-center gap-1.5 text-neutral-500/80">
+            <Clock size={12} className="text-neutral-400 shrink-0" />
+            <span className="text-[11px] font-black uppercase tracking-wider">09:00 — 21:00</span>
           </div>
         </div>
 
@@ -48,9 +48,9 @@ export const TopBar = () => {
         <div className="flex items-center gap-4">
           <a
             href="tel:84952259922"
-            className="text-[12px] font-black text-secondary hover:text-primary transition-colors tracking-tight"
+            className="text-[11px] font-black text-secondary dark:text-white hover:text-primary transition-colors tracking-widest uppercase"
           >
-            8 (495) 225-99-22
+            8 495 225-99-22
           </a>
 
           <div className="flex items-center gap-1.5">

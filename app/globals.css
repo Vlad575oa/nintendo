@@ -3,30 +3,67 @@
 @tailwind utilities;
 
 :root {
+  /* Electric Premium Palette */
+  --foreground-rgb: 26, 26, 26;
+  --background-start-rgb: 252, 252, 253;
+  --background-end-rgb: 255, 255, 255;
+  
   --primary: #e60012;
-  --secondary: #2d2d2d;
+  --primary-glow: rgba(230, 0, 18, 0.15);
+  --secondary: #1a1a1a;
+  --accent: #00f2ff;
+  
+  --surface: #ffffff;
+  --surface-border: rgba(0, 0, 0, 0.06);
+  --surface-glass: rgba(255, 255, 255, 0.82);
+  
+  /* Gradations */
+  --grad-premium: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+  --grad-electric: linear-gradient(90deg, #e60012 0%, #ff4d5a 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 245, 245, 247;
+    --background-start-rgb: 10, 10, 10;
+    --background-end-rgb: 0, 0, 0;
+    
+    --surface: #121212;
+    --surface-border: rgba(255, 255, 255, 0.08);
+    --surface-glass: rgba(18, 18, 18, 0.85);
+  }
 }
 
 body {
-  background-color: #F2F3F5;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
-  @apply max-w-7xl mx-auto px-4;
+  @apply max-w-screen-2xl mx-auto px-8 md:px-16 lg:px-24;
 }
 
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+/* Glassmorphism Utility */
+.glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+/* Premium Card Shadow */
+.premium-shadow {
+  box-shadow: 0 32px 64px -16px rgba(0,0,0,0.08);
 }
 
 ::selection {
   background-color: var(--primary);
   color: white;
 }
-

@@ -1,163 +1,129 @@
 "use client";
 
 import Link from "next/link";
-import { Send, MessageSquare, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Send, Phone, Mail, MapPin, Youtube, Instagram, Twitter } from "lucide-react";
 
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
 
-  const legalLinks = [
-    { name: "Публичная оферта", href: "/legal/offer" },
-    { name: "Политика обработки персональных данных", href: "/legal/privacy" },
-    { name: "Условия использования", href: "/legal/terms" },
-    { name: "Настройки файлов Cookie", href: "/legal/cookies" },
-    { name: "Карта сайта", href: "/sitemap-info" },
-  ];
+    return (
+        <footer className="bg-neutral-950 text-white pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
+            {/* Glowing Accent */}
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[150px] rounded-full -translate-y-1/2" />
 
-  return (
-    <footer className="bg-[#0A0A0A] text-white pt-20 pb-10 border-t border-neutral-900">
-      <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand & Contacts */}
-          <div className="space-y-6">
-            <Link href="/" className="text-2xl font-black tracking-tighter hover:opacity-80 transition-opacity">
-              NINTENDO<span className="text-primary">.</span>SHOP
-            </Link>
-            <div className="space-y-4 text-sm text-neutral-400 font-bold">
-              <p className="flex flex-col">
-                <span className="text-neutral-500 uppercase text-[10px] tracking-widest mb-1">Телефон</span>
-                <Link href="tel:+74951234567" className="text-white hover:text-primary transition-colors text-lg">
-                  +7 (495) 123-45-67
-                </Link>
-              </p>
-              <p className="flex flex-col">
-                <span className="text-neutral-500 uppercase text-[10px] tracking-widest mb-1">Email</span>
-                <Link href="mailto:support@nintendo-shop.ru" className="text-white hover:text-primary transition-colors">
-                  support@nintendo-shop.ru
-                </Link>
-              </p>
-              <div className="pt-4 space-y-1 text-[11px] leading-relaxed">
-                <p>ООО "ГЕЙМПРО"</p>
-                <p>ИНН: 7743891254</p>
-                <p>ОГРН: 1177746382091</p>
-                <p>Адрес: г. Москва, ул. Митинская, д. 10, корп. 1</p>
-              </div>
+            <div className="container relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-24">
+                    
+                    {/* Brand Section */}
+                    <div className="flex flex-col gap-8">
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <div className="w-11 h-11 bg-primary rounded-2xl flex items-center justify-center shadow-[0_8px_20px_var(--primary-glow)] transition-all group-hover:scale-105 active:scale-95">
+                                <span className="text-white font-black text-2xl italic leading-none ml-0.5">N</span>
+                            </div>
+                            <span className="text-2xl font-black tracking-tighter uppercase italic">
+                                Nintendo<span className="text-primary italic">.</span>Shop
+                            </span>
+                        </Link>
+                        <p className="text-neutral-500 text-sm font-medium leading-relaxed max-w-xs">
+                            Ваш премиальный гид в мире гейминга. Только оригинальные консоли, редкие аксессуары и экспертный контент с 2012 года.
+                        </p>
+                        <div className="flex items-center gap-4">
+                            {[
+                                { icon: Send, color: "hover:bg-[#26A5E4]", id: "tg" },
+                                { icon: Youtube, color: "hover:bg-[#FF0000]", id: "yt" },
+                                { icon: Instagram, color: "hover:bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500", id: "ig" }
+                            ].map((social) => (
+                                <Link 
+                                    key={social.id}
+                                    href="#" 
+                                    className={`w-11 h-11 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center transition-all duration-300 ${social.color} hover:text-white text-neutral-400`}
+                                >
+                                    <social.icon size={18} />
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Navigation */}
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Экосистема</h4>
+                        <ul className="space-y-4">
+                            {["Nintendo Switch", "PlayStation 5", "Xbox Series", "Retro Gaming", "Аксессуары"].map((item) => (
+                                <li key={item}>
+                                    <Link href="#" className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                        {item}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Info */}
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Информация</h4>
+                        <ul className="space-y-4">
+                            {["О компании", "Блог игромана", "Доставка & Оплата", "Гарантия", "FAQ"].map((item) => (
+                                <li key={item}>
+                                    <Link href="#" className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                        {item}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Contacts */}
+                    <div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Связь с нами</h4>
+                        <div className="space-y-8">
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                                    <Phone size={16} className="text-neutral-400" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-black text-white">8 495 225-99-22</p>
+                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">09:00 — 21:00 (ЕЖЕДНЕВНО)</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                                    <Mail size={16} className="text-neutral-400" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-black text-white">support@nintendo.shop</p>
+                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПО ЛЮБЫМ ВОПРОСАМ</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
+                                    <MapPin size={16} className="text-neutral-400" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-black text-white">Москва, Митинская 10</p>
+                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПРЕМИУМ ШОУРУМ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                        <p className="text-[10px] font-black text-neutral-600 uppercase tracking-widest">
+                            © {currentYear} NINTENDO SHOP · ООО "ГЕЙМПРО" 
+                        </p>
+                        <div className="flex items-center gap-6">
+                            <Link href="/privacy" className="text-[10px] font-black text-neutral-500 hover:text-white transition-colors uppercase tracking-widest">Privacy Policy</Link>
+                            <Link href="/terms" className="text-[10px] font-black text-neutral-500 hover:text-white transition-colors uppercase tracking-widest">Terms</Link>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                        <span className="text-[9px] font-black text-neutral-500 uppercase tracking-[.3em]">Built with</span>
+                        <div className="bg-primary px-2 py-0.5 rounded-md text-[9px] font-black text-white italic">AI</div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          {/* Catalog */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">Каталог</h4>
-            <ul className="space-y-3 text-sm font-bold text-neutral-400">
-              <li><Link href="/catalog/playstation" className="hover:text-white transition-colors">PlayStation 5</Link></li>
-              <li><Link href="/catalog/xbox" className="hover:text-white transition-colors">Xbox Series</Link></li>
-              <li><Link href="/catalog/nintendo" className="hover:text-white transition-colors">Nintendo Switch</Link></li>
-              <li><Link href="/catalog/accessories" className="hover:text-white transition-colors">Аксессуары</Link></li>
-              <li><Link href="/catalog/games" className="hover:text-white transition-colors">Игры</Link></li>
-            </ul>
-          </div>
-
-          {/* Info */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">Информация</h4>
-            <ul className="space-y-3 text-sm font-bold text-neutral-400">
-              <li><Link href="/about" className="text-sm font-medium hover:text-white transition-colors">О компании</Link></li>
-              <li><Link href="/blog" className="text-sm font-medium hover:text-white transition-colors">Блог игромана</Link></li>
-              <li><Link href="/faq" className="text-sm font-medium hover:text-white transition-colors">Вопросы и ответы</Link></li>
-              <li><Link href="/delivery" className="text-sm font-medium hover:text-white transition-colors">Доставка и оплата</Link></li>
-              <li><Link href="/warranty" className="text-sm font-medium hover:text-white transition-colors">Гарантия</Link></li>
-              <li><Link href="/contacts" className="hover:text-white transition-colors">Контакты</Link></li>
-            </ul>
-          </div>
-
-          {/* Social & Support */}
-          <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">На связи</h4>
-            <div className="flex flex-wrap gap-2.5">
-              <Link 
-                href="https://t.me/max_support" 
-                target="_blank"
-                className="group relative"
-                title="Support"
-              >
-                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#9000FF]/20 group-hover:border-[#9000FF]/50 group-hover:shadow-[0_0_15px_rgba(144,0,255,0.3)] group-hover:scale-110 active:scale-95">
-                  <div className="w-4 h-4 rounded-full border-[2.5px] border-neutral-400 group-hover:border-white transition-colors flex items-center justify-center">
-                    <div className="w-0.5 h-0.5 bg-neutral-400 group-hover:bg-white rounded-full" />
-                  </div>
-                </div>
-              </Link>
-              <Link 
-                href="https://t.me/nintendo_shop" 
-                target="_blank"
-                className="group relative"
-                title="Telegram"
-              >
-                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#26A5E4]/20 group-hover:border-[#26A5E4]/50 group-hover:shadow-[0_0_15px_rgba(38,165,228,0.3)] group-hover:scale-110 active:scale-95">
-                  <Send size={16} className="text-neutral-400 group-hover:text-white transition-colors ml-0.5" />
-                </div>
-              </Link>
-              <Link 
-                href="https://vk.com/nintendo_shop" 
-                target="_blank"
-                className="group relative"
-                title="VK"
-              >
-                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#4C75A3]/20 group-hover:border-[#4C75A3]/50 group-hover:shadow-[0_0_15px_rgba(76,117,163,0.3)] group-hover:scale-110 active:scale-95">
-                  <div className="text-neutral-400 group-hover:text-white font-black text-[10px] transition-colors">VK</div>
-                </div>
-              </Link>
-              <Link 
-                href="https://youtube.com/nintendo_shop" 
-                target="_blank"
-                className="group relative"
-                title="YouTube"
-              >
-                <div className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center transition-all group-hover:bg-[#FF0000]/20 group-hover:border-[#FF0000]/50 group-hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] group-hover:scale-110 active:scale-95">
-                  <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[6px] border-l-neutral-400 group-hover:border-l-white border-b-[4px] border-b-transparent ml-0.5 transition-colors" />
-                </div>
-              </Link>
-            </div>
-            
-            <div className="pt-4 border-t border-neutral-900">
-              <div className="flex items-center gap-3 text-neutral-400 group">
-                <div className="w-8 h-8 rounded-full bg-neutral-900 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                  <Clock size={14} />
-                </div>
-                <div className="space-y-0.5">
-                  <span className="block text-[10px] uppercase tracking-wider text-neutral-600 font-bold">Время работы</span>
-                  <span className="block text-[12px] text-white font-bold leading-none">10:00 — 21:00</span>
-                </div>
-              </div>
-              <p className="mt-3 text-[10px] text-neutral-500 font-medium leading-relaxed">
-                Ежедневно, без выходных и праздников.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="pt-10 border-t border-neutral-900 flex flex-col items-center">
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-8">
-            {legalLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href}
-                className="text-[11px] font-bold text-neutral-500 hover:text-neutral-300 transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          
-          <div className="text-center space-y-4 max-w-4xl mx-auto">
-            <p className="text-[10px] font-bold text-neutral-600 leading-relaxed uppercase tracking-widest">
-              © {currentYear} NINTENDO SHOP. ВСЕ ПРАВА ЗАЩИЩЕНЫ. КОПИРОВАНИЕ МАТЕРИАЛОВ С САЙТА ЗАПРЕЩЕНО. 
-              ВСЯ ИНФОРМАЦИЯ НА САЙТЕ НОСИТ СПРАВОЧНЫЙ ХАРАКТЕР И НЕ ЯВЛЯЕТСЯ ПУБЛИЧНОЙ ОФЕРТОЙ (П.2 СТ.437 ГК РФ).
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
+        </footer>
+    )
+}
