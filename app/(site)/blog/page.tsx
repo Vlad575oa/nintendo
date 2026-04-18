@@ -103,71 +103,103 @@ export default async function BlogPage({
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {posts.map((post, idx) => {
               const isFeatured = idx === 0 && currentCategory === "Все";
               const readTime = calculateReadingTime(post.content);
-              const catColor = CATEGORY_COLORS[post.category ?? ""] ?? "bg-neutral-50 text-neutral-500";
+              const catColor = CATEGORY_COLORS[post.category ?? ""] ?? "bg-white/20 text-white";
+              const catColorCard = CATEGORY_COLORS[post.category ?? ""] ?? "bg-neutral-50 text-neutral-500";
+
+              if (isFeatured) {
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="group col-span-1 md:col-span-2 lg:col-span-3 relative rounded-[32px] overflow-hidden bg-neutral-900 min-h-[420px] flex items-end hover:shadow-2xl hover:shadow-neutral-300/60 transition-all duration-500"
+                  >
+                    {/* Full-bleed image */}
+                    <img
+                      src={post.image || "https://picsum.photos/seed/featured/1200/600"}
+                      alt={post.title}
+                      className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                    {/* Content over image */}
+                    <div className="relative z-10 p-8 md:p-12 w-full">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm bg-white/15 backdrop-blur-sm text-white border border-white/20`}>
+                          {post.category || "Статья"}
+                        </span>
+                        <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
+                          <Clock size={10} /> {readTime} мин · {format(new Date(post.createdAt), "dd.MM.yy")}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl md:text-4xl font-black text-white leading-[1.15] tracking-tight mb-4 max-w-3xl group-hover:text-primary transition-colors duration-300">
+                        {post.title}
+                      </h3>
+                      <p className="text-white/60 font-medium leading-relaxed text-sm md:text-base max-w-2xl line-clamp-2 mb-6">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 px-5 bg-primary rounded-full flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest group-hover:bg-white group-hover:text-primary transition-all duration-300">
+                          Читать <ArrowRight size={12} />
+                        </div>
+                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Nintendo Media</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              }
 
               return (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className={`group flex flex-col bg-white border border-neutral-100 rounded-[28px] overflow-hidden hover:border-primary/20 hover:shadow-2xl hover:shadow-neutral-200/60 transition-all duration-500 ${
-                    isFeatured ? "md:col-span-2 lg:col-span-2 md:flex-row" : ""
-                  }`}
+                  className="group flex flex-col bg-white border border-neutral-100 rounded-[24px] overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-neutral-200/70 hover:-translate-y-0.5 transition-all duration-300"
                 >
                   {/* Image */}
-                  <div
-                    className={`relative overflow-hidden bg-neutral-100 ${
-                      isFeatured ? "md:w-1/2 aspect-video md:aspect-auto" : "aspect-[16/9]"
-                    }`}
-                  >
+                  <div className="relative overflow-hidden bg-neutral-100 aspect-[16/9]">
                     <img
-                      src={post.image || "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=800&q=80"}
+                      src={post.image || "https://picsum.photos/seed/card/800/450"}
                       alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     />
-                    {/* Category badge on image */}
-                    <span className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm ${catColor}`}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm ${catColorCard}`}>
                       {post.category || "Статья"}
                     </span>
                   </div>
 
                   {/* Content */}
-                  <div className={`p-7 flex flex-col flex-grow ${isFeatured ? "md:w-1/2 justify-center md:p-10" : ""}`}>
-                    <div className="flex items-center gap-3 text-neutral-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={11} className="text-primary" />
-                        {readTime} мин
-                      </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center gap-2 text-neutral-400 text-[9px] font-bold uppercase tracking-wider mb-3">
+                      <Clock size={10} className="text-primary" />
+                      {readTime} мин чтения
                       <span className="w-1 h-1 bg-neutral-200 rounded-full" />
                       {format(new Date(post.createdAt), "dd.MM.yy")}
                     </div>
 
-                    <h3
-                      className={`font-black text-secondary group-hover:text-primary transition-colors leading-[1.2] mb-3 tracking-tight ${
-                        isFeatured ? "text-2xl md:text-3xl" : "text-lg md:text-xl"
-                      }`}
-                    >
+                    <h3 className="font-black text-secondary group-hover:text-primary transition-colors leading-[1.25] mb-2.5 tracking-tight text-base md:text-lg">
                       {post.title}
                     </h3>
 
-                    <p className="text-neutral-500 font-medium leading-relaxed text-sm mb-6 line-clamp-2">
+                    <p className="text-neutral-400 font-medium leading-relaxed text-[13px] mb-5 line-clamp-3 flex-grow">
                       {post.excerpt}
                     </p>
 
-                    <div className="mt-auto flex items-center justify-between border-t border-neutral-50 pt-5">
+                    <div className="flex items-center justify-between pt-4 border-t border-neutral-50">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-neutral-100 flex items-center justify-center">
-                          <User size={12} className="text-neutral-400" />
+                        <div className="w-6 h-6 rounded-full bg-neutral-100 flex items-center justify-center">
+                          <User size={11} className="text-neutral-400" />
                         </div>
                         <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">
                           Nintendo Media
                         </span>
                       </div>
-                      <div className="w-9 h-9 rounded-full border border-neutral-100 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-white transition-all duration-300">
-                        <ArrowRight size={15} />
+                      <div className="w-8 h-8 rounded-full border border-neutral-100 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-white transition-all duration-300">
+                        <ArrowRight size={13} />
                       </div>
                     </div>
                   </div>

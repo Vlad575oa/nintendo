@@ -146,9 +146,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {/* Cinematic Main Image */}
         <div className="max-w-5xl mx-auto mb-16 px-0 md:px-4">
           <div className="relative aspect-video md:aspect-[21/9] md:rounded-[40px] overflow-hidden shadow-2xl group transition-transform duration-700 hover:scale-[1.01]">
-            <img 
-              src={post.image || "/images/placeholder.jpg"} 
-              className="w-full h-full object-cover" 
+            <img
+              src={post.image || "/images/placeholder.jpg"}
+              className="w-full h-full object-cover"
               alt={post.title}
             />
           </div>
@@ -156,14 +156,44 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         <div className="max-w-3xl mx-auto px-4 sm:px-0">
           {/* Content with Custom Prose */}
-          <div className="prose prose-neutral prose-base max-w-none 
-            prose-h2:text-2xl prose-h2:font-black prose-h2:text-secondary prose-h2:tracking-tight prose-h2:mt-10 prose-h2:mb-4 prose-h2:uppercase prose-h2:italic
-            prose-h3:text-lg prose-h3:font-black prose-h3:text-secondary prose-h3:mb-3
-            prose-p:text-neutral-600 prose-p:font-medium prose-p:leading-relaxed prose-p:mb-6 text-sm md:text-base
-            prose-li:text-neutral-600 prose-li:font-medium prose-li:mb-2
+          <div className="
+            prose prose-neutral max-w-none text-base leading-relaxed
+
+            prose-h2:text-2xl prose-h2:font-black prose-h2:text-secondary
+            prose-h2:tracking-tight prose-h2:mt-14 prose-h2:mb-5
+            prose-h2:pb-3 prose-h2:border-b prose-h2:border-neutral-100
+
+            prose-h3:text-lg prose-h3:font-black prose-h3:text-secondary
+            prose-h3:mt-8 prose-h3:mb-3
+
+            prose-p:text-neutral-600 prose-p:leading-[1.85] prose-p:mb-5
+
+            prose-a:text-primary prose-a:font-bold prose-a:no-underline
+            hover:prose-a:underline
+
             prose-strong:text-secondary prose-strong:font-black
-            prose-img:rounded-[24px] prose-img:shadow-xl prose-img:my-8
-            prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-black prose-blockquote:text-secondary prose-blockquote:not-italic
+
+            prose-ul:my-5 prose-ul:space-y-2
+            prose-ol:my-5 prose-ol:space-y-2
+            prose-li:text-neutral-600 prose-li:leading-relaxed
+
+            prose-table:w-full prose-table:text-sm
+            prose-thead:bg-neutral-50
+            prose-th:font-black prose-th:text-secondary prose-th:py-3 prose-th:px-4 prose-th:text-left
+            prose-td:py-3 prose-td:px-4 prose-td:border-b prose-td:border-neutral-100 prose-td:text-neutral-600
+
+            prose-blockquote:not-italic prose-blockquote:border-l-4
+            prose-blockquote:border-primary prose-blockquote:bg-primary/5
+            prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-2xl
+            prose-blockquote:text-secondary prose-blockquote:font-semibold
+
+            prose-hr:border-neutral-100 prose-hr:my-10
+
+            prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-8
+
+            prose-code:text-primary prose-code:bg-neutral-100
+            prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
+            prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
           ">
             <div dangerouslySetInnerHTML={{ __html: marked(post.content) as string }} />
           </div>
