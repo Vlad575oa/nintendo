@@ -107,20 +107,37 @@ export const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                        <p className="text-[10px] font-black text-neutral-600 uppercase tracking-widest">
-                            © {currentYear} NINTENDO SHOP · ООО "ГЕЙМПРО" 
-                        </p>
-                        <div className="flex items-center gap-6">
-                            <Link href="/privacy" className="text-[10px] font-black text-neutral-500 hover:text-white transition-colors uppercase tracking-widest">Privacy Policy</Link>
-                            <Link href="/terms" className="text-[10px] font-black text-neutral-500 hover:text-white transition-colors uppercase tracking-widest">Terms</Link>
-                        </div>
+                {/* Bottom Bar & Legal Links */}
+                <div className="pt-12 border-t border-white/5">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+                        {[
+                            { name: "Публичная оферта", href: "/legal/offer" },
+                            { name: "Конфиденциальность", href: "/legal/privacy" },
+                            { name: "Условия использования", href: "/legal/terms" },
+                            { name: "Файлы Cookie", href: "/legal/cookies" },
+                            { name: "Карта сайта", href: "/sitemap-info" },
+                            { name: "Возврат товара", href: "/guarantee" }
+                        ].map((link) => (
+                            <Link 
+                                key={link.name} 
+                                href={link.href}
+                                className="text-[10px] font-bold text-neutral-500 hover:text-white transition-colors uppercase tracking-widest"
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
                     </div>
-                    <div className="flex items-center gap-1.5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
-                        <span className="text-[9px] font-black text-neutral-500 uppercase tracking-[.3em]">Built with</span>
-                        <div className="bg-primary px-2 py-0.5 rounded-md text-[9px] font-black text-white italic">AI</div>
+
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8 pt-8 border-t border-white/[0.02]">
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+                            <p className="text-[10px] font-black text-neutral-600 uppercase tracking-widest text-center md:text-left">
+                                © {currentYear} NINTENDO SHOP · ООО "ГЕЙМПРО" · ИНН 7743891254 · ОГРН 1177746382091
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-1.5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+                            <span className="text-[9px] font-black text-neutral-500 uppercase tracking-[.3em]">Built with</span>
+                            <div className="bg-primary px-2 py-0.5 rounded-md text-[9px] font-black text-white italic">AI</div>
+                        </div>
                     </div>
                 </div>
             </div>
