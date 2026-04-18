@@ -53,14 +53,41 @@ export default async function BlogPage({
     <div className="bg-[#fcfcfd] min-h-screen pt-6 pb-20">
       <div className="container">
 
-        {/* Page title */}
-        <div className="mb-10">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-secondary uppercase leading-[0.9] mb-3">
-            Блог <span className="text-primary">игромана</span>
+        {/* Phase 4A: Magnetic Header (The Voice) */}
+        <header className="mb-16 pt-10">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="px-4 py-2 bg-primary/10 text-primary rounded-xl text-[10px] font-black uppercase tracking-[0.2em]">
+              Nintendo Media
+            </span>
+            <div className="h-[1px] w-12 bg-neutral-100 dark:bg-white/10" />
+            <span className="text-neutral-400 text-[10px] font-black uppercase tracking-[0.2em]">
+              Tech & Culture
+            </span>
+          </div>
+          <h1 className="text-5xl md:text-8xl font-black text-secondary leading-[0.9] tracking-tighter uppercase italic mb-8">
+            Голос<br /> 
+            <span className="text-primary not-italic">комьюнити</span>
           </h1>
-          <p className="text-neutral-400 font-bold max-w-xl">
-            Обзоры, гайды, новости и слухи из мира Nintendo, PS5 и Xbox.
+          <p className="text-lg md:text-xl text-neutral-400 font-bold leading-relaxed max-w-xl">
+             Эксклюзивные обзоры, инсайды индустрии и экспертные гайды от команды Nintendo Shop.
           </p>
+        </header>
+
+        {/* Phase 4B: Trending Topics (Engagement Element) */}
+        <div className="mb-12">
+            <h4 className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                Сейчас обсуждают
+            </h4>
+            <div className="flex flex-wrap gap-3">
+                {[
+                    "Switch 2 Specs", "Ghost of Yotei", "Zelda Movie Cast", "Retro Restoration", "OLED vs LCD"
+                ].map((tag) => (
+                    <button key={tag} className="px-5 py-3 bg-white border border-neutral-100 rounded-2xl text-[11px] font-black text-secondary hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all uppercase tracking-widest">
+                        #{tag}
+                    </button>
+                ))}
+            </div>
         </div>
 
         {/* Categories filter */}
@@ -76,7 +103,7 @@ export default async function BlogPage({
                   scroll={false}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-[11px] uppercase tracking-wider transition-all duration-300 ${
                     isActive
-                      ? "bg-secondary text-white shadow-lg"
+                      ? "bg-primary text-white shadow-xl shadow-primary/20"
                       : "bg-white text-neutral-400 hover:bg-neutral-50 border border-neutral-100"
                   }`}
                 >
@@ -89,7 +116,7 @@ export default async function BlogPage({
             })}
           </div>
           <p className="text-neutral-400 font-bold text-[9px] uppercase tracking-[0.2em] bg-neutral-50 px-4 py-2 rounded-lg border border-neutral-100">
-            Найдено: {posts.length} {posts.length === 1 ? "публикация" : posts.length < 5 ? "публикации" : "публикаций"}
+            {posts.length} {posts.length === 1 ? "статья" : posts.length < 5 ? "статьи" : "статей"}
           </p>
         </div>
 
