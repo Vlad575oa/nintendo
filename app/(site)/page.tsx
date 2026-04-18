@@ -5,6 +5,7 @@ import { CategoryGrid } from "@/features/home/components/CategoryGrid";
 import { WhyUs } from "@/features/home/components/WhyUs";
 import { ExpertInsights } from "@/features/home/components/ExpertInsights";
 import { FinalCta } from "@/features/home/components/FinalCta";
+import { HomeSchema } from "@/features/home/components/HomeSchema";
 import loadDynamic from "next/dynamic";
 import { Metadata } from "next";
 
@@ -31,6 +32,7 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <main className="container pt-6 pb-20">
+      <HomeSchema />
       {/* 1. Marketing Upper Layer */}
       <Hero />
       <TrustBar />

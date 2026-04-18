@@ -30,12 +30,38 @@ export const ExpertInsights = () => {
         </Link>
       </div>
 
+      {/* Elite Layer: Key Takeaways Summary */}
+      <div className="mb-12 p-8 bg-neutral-950 rounded-[32px] border border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Clock size={120} />
+        </div>
+        <div className="relative z-10 max-w-2xl">
+            <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">Quick Summary</h4>
+            <h5 className="text-xl font-black text-white uppercase tracking-tight mb-6 flex items-center gap-3">
+               Главное сегодня в мире гейминга
+            </h5>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                {[
+                    "Предзаказы Switch 2 ожидаются в Q4 2026",
+                    "Ghost of Yotei: новые детали геймплея",
+                    "Xbox Game Pass расширяет библиотеку в СНГ",
+                    "Retro-тренды: почему цены на GameBoy растут"
+                ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-white/60 text-xs font-bold uppercase tracking-wider">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {posts.slice(0, 3).map((post) => (
           <Link 
             key={post.slug} 
             href={`/blog/${post.slug}`}
-            className="group flex flex-col bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-white/5 rounded-[32px] overflow-hidden hover:border-primary/20 transition-all duration-500"
+            className="group flex flex-col bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-white/5 rounded-[32px] overflow-hidden hover:border-primary/20 transition-all duration-500 hover:-translate-y-1"
           >
             <div className="aspect-video overflow-hidden">
               <img 
