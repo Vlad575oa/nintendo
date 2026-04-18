@@ -7,15 +7,15 @@ export const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative overflow-hidden bg-[#0a0a0a] text-white pt-24 pb-12 border-t border-white/5">
+        <footer className="relative overflow-hidden bg-gradient-to-b from-transparent via-neutral-900/50 to-neutral-950 text-white pt-24 pb-12 border-t border-white/5">
             {/* Premium Mesh Gradient Background */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,107,0,0.05)_0%,transparent_50%)]" />
-                <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_100%,rgba(255,107,0,0.03)_0%,transparent_40%)]" />
+            <div className="absolute inset-0 z-0 opacity-40">
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,107,0,0.15)_0%,transparent_50%)]" />
+                <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_100%,rgba(255,107,0,0.08)_0%,transparent_40%)]" />
             </div>
 
             {/* Glowing Accent */}
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 pointer-events-none" />
+            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/20 blur-[180px] rounded-full -translate-y-1/2 pointer-events-none opacity-50" />
 
             <div className="container relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-24">
@@ -51,7 +51,7 @@ export const Footer = () => {
                     </div>
 
                     {/* Navigation */}
-                    <div className="bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.04] transition-all group">
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Экосистема</h4>
                         <ul className="space-y-4">
                             {[
@@ -71,7 +71,7 @@ export const Footer = () => {
                     </div>
  
                     {/* Info */}
-                    <div className="bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.04] transition-all group">
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Информация</h4>
                         <ul className="space-y-4">
                             {[
@@ -91,7 +91,7 @@ export const Footer = () => {
                     </div>
 
                     {/* Contacts */}
-                    <div className="bg-white/[0.02] border border-white/[0.05] rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.04] transition-all group">
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 lg:p-10 hover:bg-white/[0.08] transition-all group shadow-xl shadow-black/20">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-8">Связь с нами</h4>
                         <div className="space-y-6">
                             <Link href="tel:84952259922" className="flex items-start gap-4 group/item">

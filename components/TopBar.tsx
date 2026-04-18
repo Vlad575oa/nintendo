@@ -30,8 +30,9 @@ const MaxIcon = () => (
 
 export const TopBar = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-[#111] via-[#1a1a1a] to-[#111] border-b border-white/5 transition-all">
-      {/* Subtle Gloss Overlay */}
+    <div className="relative overflow-hidden bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 border-b border-white/5 transition-all">
+      {/* Subtle Primary Glow */}
+      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
       
       <div className="container px-4 h-11 flex items-center justify-between gap-4 relative z-10">

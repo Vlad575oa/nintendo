@@ -27,12 +27,12 @@ export default async function FAQPage() {
   };
 
   return (
-    <div className="bg-white dark:bg-black min-h-screen pt-12 pb-24 transition-colors">
+    <div className="min-h-screen pt-12 pb-24 relative overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <div className="container">
+      <div className="container relative z-10">
         
         {/* Phase 4A: Magnetic Header (The Voice) */}
         <header className="mb-16 max-w-4xl">
@@ -62,10 +62,10 @@ export default async function FAQPage() {
                 { title: "Честная гарантия", desc: "Собственный сервис-центр", icon: "🛡️" },
                 { title: "Support Expert", desc: "Живое общение без ботов", icon: "👑" }
             ].map((item, i) => (
-                <div key={i} className="p-6 bg-neutral-900 rounded-3xl border border-white/5 group hover:border-primary/30 transition-all">
+                <div key={i} className="p-6 bg-white/40 dark:bg-white/[0.03] backdrop-blur-md rounded-3xl border border-neutral-100 dark:border-white/10 shadow-xl shadow-black/5 group hover:border-primary/30 transition-all">
                     <div className="text-3xl mb-4 group-hover:scale-110 transition-transform inline-block">{item.icon}</div>
-                    <h4 className="text-white font-black uppercase text-[12px] tracking-wider mb-2">{item.title}</h4>
-                    <p className="text-white/40 text-[11px] font-medium leading-relaxed">{item.desc}</p>
+                    <h4 className="text-secondary dark:text-white font-black uppercase text-[12px] tracking-wider mb-2">{item.title}</h4>
+                    <p className="text-neutral-500 dark:text-neutral-400 text-[11px] font-medium leading-relaxed">{item.desc}</p>
                 </div>
             ))}
         </div>

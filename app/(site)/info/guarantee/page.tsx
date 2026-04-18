@@ -23,12 +23,12 @@ export default function GuaranteePage() {
   };
 
   return (
-    <div className="bg-white dark:bg-black min-h-screen pt-12 pb-24 transition-colors">
+    <div className="min-h-screen pt-12 pb-24 relative overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(guaranteeSchema) }}
       />
-      <div className="container">
+      <div className="container relative z-10">
         
         {/* Phase 4A: Magnetic Header (Psychological Trigger: Absolute Security) */}
         <header className="mb-20 max-w-4xl">
@@ -57,22 +57,22 @@ export default function GuaranteePage() {
                 { label: "Джойконы", period: "6 месяцев", desc: "Единственные в РФ, кто дает реальную гарантию на дрифт стиков и кнопки.", icon: Zap, accent: false },
                 { label: "Возврат", period: "14 дней", desc: "Не подошел цвет или просто передумали? Вернем деньги без лишних вопросов.", icon: RotateCcw, accent: false }
             ].map((g, i) => (
-                <div key={i} className={`rounded-[48px] p-10 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-2 ${g.accent ? "bg-secondary shadow-2xl shadow-secondary/30" : "bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-white/5"}`}>
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${g.accent ? "bg-primary text-white" : "bg-white dark:bg-white/5 text-primary"}`}>
+                <div key={i} className={`rounded-[48px] p-10 flex flex-col gap-6 transition-all duration-500 hover:-translate-y-2 backdrop-blur-md border ${g.accent ? "bg-primary/5 border-primary/20 shadow-2xl shadow-primary/10" : "bg-white/40 dark:bg-white/[0.03] border-neutral-100 dark:border-white/10 shadow-xl shadow-black/5"}`}>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${g.accent ? "bg-primary text-white" : "bg-primary/10 text-primary"}`}>
                         <g.icon size={26} />
                     </div>
                     <div>
-                        <h3 className={`text-xl font-black uppercase tracking-tight ${g.accent ? "text-white" : "text-secondary dark:text-white"}`}>{g.label}</h3>
-                        <p className={`text-4xl font-black mt-1 italic leading-none ${g.accent ? "text-primary" : "text-primary"}`}>{g.period}</p>
+                        <h3 className={`text-xl font-black uppercase tracking-tight text-secondary dark:text-white`}>{g.label}</h3>
+                        <p className={`text-4xl font-black mt-1 italic leading-none text-primary`}>{g.period}</p>
                     </div>
-                    <p className={`text-[13px] font-medium leading-relaxed ${g.accent ? "text-white/60" : "text-neutral-500 dark:text-neutral-400"}`}>{g.desc}</p>
+                    <p className={`text-[13px] font-medium leading-relaxed text-neutral-500 dark:text-neutral-400`}>{g.desc}</p>
                 </div>
             ))}
         </section>
 
         {/* Phase 4B: Visual Rhythm - Comparison Table */}
         <section className="mb-24 grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="bg-green-50/30 dark:bg-green-500/5 p-12 rounded-[56px] border border-green-100 dark:border-green-500/10">
+            <div className="bg-green-500/5 p-12 rounded-[56px] border border-green-500/10 backdrop-blur-sm">
                 <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic mb-8 flex items-center gap-3">
                     <CheckCircle2 className="text-green-600" /> Наше покрытие
                 </h3>
@@ -90,7 +90,7 @@ export default function GuaranteePage() {
                     ))}
                 </ul>
             </div>
-            <div className="bg-red-50/30 dark:bg-red-500/5 p-12 rounded-[56px] border border-red-100 dark:border-red-500/10">
+            <div className="bg-red-500/5 p-12 rounded-[56px] border border-red-500/10 backdrop-blur-sm">
                 <h3 className="text-xl font-black text-secondary dark:text-white uppercase italic mb-8 flex items-center gap-3">
                     <ShieldAlert className="text-red-500" /> Не считается гарантией
                 </h3>
@@ -111,14 +111,14 @@ export default function GuaranteePage() {
         </section>
 
         {/* Elite Engagement: Pro Tip */}
-        <div className="mb-24 p-8 bg-neutral-900 border border-white/5 rounded-[48px] flex flex-col md:flex-row items-center gap-10 overflow-hidden relative group">
+        <div className="mb-24 p-8 bg-white/40 dark:bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-[48px] flex flex-col md:flex-row items-center gap-10 overflow-hidden relative group">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none group-hover:scale-110 transition-transform" />
             <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-2xl shadow-primary/30 relative z-10">
                 <Wrench size={40} className="text-white" />
             </div>
             <div className="relative z-10">
-                <h4 className="text-white font-black uppercase text-sm mb-2 tracking-widest">Профессиональный совет:</h4>
-                <p className="text-white/40 text-sm leading-relaxed max-w-3xl font-medium italic">
+                <h4 className="text-secondary dark:text-white font-black uppercase text-sm mb-2 tracking-widest">Профессиональный совет:</h4>
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed max-w-3xl font-medium italic">
                     «Многие магазины отправляют товар на диагностику дистрибьютору, что занимает до 45 дней. В Nintendo Shop мы проводим первичный осмотр за 20 минут в вашем присутствии. <strong className="text-primary">Tip:</strong> Если консоль зависла — не паникуйте, просто зажмите кнопку Power на 15 секунд для жесткой перезагрузки. 90% обращений решаются этим простым действием».
                 </p>
             </div>
