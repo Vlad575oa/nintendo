@@ -30,35 +30,56 @@ const MaxIcon = () => (
 
 export const TopBar = () => {
   return (
-    <div className="bg-white dark:bg-black border-b border-neutral-100 dark:border-white/5 transition-colors">
-      <div className="container px-4 h-10 flex items-center justify-between gap-4">
-        {/* Left */}
-        <div className="flex items-center gap-5">
-          <div className="flex items-center gap-1.5 text-neutral-500/80">
-            <MapPin size={12} className="text-neutral-400 shrink-0" />
-            <span className="text-[11px] font-black uppercase tracking-wider">Москва</span>
+    <div className="relative overflow-hidden bg-gradient-to-r from-[#111] via-[#1a1a1a] to-[#111] border-b border-white/5 transition-all">
+      {/* Subtle Gloss Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
+      
+      <div className="container px-4 h-11 flex items-center justify-between gap-4 relative z-10">
+        {/* Left: Location & Time */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 text-neutral-400 font-bold group cursor-default">
+            <MapPin size={13} className="text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] uppercase tracking-[0.15em]">Москва</span>
           </div>
-          <div className="flex items-center gap-1.5 text-neutral-500/80">
-            <Clock size={12} className="text-neutral-400 shrink-0" />
-            <span className="text-[11px] font-black uppercase tracking-wider">09:00 — 21:00</span>
+          <div className="flex items-center gap-2 text-neutral-400 font-bold group cursor-default">
+            <Clock size={13} className="text-neutral-500 group-hover:text-primary transition-colors" />
+            <span className="text-[10px] uppercase tracking-[0.15em]">09:00 — 21:00</span>
           </div>
         </div>
 
-        {/* Right */}
-        <div className="flex items-center gap-4">
+        {/* Center: WHY US BENEFITS (New Section) */}
+        <div className="hidden xl:flex items-center gap-8">
+            {[
+                { label: "12 лет успеха", icon: "✦" },
+                { label: "Свой сервис", icon: "⛨" },
+                { label: "Экспресс-доставка", icon: "🚀" },
+                { label: "100% Оригинал", icon: "✔" }
+            ].map((benefit) => (
+                <div key={benefit.label} className="flex items-center gap-2 group cursor-help">
+                    <span className="text-xs text-primary font-black opacity-80 group-hover:opacity-100 transition-opacity">{benefit.icon}</span>
+                    <span className="text-[9px] font-black text-neutral-500 uppercase tracking-widest group-hover:text-neutral-300 transition-colors">
+                        {benefit.label}
+                    </span>
+                </div>
+            ))}
+        </div>
+
+        {/* Right: Phone & Socials */}
+        <div className="flex items-center gap-6">
           <a
             href="tel:84952259922"
-            className="text-[11px] font-black text-secondary dark:text-white hover:text-primary transition-colors tracking-widest uppercase"
+            className="text-[11px] font-black text-white hover:text-primary transition-all tracking-[0.1em] uppercase group flex items-center gap-2"
           >
-            8 495 225-99-22
+            <span className="opacity-50 group-hover:opacity-100 transition-opacity">8 495</span>
+            <span className="text-primary group-hover:text-white transition-colors">225-99-22</span>
           </a>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Link
               href="https://wa.me/84952259922"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-6 h-6 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition-transform"
+              className="w-7 h-7 rounded-xl bg-white/5 border border-white/5 text-neutral-400 flex items-center justify-center hover:bg-[#25D366] hover:text-white hover:border-[#25D366] hover:scale-105 transition-all shadow-xl"
               title="WhatsApp"
             >
               <WhatsAppIcon />
@@ -67,28 +88,10 @@ export const TopBar = () => {
               href="https://t.me/nintendoshop"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-6 h-6 rounded-full bg-[#2AABEE] text-white flex items-center justify-center hover:scale-110 transition-transform"
+              className="w-7 h-7 rounded-xl bg-white/5 border border-white/5 text-neutral-400 flex items-center justify-center hover:bg-[#2AABEE] hover:text-white hover:border-[#2AABEE] hover:scale-105 transition-all shadow-xl"
               title="Telegram"
             >
               <TelegramIcon />
-            </Link>
-            <Link
-              href="https://vk.com/nintendoshop"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-6 h-6 rounded-full bg-[#0077FF] text-white flex items-center justify-center hover:scale-110 transition-transform"
-              title="ВКонтакте"
-            >
-              <VKIcon />
-            </Link>
-            <Link
-              href="https://max.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-6 h-6 rounded-full bg-[#002BE7] text-white flex items-center justify-center hover:scale-110 transition-transform"
-              title="MAX"
-            >
-              <MaxIcon />
             </Link>
           </div>
         </div>
