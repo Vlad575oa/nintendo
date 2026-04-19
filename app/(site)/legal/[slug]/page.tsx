@@ -47,7 +47,7 @@ export default function LegalPage({ params }: LegalPageProps) {
   }
 
   return (
-    <div className="bg-white min-h-screen py-32 px-4">
+    <div className="bg-white min-h-screen pt-12 pb-24 px-4 overflow-hidden">
       <div className="max-w-3xl mx-auto">
         <article>
           <h1 className="text-4xl font-black mb-12 tracking-tight text-secondary">{pageContent.title}</h1>

@@ -31,7 +31,7 @@ const advantages = [
 
 export const WhyUs = () => {
   return (
-    <section className="mb-20 neu-raised px-8 md:px-20 py-16 md:py-24 relative overflow-hidden">
+    <section className="mb-20 bg-white border border-neutral-100 rounded-3xl shadow-sm px-8 md:px-20 py-16 md:py-24 relative overflow-hidden">
       {/* Soft decorative glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
       
@@ -49,7 +49,7 @@ export const WhyUs = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {advantages.map((item) => (
-            <div key={item.title} className="p-7 bg-[var(--bg-base)] rounded-2xl hover:shadow-[inset_3px_3px_6px_var(--shadow-dark),inset_-3px_-3px_6px_var(--shadow-light)] transition-all duration-300 group cursor-default">
+            <div key={item.title} className="p-7 bg-neutral-50 border border-neutral-100 rounded-2xl hover:bg-white hover:shadow-md transition-all duration-300 group cursor-default">
               <item.icon className={`${item.color} mb-5`} size={28} />
               <h4 className="text-[var(--text-primary)] font-black uppercase text-sm mb-2">{item.title}</h4>
               <p className="text-[var(--text-muted)] text-xs leading-relaxed">{item.desc}</p>

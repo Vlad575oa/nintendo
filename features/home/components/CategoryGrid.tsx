@@ -8,28 +8,28 @@ const categories = [
     id: "consoles",
     name: "Игровые консоли",
     items: "50+ позиций",
-    image: "/images/blog/ps5-pro-premium.jpg",
+    image: "/images/blog/ps5-pro-premium.webp",
     accent: "from-blue-500/10",
   },
   {
     id: "games",
     name: "Игры & Хиты",
     items: "200+ позиций",
-    image: "/images/blog/switch-2-best-games-2026.jpg",
+    image: "/images/blog/switch-2-best-games-2026.webp",
     accent: "from-red-500/10",
   },
   {
     id: "accessories",
     name: "Аксессуары",
     items: "120+ позиций",
-    image: "/images/blog/switch-accessories-premium.jpg",
+    image: "/images/blog/switch-accessories-premium.webp",
     accent: "from-purple-500/10",
   },
   {
     id: "retro",
     name: "Ретро-гейминг",
     items: "30+ позиций",
-    image: "/images/blog/retro-gaming-premium.jpg",
+    image: "/images/blog/retro-gaming-premium.webp",
     accent: "from-orange-500/10",
   },
 ];
@@ -51,7 +51,7 @@ export const CategoryGrid = () => {
           <Link 
             key={cat.id} 
             href={`/catalog/${cat.id}`}
-            className="group relative h-[320px] neu-raised overflow-hidden hover:shadow-[8px_8px_20px_var(--shadow-dark),-8px_-8px_20px_var(--shadow-light)] transition-all duration-500"
+            className="group relative h-[320px] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
           >
             {/* Background Image */}
             <img 

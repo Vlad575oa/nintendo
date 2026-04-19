@@ -11,7 +11,7 @@ export const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-1000 group-hover:scale-100 opacity-60"
         style={{ 
-          backgroundImage: `url('/images/blog/switch-2-complete-review.jpg')`,
+          backgroundImage: `url('/images/blog/switch-2-complete-review.webp')`,
         }}
       />
       

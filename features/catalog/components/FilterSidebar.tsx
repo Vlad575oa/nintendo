@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useCallback, useState } from "react";
-import { ChevronDown, X } from "lucide-react";
+import { useCallback, useState, useEffect, useMemo } from "react";
+import { ChevronDown, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PriceRangeSlider } from "./PriceRangeSlider";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORY_FILTERS } from "../config/categoryFilters";
+import { getFilteredProductsCountAction } from "../actions";
 
 const MAX_PRICE = 200000;
 
@@ -21,13 +22,12 @@ const STATUS_OPTIONS = [
   { label: "Под заказ", value: "onOrder" },
 ];
 
-const CATEGORIES = [
-  { label: "Все товары", slug: "all" },
-  { label: "PlayStation", slug: "playstation" },
-  { label: "Xbox", slug: "xbox" },
-  { label: "Nintendo", slug: "nintendo" },
-  { label: "Аксессуары", slug: "accessories" },
-];
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  children?: Category[];
+}
 
 // ─── Sub-components defined OUTSIDE FilterSidebar to prevent remount on state change ──
 
@@ -134,9 +134,10 @@ const CheckboxOption = ({ label, checked, onChange, colorHex }: CheckboxOptionPr
 interface FilterSidebarProps {
   currentCategory: string;
   totalCount: number;
+  categoryTree: any[];
 }
 
-export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProps) => {
+export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: FilterSidebarProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -161,6 +162,10 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
     }
     return init;
   });
+
+  // ── Live Count State ──────────────────────────────────────────────────────
+  const [liveCount, setLiveCount] = useState(totalCount);
+  const [isCounting, setIsCounting] = useState(false);
 
   // ── Open/close sections ────────────────────────────────────────────────────
   const defaultOpen: Record<string, boolean> = {
@@ -191,6 +196,28 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
       };
     });
   };
+
+  // ─── Debounced Count Logic ────────────────────────────────────────────────
+  useEffect(() => {
+    const updateCount = async () => {
+      setIsCounting(true);
+      const res = await getFilteredProductsCountAction({
+        category: currentCategory,
+        priceMin,
+        priceMax,
+        colors,
+        statuses,
+        attrValues
+      });
+      if (res.success && typeof res.count === 'number') {
+        setLiveCount(res.count);
+      }
+      setIsCounting(false);
+    };
+
+    const timer = setTimeout(updateCount, 600);
+    return () => clearTimeout(timer);
+  }, [currentCategory, priceMin, priceMax, colors, statuses, attrValues]);
 
   const hasActiveFilters =
     priceMin > 0 ||
@@ -238,6 +265,37 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
     router.push(pathname);
   };
 
+  // ─── Recursive Category Tree component ───
+  const CategoryItem = ({ item, depth = 0 }: { item: Category; depth?: number }) => {
+    const isActive = currentCategory === item.slug;
+    const hasChildren = item.children && item.children.length > 0;
+    
+    return (
+      <div className="space-y-1">
+        <button
+          onClick={() => router.push(`/catalog/${item.slug}`)}
+          className={cn(
+            "text-[13px] font-bold transition-all w-full text-left py-2 px-3 rounded-xl flex items-center justify-between group/cat",
+            isActive
+              ? "text-primary bg-primary/5 shadow-sm shadow-primary/5"
+              : "text-neutral-400 hover:text-secondary hover:bg-neutral-50"
+          )}
+          style={{ paddingLeft: `${depth * 12 + 12}px` }}
+        >
+          <span>{item.name}</span>
+          {hasChildren && <ChevronDown size={14} className="opacity-0 group-hover/cat:opacity-100 transition-opacity" />}
+        </button>
+        {hasChildren && (
+          <div className="mt-1">
+            {item.children?.map(child => (
+              <CategoryItem key={child.id} item={child} depth={depth + 1} />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
@@ -249,23 +307,22 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
         isOpen={openSections.category}
         onToggle={() => toggleSection("category")}
       >
-        <ul className="space-y-1">
-          {CATEGORIES.map(({ label, slug }) => (
-            <li key={slug}>
-              <button
-                onClick={() => router.push(`/catalog/${slug}`)}
-                className={cn(
-                  "text-[13px] font-bold transition-all w-full text-left py-2 px-3 rounded-xl",
-                  currentCategory === slug
-                    ? "text-primary bg-primary/5"
-                    : "text-neutral-400 hover:text-secondary hover:bg-neutral-50"
-                )}
-              >
-                {label}
-              </button>
-            </li>
+        <div className="space-y-1 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+          <button
+            onClick={() => router.push(`/catalog/all`)}
+            className={cn(
+              "text-[13px] font-black transition-all w-full text-left py-2 px-3 rounded-xl",
+              currentCategory === "all"
+                ? "text-primary bg-primary/5"
+                : "text-neutral-400 hover:text-secondary hover:bg-neutral-50"
+            )}
+          >
+            Все товары
+          </button>
+          {categoryTree.map((item) => (
+            <CategoryItem key={item.id} item={item} />
           ))}
-        </ul>
+        </div>
       </FilterSection>
 
       {/* ── Цена ── */}
@@ -375,9 +432,13 @@ export const FilterSidebar = ({ currentCategory, totalCount }: FilterSidebarProp
       <div className="pt-6 space-y-3">
         <button
           onClick={handleApply}
-          className="w-full py-4 bg-primary text-white font-black rounded-2xl hover:bg-red-700 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all text-sm uppercase tracking-wide"
+          disabled={isCounting && liveCount === 0}
+          className="w-full py-4 bg-primary text-white font-black rounded-2xl hover:bg-red-700 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm uppercase tracking-wide flex items-center justify-center gap-2"
         >
-          Показать {totalCount} товаров
+          {isCounting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : null}
+          Показать {liveCount} {liveCount === 1 ? 'товар' : liveCount > 1 && liveCount < 5 ? 'товара' : 'товаров'}
         </button>
         {hasActiveFilters && (
           <button

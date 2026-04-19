@@ -3,7 +3,24 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export const getCategories = cache(async () => {
-  return await prisma.category.findMany();
+  return await prisma.category.findMany({
+    orderBy: { name: "asc" }
+  });
+});
+
+export const getCategoryTree = cache(async () => {
+  const allCategories = await prisma.category.findMany({
+    include: {
+      children: {
+        include: {
+          children: true
+        }
+      }
+    },
+    where: { parentId: null },
+    orderBy: { name: "asc" }
+  });
+  return allCategories;
 });
 
 export const getCategoryBySlug = cache(async (slug: string) => {

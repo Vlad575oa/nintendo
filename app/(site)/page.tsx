@@ -1,6 +1,6 @@
 import { Catalog } from "@/features/catalog/components/Catalog";
 import { Hero } from "@/features/home/components/Hero";
-import { TrustBar } from "@/features/home/components/TrustBar";
+import { QualityBadges } from "@/features/home/components/QualityBadges";
 import { CategoryGrid } from "@/features/home/components/CategoryGrid";
 import { WhyUs } from "@/features/home/components/WhyUs";
 import { ExpertInsights } from "@/features/home/components/ExpertInsights";
@@ -33,7 +33,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     <main className="container pt-6 pb-20">
       {/* 1. Marketing Upper Layer */}
       <Hero />
-      <TrustBar />
+      <QualityBadges />
       
       {/* 2. Navigation Layer */}
       <CategoryGrid />

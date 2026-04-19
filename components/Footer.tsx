@@ -1,62 +1,61 @@
 "use client";
 
 import Link from "next/link";
-import { Send, Phone, Mail, MapPin, Youtube, Instagram, Twitter } from "lucide-react";
+import { Send, Phone, Mail, MapPin, Youtube, Instagram } from "lucide-react";
 
 export const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-neutral-950 text-white pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
-            {/* Glowing Accent */}
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[150px] rounded-full -translate-y-1/2" />
+        <footer className="bg-[#2c2c30] text-white pt-12 pb-6 border-t border-white/[0.06] relative overflow-hidden">
+            <div className="absolute top-0 left-1/4 w-80 h-80 bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 pointer-events-none" />
 
-            <div className="container relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-24">
-                    
-                    {/* Brand Section */}
-                    <div className="flex flex-col gap-8">
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-11 h-11 bg-primary rounded-2xl flex items-center justify-center shadow-[0_8px_20px_var(--primary-glow)] transition-all group-hover:scale-105 active:scale-95">
-                                <span className="text-white font-black text-2xl italic leading-none ml-0.5">N</span>
+            <div className="container relative z-10 px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-10">
+
+                    {/* Brand */}
+                    <div className="flex flex-col gap-4">
+                        <Link href="/" className="flex items-center gap-2.5 group">
+                            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-[0_6px_16px_var(--primary-glow)] transition-all group-hover:scale-105">
+                                <span className="text-white font-black text-xl italic leading-none">N</span>
                             </div>
-                            <span className="text-2xl font-black tracking-tighter uppercase italic">
-                                Nintendo<span className="text-primary italic">.</span>Shop
+                            <span className="text-xl font-black tracking-tighter uppercase italic">
+                                Nintendo<span className="text-primary">.</span>Shop
                             </span>
                         </Link>
-                        <p className="text-neutral-500 text-sm font-medium leading-relaxed max-w-xs">
-                            Ваш премиальный гид в мире гейминга. Только оригинальные консоли, редкие аксессуары и экспертный контент с 2012 года.
+                        <p className="text-neutral-500 text-[12px] font-medium leading-relaxed max-w-xs">
+                            Премиальный магазин игровых консолей и аксессуаров. Только оригинальные товары с гарантией.
                         </p>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2.5">
                             {[
                                 { icon: Send, color: "hover:bg-[#26A5E4]", id: "tg" },
                                 { icon: Youtube, color: "hover:bg-[#FF0000]", id: "yt" },
-                                { icon: Instagram, color: "hover:bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500", id: "ig" }
-                            ].map((social) => (
-                                <Link 
-                                    key={social.id}
-                                    href="#" 
-                                    className={`w-11 h-11 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center transition-all duration-300 ${social.color} hover:text-white text-neutral-400`}
+                                { icon: Instagram, color: "hover:bg-pink-600", id: "ig" },
+                            ].map((s) => (
+                                <Link
+                                    key={s.id}
+                                    href="#"
+                                    className={`w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center transition-all ${s.color} hover:text-white text-neutral-400`}
                                 >
-                                    <social.icon size={18} />
+                                    <s.icon size={15} />
                                 </Link>
                             ))}
                         </div>
                     </div>
 
-                    {/* Navigation */}
+                    {/* Nav */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Экосистема</h4>
-                        <ul className="space-y-4">
+                        <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4">Каталог</h4>
+                        <ul className="space-y-2">
                             {[
                                 { name: "Nintendo Switch", href: "/catalog/nintendo" },
                                 { name: "PlayStation 5", href: "/catalog/playstation" },
                                 { name: "Xbox Series", href: "/catalog/xbox" },
-                                { name: "Retro Gaming", href: "/catalog/retro" },
-                                { name: "Аксессуары", href: "/catalog/accessories" }
+                                { name: "Аксессуары", href: "/catalog/accessories" },
+                                { name: "Все товары", href: "/catalog/all" },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <Link href={item.href} className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                    <Link href={item.href} className="text-[12px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
                                         {item.name}
                                     </Link>
                                 </li>
@@ -66,17 +65,17 @@ export const Footer = () => {
 
                     {/* Info */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Информация</h4>
-                        <ul className="space-y-4">
+                        <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4">Информация</h4>
+                        <ul className="space-y-2">
                             {[
                                 { name: "О компании", href: "/about" },
-                                { name: "Блог игромана", href: "/blog" },
-                                { name: "Доставка & Оплата", href: "/info/delivery" },
-                                { name: "Гарантия", href: "/info/guarantee" },
-                                { name: "FAQ", href: "/faq" }
+                                { name: "Блог", href: "/blog" },
+                                { name: "Доставка и оплата", href: "/delivery" },
+                                { name: "Гарантия", href: "/warranty" },
+                                { name: "FAQ", href: "/faq" },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <Link href={item.href} className="text-[13px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
+                                    <Link href={item.href} className="text-[12px] font-bold text-neutral-400 hover:text-white hover:translate-x-1 transition-all inline-block">
                                         {item.name}
                                     </Link>
                                 </li>
@@ -86,73 +85,71 @@ export const Footer = () => {
 
                     {/* Contacts */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-10">Связь с нами</h4>
-                        <div className="space-y-8">
-                            <Link href="tel:84952259922" className="flex items-start gap-4 group/item">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
-                                    <Phone size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
+                        <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4">Контакты</h4>
+                        <div className="space-y-3">
+                            <Link href="tel:84952259922" className="flex items-center gap-3 group/item">
+                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
+                                    <Phone size={13} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-black text-white">8 495 225-99-22</p>
-                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">09:00 — 21:00 (ЕЖЕДНЕВНО)</p>
-                                </div>
-                            </Link>
-                            <Link href="mailto:support@nintendo.shop" className="flex items-start gap-4 group/item">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
-                                    <Mail size={16} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-black text-white">support@nintendo.shop</p>
-                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПО ЛЮБЫМ ВОПРОСАМ</p>
+                                <div>
+                                    <p className="text-[12px] font-black text-white">8 495 225-99-22</p>
+                                    <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">09:00 — 21:00</p>
                                 </div>
                             </Link>
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                                    <MapPin size={16} className="text-neutral-400" />
+                            <Link href="mailto:support@nintendo.shop" className="flex items-center gap-3 group/item">
+                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
+                                    <Mail size={13} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-black text-white">Москва, Митинская 10</p>
-                                    <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">ПРЕМИУМ ШОУРУМ</p>
+                                <div>
+                                    <p className="text-[12px] font-black text-white">support@nintendo.shop</p>
+                                    <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Email</p>
+                                </div>
+                            </Link>
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                    <MapPin size={13} className="text-neutral-400" />
+                                </div>
+                                <div>
+                                    <p className="text-[12px] font-black text-white">Москва, Митинская 10</p>
+                                    <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Шоурум</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Bar & Legal Links */}
-                <div className="pt-12 border-t border-white/5">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+                {/* Bottom */}
+                <div className="pt-6 border-t border-white/5">
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4">
                         {[
-                            { name: "Публичная оферта", href: "/info/offer" },
-                            { name: "Конфиденциальность", href: "/info/privacy" },
-                            { name: "Условия использования", href: "/info/terms" },
-                            { name: "Файлы Cookie", href: "/info/cookies" },
-                            { name: "Карта сайта", href: "/sitemap.xml" },
-                            { name: "Возврат товара", href: "/info/guarantee" }
+                            { name: "Публичная оферта", href: "/legal/offer" },
+                            { name: "Конфиденциальность", href: "/legal/privacy" },
+                            { name: "Условия использования", href: "/legal/terms" },
+                            { name: "Файлы Cookie", href: "/legal/cookies" },
+                            { name: "Возврат", href: "/warranty" },
                         ].map((link) => (
-                            <Link 
-                                key={link.name} 
-                                href={link.href}
-                                className="text-[10px] font-bold text-neutral-500 hover:text-white transition-colors uppercase tracking-widest"
-                            >
+                            <Link key={link.name} href={link.href} className="text-[10px] font-bold text-neutral-600 hover:text-neutral-400 transition-colors uppercase tracking-widest">
                                 {link.name}
                             </Link>
                         ))}
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-8 pt-8 border-t border-white/[0.02]">
-                        <div className="flex flex-col md:flex-row items-center gap-8">
-                            <p className="text-[10px] font-black text-neutral-600 uppercase tracking-widest text-center md:text-left">
-                                © {currentYear} NINTENDO SHOP · ООО "ГЕЙМПРО" · ИНН 7743891254 · ОГРН 1177746382091
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-1.5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
-                            <span className="text-[9px] font-black text-neutral-500 uppercase tracking-[.3em]">Built with</span>
-                            <div className="bg-primary px-2 py-0.5 rounded-md text-[9px] font-black text-white italic">AI</div>
-                        </div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <p className="text-[10px] font-black text-neutral-700 uppercase tracking-widest">
+                            © {currentYear} Nintendo Shop · ООО "ГЕЙМПРО" · ИНН 7743891254
+                        </p>
+                        <Link
+                            href="https://t.me/vlad557"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all group"
+                        >
+                            <span className="text-[9px] font-black text-neutral-500 uppercase tracking-[.3em] group-hover:text-neutral-400">Build</span>
+                            <div className="bg-primary px-2 py-0.5 rounded text-[9px] font-black text-white italic">VD</div>
+                        </Link>
                     </div>
                 </div>
             </div>
         </footer>
-    )
-}
+    );
+};

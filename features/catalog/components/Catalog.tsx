@@ -1,4 +1,4 @@
-import { getProducts, getProductsCount, getCategoryBySlug } from "@/lib/queries";
+import { getProducts, getProductsCount, getCategoryBySlug, getCategoryTree } from "@/lib/queries";
 import { ProductCard } from "@/features/product/components/ProductCard";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { SortingSelect } from "@/features/catalog/components/SortingSelect";
@@ -77,12 +77,13 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
   if (sort === "newest") orderBy = { createdAt: "desc" };
 
   // ── Data Fetching ─────────────────────────────────────────────────────────
-  const [products, totalCount, categoryData] = await Promise.all([
+  const [products, totalCount, categoryData, categoryTree] = await Promise.all([
     getProducts(where, orderBy, skip, pageSize),
     getProductsCount(where),
     category !== "all"
       ? getCategoryBySlug(category)
       : Promise.resolve({ name: "Весь каталог" }),
+    getCategoryTree()
   ]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -95,7 +96,11 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
     <div className="flex flex-col lg:flex-row gap-12">
       {/* Sidebar */}
       <aside className="w-full lg:w-[280px] flex-shrink-0">
-        <FilterSidebar currentCategory={category} totalCount={totalCount} />
+        <FilterSidebar 
+          currentCategory={category} 
+          totalCount={totalCount} 
+          categoryTree={categoryTree}
+        />
       </aside>
 
       {/* Content */}

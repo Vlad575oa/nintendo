@@ -35,7 +35,7 @@ export const ExpertInsights = () => {
           <Link 
             key={post.slug} 
             href={`/blog/${post.slug}`}
-            className="group flex flex-col neu-raised overflow-hidden hover:shadow-[8px_8px_20px_var(--shadow-dark),-8px_-8px_20px_var(--shadow-light)] transition-all duration-500"
+            className="group flex flex-col bg-white border border-neutral-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
           >
             <div className="aspect-video overflow-hidden">
               <img 

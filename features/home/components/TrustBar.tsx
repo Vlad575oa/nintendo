@@ -13,11 +13,11 @@ export const TrustBar = () => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-16">
       {stats.map((item, idx) => (
-        <div 
+        <div
           key={idx}
-          className="neu-raised p-6 flex items-center gap-4 hover:shadow-[8px_8px_20px_var(--shadow-dark),-8px_-8px_20px_var(--shadow-light)] transition-all duration-300 group cursor-default"
+          className="bg-white border border-neutral-100 rounded-2xl shadow-sm p-6 flex items-center gap-4 hover:shadow-md transition-all duration-300 group cursor-default"
         >
-          <div className="w-12 h-12 rounded-xl bg-[var(--bg-base)] flex items-center justify-center text-[var(--text-muted)] group-hover:text-primary transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center text-neutral-400 group-hover:text-primary transition-colors">
             <item.icon size={22} strokeWidth={2.5} />
           </div>
           <div>

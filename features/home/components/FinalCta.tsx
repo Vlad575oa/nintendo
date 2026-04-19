@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const FinalCta = () => {
   return (
-    <section className="relative h-[360px] mb-20 overflow-hidden flex items-center justify-center text-center p-8 neu-raised bg-gradient-to-br from-primary via-[#cc0010] to-[#1a1a2e]"
+    <section className="relative h-[360px] mb-20 overflow-hidden flex items-center justify-center text-center p-8 bg-gradient-to-br from-primary via-[#cc0010] to-[#1a1a2e]"
       style={{ borderRadius: '40px' }}
     >
       {/* Decorative Background Pattern */}

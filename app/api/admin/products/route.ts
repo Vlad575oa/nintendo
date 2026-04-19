@@ -1,77 +1,78 @@
 import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import prisma from "@/lib/prisma";
 import { join } from "path";
+import prisma from "@/lib/prisma";
+
+function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/[а-яёa-z0-9]+/gi, (m) => m)
+    .replace(/[^a-z0-9а-яё\s-]/gi, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+async function saveImages(files: File[]): Promise<string[]> {
+  const uploadDir = join(process.cwd(), "public", "uploads", "products");
+  await mkdir(uploadDir, { recursive: true });
+  const urls: string[] = [];
+  for (const file of files) {
+    const buf = Buffer.from(await file.arrayBuffer());
+    const name = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+    await writeFile(join(uploadDir, name), buf);
+    urls.push(`/uploads/products/${name}`);
+  }
+  return urls;
+}
+
+export async function GET() {
+  const products = await prisma.product.findMany({
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return NextResponse.json(products);
+}
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
-    
-    // Extract product data
-    const name = formData.get("name") as string;
-    const description = formData.get("description") as string;
-    const price = parseInt(formData.get("price") as string) * 100; // Convert to kopeks
-    const priceOld = formData.get("priceOld") ? parseInt(formData.get("priceOld") as string) * 100 : null;
-    const categoryName = formData.get("category") as string;
-    const metaTitle = formData.get("metaTitle") as string;
-    const metaDesc = formData.get("metaDesc") as string;
-    
-    // Handle Images
-    const files = formData.getAll("images") as File[];
-    const imageUrls: string[] = [];
+    const fd = await request.formData();
 
-    if (files.length > 0) {
-      // Ensure the uploads directory exists
-      const uploadDir = join(process.cwd(), "public", "uploads", "products");
-      try {
-        await mkdir(uploadDir, { recursive: true });
-      } catch (err) {
-        // Directory might already exist
-      }
+    const name = fd.get("name") as string;
+    const description = fd.get("description") as string;
+    const price = Math.round(parseFloat(fd.get("price") as string) * 100);
+    const priceOldRaw = fd.get("priceOld") as string;
+    const priceOld = priceOldRaw ? Math.round(parseFloat(priceOldRaw) * 100) : null;
+    const categoryId = parseInt(fd.get("categoryId") as string);
+    const brand = (fd.get("brand") as string) || null;
+    const color = (fd.get("color") as string) || null;
+    const inStock = fd.get("inStock") === "true";
+    const isNew = fd.get("isNew") === "true";
+    const isSale = fd.get("isSale") === "true";
+    const stock = parseInt(fd.get("stock") as string) || 10;
+    const metaTitle = (fd.get("metaTitle") as string) || null;
+    const metaDesc = (fd.get("metaDesc") as string) || null;
+    const attrsRaw = fd.get("attributes") as string;
+    const attributesList: { key: string; value: string }[] = attrsRaw ? JSON.parse(attrsRaw) : [];
+    const attributes = Object.fromEntries(attributesList.map((a) => [a.key, a.value]));
 
-      for (const file of files) {
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+    const files = fd.getAll("images") as File[];
+    const imageUrls = files.length ? await saveImages(files) : [];
 
-        // Generate unique filename
-        const filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-        const filePath = join(uploadDir, filename);
+    let slug = slugify(name);
+    const existing = await prisma.product.findUnique({ where: { slug } });
+    if (existing) slug = `${slug}-${Date.now()}`;
 
-        await writeFile(filePath, buffer);
-        imageUrls.push(`/uploads/products/${filename}`);
-      }
-    }
-
-    // Find category ID
-    const category = await prisma.category.findFirst({
-        where: { name: { contains: categoryName, mode: 'insensitive' } }
-    });
-
-    if (!category) {
-        return NextResponse.json({ error: "Категория не найдена" }, { status: 400 });
-    }
-
-    // Create product in DB
     const product = await prisma.product.create({
       data: {
-        name,
-        slug: name.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
-        description,
-        price,
-        priceOld,
-        images: imageUrls,
-        categoryId: category.id,
-        metaTitle,
-        metaDesc,
-        inStock: true,
-        stock: 10,
+        name, slug, description, price, priceOld,
+        categoryId, brand, color, inStock, isNew, isSale,
+        stock, images: imageUrls, attributes, metaTitle, metaDesc,
       },
     });
 
     return NextResponse.json({ success: true, product });
-  } catch (error: any) {
-    console.error("Upload error:", error);
-    return NextResponse.json({ error: "Ошибка при сохранении товара: " + error.message }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
