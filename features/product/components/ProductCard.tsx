@@ -9,6 +9,7 @@ import { useWishlistStore } from "@/features/product/store/useWishlistStore";
 import { useCompareStore } from "@/features/product/store/useCompareStore";
 import { useCartStore } from "@/features/cart/store/useCartStore";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: {
@@ -194,6 +195,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 image: product.images[0] || "/placeholder.jpg",
                 quantity: 1,
               });
+              toast.success("Добавлено в корзину", { description: product.name, duration: 2000 });
             }}
             className="flex-1 h-10 bg-orange-50 border border-orange-100 text-orange-600 rounded-2xl flex items-center justify-center hover:bg-orange-600 hover:text-white transition-all active:scale-95"
           >

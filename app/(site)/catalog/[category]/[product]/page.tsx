@@ -8,6 +8,9 @@ import { PurchaseBlock } from "@/features/product/components/PurchaseBlock";
 import { ProductMeta } from "@/features/product/components/ProductMeta";
 import { TrackView } from "@/features/product/components/TrackView";
 import { ProductTabs } from "@/features/product/components/ProductTabs";
+import { SocialProof } from "@/features/product/components/SocialProof";
+import { MobileStickyCart } from "@/features/product/components/MobileStickyCart";
+import { RelatedProducts } from "@/features/product/components/RelatedProducts";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
@@ -103,6 +106,7 @@ export default async function ProductPage({
             {product.name}
           </h1>
           <ProductMeta productId={product.id} />
+          <SocialProof productId={product.id} />
         </div>
 
         {/* Main grid: Gallery + Tabs | Purchase */}
@@ -122,10 +126,15 @@ export default async function ProductPage({
           {/* Right — Sticky purchase block */}
           <aside className="w-full lg:w-[380px] flex-shrink-0">
             <div className="lg:sticky lg:top-24">
-              <PurchaseBlock product={product as any} />
+              <PurchaseBlock product={product} />
             </div>
           </aside>
         </div>
+        {/* Related products */}
+        <RelatedProducts categorySlug={product.category.slug} excludeId={product.id} />
+
+        {/* Sticky mobile add-to-cart */}
+        <MobileStickyCart product={product} />
       </main>
     </div>
   );

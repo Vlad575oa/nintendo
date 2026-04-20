@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { FloatingContact } from "@/components/FloatingContact";
 import { CookieBanner } from "@/components/CookieBanner";
 import { Suspense } from "react";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -167,6 +168,7 @@ export default function RootLayout({
         <Footer />
         <FloatingContact />
         <CookieBanner />
+        <Toaster position="bottom-right" richColors closeButton />
       </body>
     </html>
   );

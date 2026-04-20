@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { SESSION_COOKIE } from '@/lib/auth';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -7,9 +8,6 @@ export function middleware(request: NextRequest) {
   // Protect /admin routes
   if (pathname.startsWith('/admin')) {
     const token = request.cookies.get('admin_session')?.value;
-
-    // In a real app, you'd verify the JWT/Token here. 
-    // For now, we check if it exists. 
     if (!token && pathname !== '/admin/login') {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
@@ -23,9 +21,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Protect /account routes — server-side redirect to login
+  if (pathname.startsWith('/account')) {
+    const token = request.cookies.get(SESSION_COOKIE)?.value;
+    if (!token) {
+      return NextResponse.redirect(new URL('/auth/login?next=' + encodeURIComponent(pathname), request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/admin/:path*', '/auth/:path*'],
+  matcher: ['/admin/:path*', '/api/admin/:path*', '/account/:path*'],
 };

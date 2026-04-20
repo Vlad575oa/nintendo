@@ -4,6 +4,7 @@ import { useCartStore } from "@/features/cart/store/useCartStore";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart, Check } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface AddToCartButtonProps {
   product: {
@@ -31,6 +32,7 @@ export const AddToCartButton = ({ product, className }: AddToCartButtonProps) =>
     });
     
     setIsAdded(true);
+    toast.success("Добавлено в корзину", { description: product.name, duration: 2000 });
     setTimeout(() => setIsAdded(false), 2000);
   };
 
