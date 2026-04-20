@@ -9,10 +9,12 @@ interface PurchaseBlockProps {
   product: {
     id: number;
     name: string;
+    slug: string;
     price: number;
     priceOld?: number | null;
     inStock: boolean;
     brand?: string | null;
+    images: string[];
   };
 }
 
@@ -51,8 +53,8 @@ export function PurchaseBlock({ product }: PurchaseBlockProps) {
 
         {/* Actions */}
         <div className="space-y-4 mb-6">
-          <AddToCartButton 
-            product={product as any} 
+          <AddToCartButton
+            product={product}
             className="w-full h-14 rounded-2xl text-lg font-black bg-[#FF6B00] hover:bg-[#e65a00] border-none shadow-lg shadow-orange-500/20"
           />
           <div className="flex items-center gap-2 px-1 text-sm font-bold text-neutral-400">

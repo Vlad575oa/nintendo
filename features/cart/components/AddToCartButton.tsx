@@ -26,7 +26,7 @@ export const AddToCartButton = ({ product, className }: AddToCartButtonProps) =>
       name: product.name,
       slug: product.slug,
       price: product.price,
-      image: product.images[0],
+      image: product.images?.[0] || "/placeholder.jpg",
       quantity: 1,
     });
     
