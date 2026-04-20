@@ -9,10 +9,7 @@ import loadDynamic from "next/dynamic";
 import { Metadata } from "next";
 
 const RecentlyViewed = loadDynamic(
-  () =>
-    import("@/features/product/components/RecentlyViewed").then((m) => ({
-      default: m.RecentlyViewed,
-    })),
+  () => import("@/features/product/components/RecentlyViewed").then((m) => m.RecentlyViewed),
   { ssr: false }
 );
 
@@ -31,17 +28,11 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <main className="container pt-6 pb-20">
-      {/* 1. Marketing Upper Layer */}
       <Hero />
       <QualityBadges />
-      
-      {/* 2. Navigation Layer */}
       <CategoryGrid />
-      
-      {/* 3. Competitive Advantage */}
       <WhyUs />
 
-      {/* 4. Product Catalog (Main Action) */}
       <div id="catalog" className="mb-20 scroll-mt-24">
         <div className="flex items-end justify-between mb-10">
           <div>
@@ -54,13 +45,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <Catalog category="all" searchParams={searchParams} pageSize={12} />
       </div>
 
-      {/* 5. Expert Content */}
       <ExpertInsights />
-
-      {/* 6. Utility & Finale */}
       <RecentlyViewed />
       <FinalCta />
     </main>
   );
 }
-

@@ -11,38 +11,34 @@ model Category {
   id       Int        @id @default(autoincrement())
   name     String
   slug     String     @unique
-  parent   Category?  @relation("sub", fields: [parentId], references: [id])
   parentId Int?
+  parent   Category?  @relation("sub", fields: [parentId], references: [id])
   children Category[] @relation("sub")
   products Product[]
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
-  slug        String   @unique
+  slug        String      @unique
   description String?
   price       Int
   priceOld    Int?
   images      String[]
-  inStock     Boolean  @default(true)
-  stock       Int      @default(10)
-  isNew       Boolean  @default(false)
-  isSale      Boolean  @default(false)
-
+  inStock     Boolean     @default(true)
+  isNew       Boolean     @default(false)
+  isSale      Boolean     @default(false)
   color       String?
   brand       String?
   attributes  Json?
-
   categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
-
   metaTitle   String?
   metaDesc    String?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  stock       Int         @default(10)
+  orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id])
 
   @@index([slug])
   @@index([price])
@@ -51,28 +47,30 @@ model Product {
 }
 
 model Order {
-  id          Int      @id @default(autoincrement())
-  status      String   @default("pending") // pending, paid, failed, success
+  id          Int         @id @default(autoincrement())
+  status      String      @default("pending")
   totalAmount Int
   name        String
   phone       String
   address     String
-  paymentId   String?  @unique
+  paymentId   String?     @unique
   
+  userId      Int?
+  user        User?       @relation(fields: [userId], references: [id])
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   items       OrderItem[]
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model OrderItem {
-  id                Int      @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
   orderId           Int
-  order             Order    @relation(fields: [orderId], references: [id])
   productId         Int
-  product           Product  @relation(fields: [productId], references: [id])
   quantity          Int
-  price_at_purchase Int      // Цена на момент покупки (в копейках)
+  price_at_purchase Int
+  order             Order   @relation(fields: [orderId], references: [id])
+  product           Product @relation(fields: [productId], references: [id])
 }
 
 model Post {
@@ -80,16 +78,14 @@ model Post {
   title       String
   slug        String   @unique
   excerpt     String?
-  content     String   // MD or RichText
+  content     String
   image       String?
-  category    String?     @default("Статья")
   isPublished Boolean  @default(false)
-  
   metaTitle   String?
   metaDesc    String?
-  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  category    String?  @default("Статья")
 
   @@index([slug])
 }
@@ -98,33 +94,74 @@ model FAQ {
   id        Int      @id @default(autoincrement())
   question  String
   answer    String
-  category  String   @default("Заказы")
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  category  String   @default("Заказы")
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String?   @unique
-  phone        String?   @unique
-  name         String?
-  passwordHash String
-  passwordSalt String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  sessions     Session[]
+  id            Int       @id @default(autoincrement())
+  email         String?   @unique
+  phone         String?   @unique
+  name          String?
+  passwordHash  String?
+  passwordSalt  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  emailVerified DateTime?
+  lastLogin     DateTime?
+  role          String    @default("USER")
+  orders        Order[]
+  Account       Account[]
+  sessions      Session[]
 
   @@index([email])
   @@index([phone])
 }
 
 model Session {
-  id        String   @id
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id           String   @id
+  userId       Int
+  createdAt    DateTime @default(now())
+  expires      DateTime
+  sessionToken String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Account {
+  id                String  @id
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  topic     String
+  message   String
+  createdAt DateTime @default(now())
 }

@@ -10,10 +10,10 @@ export async function GET() {
 
     const session = await prisma.session.findUnique({
       where: { id: token },
-      select: { userId: true, expiresAt: true },
+      select: { userId: true, expires: true },
     });
 
-    if (!session || session.expiresAt < new Date()) {
+    if (!session || session.expires < new Date()) {
       return NextResponse.json([], { status: 401 });
     }
 

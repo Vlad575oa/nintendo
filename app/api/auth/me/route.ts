@@ -13,7 +13,7 @@ export async function GET() {
       include: { user: { select: { id: true, name: true, email: true, phone: true } } },
     });
 
-    if (!session || session.expiresAt < new Date()) {
+    if (!session || session.expires < new Date()) {
       cookies().delete(SESSION_COOKIE);
       return NextResponse.json(null);
     }
