@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import FAQClient from "@/components/FAQClient";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Вопросы и ответы (FAQ) | Поддержка Nintendo Shop",
   description: "Всё о доставке, гарантии и оплате игровых консолей. Ответы на частые вопросы.",

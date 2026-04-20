@@ -4,6 +4,8 @@ import { ArrowRight, User, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Блог игромана | Новости, обзоры и гайды | Nintendo Shop",
   description: "Самые свежие новости из мира консолей, подробные обзоры PS5 Pro, Nintendo Switch 2 и ретро-гейминга.",

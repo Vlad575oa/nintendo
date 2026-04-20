@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+
+export const dynamic = "force-dynamic";
 import { ru } from "date-fns/locale";
 import { ArrowLeft, Clock, User, Share2, Bookmark, MessageCircle, ChevronRight } from "lucide-react";
 import Link from "next/link";

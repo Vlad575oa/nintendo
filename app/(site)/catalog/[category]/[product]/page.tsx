@@ -1,6 +1,8 @@
 import { getProductBySlug } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 import { ProductGallery } from "@/features/product/components/ProductGallery";
 import { PurchaseBlock } from "@/features/product/components/PurchaseBlock";
 import { ProductMeta } from "@/features/product/components/ProductMeta";

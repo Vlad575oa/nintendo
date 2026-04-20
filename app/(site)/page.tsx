@@ -8,6 +8,8 @@ import { FinalCta } from "@/features/home/components/FinalCta";
 import loadDynamic from "next/dynamic";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 const RecentlyViewed = loadDynamic(
   () => import("@/features/product/components/RecentlyViewed").then((m) => m.RecentlyViewed),
   { ssr: false }

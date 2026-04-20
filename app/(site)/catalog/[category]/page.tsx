@@ -2,7 +2,7 @@ import { getCategoryBySlug } from "@/lib/queries";
 import { Catalog } from "@/features/catalog/components/Catalog";
 import { Metadata } from "next";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
 
