@@ -1,4 +1,4 @@
-import { getProducts, getProductsCount, getCategoryBySlug, getCategoryTree } from "@/lib/queries";
+import { getProducts, getProductsNintendoFirst, getProductsCount, getCategoryBySlug, getCategoryTree } from "@/lib/queries";
 import { ProductCard } from "@/features/product/components/ProductCard";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { SortingSelect } from "@/features/catalog/components/SortingSelect";
@@ -85,8 +85,12 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
 
   let errorMsg = "";
   try {
+    // On the "all" tab with default sort, prioritize Nintendo products
+    const useNintendoPriority = category === "all" && !sort;
     [products, totalCount, categoryData, categoryTree] = await Promise.all([
-      getProducts(where, orderBy, skip, pageSize),
+      useNintendoPriority
+        ? getProductsNintendoFirst(where, skip, pageSize)
+        : getProducts(where, orderBy, skip, pageSize),
       getProductsCount(where),
       category !== "all"
         ? getCategoryBySlug(category)

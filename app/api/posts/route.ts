@@ -6,10 +6,11 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get("limit") || "10");
 
-    const posts = await prisma.post.findMany({
+    // Fetch more than needed so we can sort Nintendo articles first
+    const raw = await prisma.post.findMany({
       where: { isPublished: true },
       orderBy: { createdAt: "desc" },
-      take: limit,
+      take: limit * 3,
       select: {
         id: true,
         title: true,
@@ -20,6 +21,16 @@ export async function GET(req: Request) {
         createdAt: true,
       },
     });
+
+    const isNintendo = (p: typeof raw[0]) =>
+      p.category?.toLowerCase().includes("nintendo") ||
+      p.title?.toLowerCase().includes("nintendo") ||
+      p.title?.toLowerCase().includes("switch");
+
+    const posts = [
+      ...raw.filter(isNintendo),
+      ...raw.filter((p) => !isNintendo(p)),
+    ].slice(0, limit);
 
     return NextResponse.json(posts);
   } catch {

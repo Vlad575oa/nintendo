@@ -89,7 +89,7 @@ export async function searchProductsAction(query: string) {
   try {
     const products = await prisma.product.findMany({
       where: {
-        isVisible: true,
+        isVisible: { not: false },
         ...(query && query.length >= 2 ? {
           OR: [
             { name: { contains: query, mode: "insensitive" } },

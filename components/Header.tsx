@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Search } from "@/features/search/components/Search";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { CatalogMegaMenu } from "./CatalogMegaMenu";
 
 interface CurrentUser {
   id: number;
@@ -20,6 +21,7 @@ export const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const totalItems = useCartStore((state) => state.totalItems());
   const clearCart = useCartStore((s) => s.clearCart);
@@ -56,7 +58,7 @@ export const Header = () => {
   const iconLabel = "text-[7.5px] font-black text-white/30 uppercase tracking-wide mt-1 group-hover:text-white/60 transition-colors text-center";
 
   return (
-    <header className="sticky top-0 z-50 h-[68px] flex items-center bg-[#2c2c30] border-b border-white/[0.07]" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.25)" }}>
+    <header className="sticky top-0 z-50 h-[68px] flex items-center bg-[#2c2c30] border-b border-white/[0.07] relative" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.25)" }}>
       <div className="container px-4 flex items-center gap-2 xl:gap-4">
 
         {/* Logo */}
@@ -74,13 +76,19 @@ export const Header = () => {
         </Link>
 
         {/* Catalog */}
-        <Link
-          href="/"
-          className="hidden lg:flex items-center gap-2 px-4 h-9 bg-white/[0.06] border border-white/[0.08] text-white/70 rounded-xl font-black text-[12px] uppercase tracking-tight hover:bg-white/10 hover:text-white hover:border-white/15 transition-all group shrink-0"
+        <button
+          onClick={() => setMegaMenuOpen((v) => !v)}
+          className={cn(
+            "hidden lg:flex items-center gap-2 px-4 h-9 border rounded-xl font-black text-[12px] uppercase tracking-tight transition-all group shrink-0",
+            megaMenuOpen
+              ? "bg-white/15 border-white/20 text-white"
+              : "bg-white/[0.06] border-white/[0.08] text-white/70 hover:bg-white/10 hover:text-white hover:border-white/15"
+          )}
         >
-          <Menu size={14} className="transition-transform group-hover:rotate-90" />
+          <Menu size={14} className={cn("transition-transform duration-200", megaMenuOpen && "rotate-90")} />
           <span>Каталог</span>
-        </Link>
+        </button>
+        {megaMenuOpen && <CatalogMegaMenu onClose={() => setMegaMenuOpen(false)} />}
 
 
 

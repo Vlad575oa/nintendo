@@ -13,12 +13,12 @@ const SPECIAL_FILTERS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Все товары",      href: "/catalog/all",          slug: "all" },
-  { label: "PlayStation",     href: "/catalog/playstation",  slug: "playstation" },
-  { label: "Xbox",            href: "/catalog/xbox",         slug: "xbox" },
-  { label: "Nintendo Switch", href: "/catalog/nintendo",     slug: "nintendo" },
-  { label: "Геймпады",        href: "/catalog/gamepads",     slug: "gamepads" },
-  { label: "Аксессуары",      href: "/catalog/accessories",  slug: "accessories" },
+  { label: "Все товары",        href: "/catalog/all",          slug: "all" },
+  { label: "Nintendo Switch",   href: "/catalog/nintendo",     slug: "nintendo" },
+  { label: "PlayStation",       href: "/catalog/playstation",  slug: "playstation" },
+  { label: "Xbox",              href: "/catalog/xbox",         slug: "xbox" },
+  { label: "Геймпады",          href: "/catalog/gamepads",     slug: "gamepads" },
+  { label: "Аксессуары",        href: "/catalog/accessories",  slug: "accessories" },
 ];
 
 export const QuickFilters = () => {
