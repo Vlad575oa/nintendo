@@ -56,11 +56,30 @@ const topics = [
 
 export default function ContactsPage() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        setError("Не удалось отправить сообщение. Попробуйте позже.");
+      }
+    } catch {
+      setError("Нет соединения с сервером.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -183,12 +202,16 @@ export default function ContactsPage() {
                     className="w-full bg-white border border-neutral-100 rounded-2xl px-5 py-3.5 text-sm font-bold text-secondary placeholder:text-neutral-200 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all resize-none"
                   />
                 </div>
+                {error && (
+                  <p className="text-xs font-bold text-red-500">{error}</p>
+                )}
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-primary/20"
+                  disabled={submitting}
+                  className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-primary/20 disabled:opacity-60 disabled:pointer-events-none"
                 >
                   <Send size={16} />
-                  Отправить сообщение
+                  {submitting ? "Отправка..." : "Отправить сообщение"}
                 </button>
               </form>
             )}

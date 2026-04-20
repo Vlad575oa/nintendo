@@ -16,10 +16,12 @@ export default function CheckoutPage() {
   const { items, totalPrice } = useCartStore();
   const { register, handleSubmit, formState: { errors } } = useForm<CheckoutFormData>();
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const router = useRouter();
 
   const onSubmit = async (data: CheckoutFormData) => {
     setLoading(true);
+    setSubmitError(null);
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -34,11 +36,10 @@ export default function CheckoutPage() {
       if (result.confirmationUrl) {
         window.location.href = result.confirmationUrl;
       } else {
-        alert("Ошибка при создании заказа");
+        setSubmitError("Ошибка при создании заказа. Попробуйте ещё раз.");
       }
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка сети");
+    } catch {
+      setSubmitError("Нет соединения с сервером. Проверьте интернет и попробуйте снова.");
     } finally {
       setLoading(false);
     }
@@ -65,10 +66,14 @@ export default function CheckoutPage() {
             <div>
               <label className="block text-sm font-bold text-neutral-400 mb-2">Телефон</label>
               <input
-                {...register("phone", { required: true })}
-                className="w-full px-6 py-4 bg-neutral-50 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 transition-all font-bold"
+                {...register("phone", {
+                  required: "Введите номер телефона",
+                  pattern: { value: /^[\+7-9][\d\s\-\(\)]{9,14}$/, message: "Неверный формат телефона" },
+                })}
+                className={`w-full px-6 py-4 bg-neutral-50 rounded-2xl border-none focus:ring-2 focus:ring-primary/20 transition-all font-bold ${errors.phone ? "ring-2 ring-red-500/20" : ""}`}
                 placeholder="+7 (999) 000-00-00"
               />
+              {errors.phone && <p className="text-xs font-bold text-red-500 mt-1">{errors.phone.message}</p>}
             </div>
 
             <div>
@@ -100,9 +105,15 @@ export default function CheckoutPage() {
               <span className="text-2xl font-black text-primary">{totalPrice().toLocaleString()} ₽</span>
             </div>
 
-            <Button 
-              type="submit" 
-              size="lg" 
+            {submitError && (
+              <div className="mb-4 px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-xs font-bold">
+                {submitError}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              size="lg"
               disabled={loading}
               className="w-full h-16 rounded-2xl bg-white text-secondary hover:bg-neutral-100 disabled:bg-neutral-800 disabled:text-neutral-600"
             >

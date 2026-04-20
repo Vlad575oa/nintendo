@@ -22,8 +22,11 @@ export const Header = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const totalItems = useCartStore((state) => state.totalItems());
+  const clearCart = useCartStore((s) => s.clearCart);
   const wishlistCount = useWishlistStore((s) => s.count());
+  const clearWishlist = useWishlistStore((s) => s.clear);
   const compareCount = useCompareStore((s) => s.count());
+  const clearCompare = useCompareStore((s) => s.clear);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,6 +46,9 @@ export const Header = () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
     setUserMenuOpen(false);
+    clearCart();
+    clearWishlist();
+    clearCompare();
     router.refresh();
   };
 
@@ -101,14 +107,14 @@ export const Header = () => {
                     </div>
                     <ul className="space-y-0.5">
                       <li>
-                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                        <Link href="/account/orders" className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-all">
                           <Package size={14} className="text-white/25" /> Мои заказы
-                        </button>
+                        </Link>
                       </li>
                       <li>
-                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                        <Link href="/wishlist" className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 rounded-xl transition-all">
                           <Heart size={14} className="text-white/25" /> Избранное
-                        </button>
+                        </Link>
                       </li>
                       <li className="pt-1 border-t border-white/[0.06]">
                         <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/10 rounded-xl transition-all">

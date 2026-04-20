@@ -64,6 +64,12 @@ export default function LoginPage() {
             </Link>
           </p>
 
+          <div className="flex justify-end mb-2 -mt-4">
+            <Link href="/auth/forgot-password" className="text-xs font-bold text-neutral-400 hover:text-primary transition-colors">
+              Забыли пароль?
+            </Link>
+          </div>
+
           {/* Mode toggle */}
           <div className="flex bg-neutral-50 rounded-2xl p-1 mb-6">
             {(["email", "phone"] as LoginMode[]).map((m) => (

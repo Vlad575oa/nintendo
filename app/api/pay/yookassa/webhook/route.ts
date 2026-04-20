@@ -18,7 +18,6 @@ export async function POST(req: Request) {
           where: { paymentId: paymentId },
           data: { status: "paid" },
         });
-        console.log(`Payment confirmed for order with paymentId ${paymentId}`);
       }
     }
 

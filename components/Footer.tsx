@@ -28,13 +28,15 @@ export const Footer = () => {
                         </p>
                         <div className="flex items-center gap-2.5">
                             {[
-                                { icon: Send, color: "hover:bg-[#26A5E4]", id: "tg" },
-                                { icon: Youtube, color: "hover:bg-[#FF0000]", id: "yt" },
-                                { icon: Instagram, color: "hover:bg-pink-600", id: "ig" },
+                                { icon: Send, color: "hover:bg-[#26A5E4]", id: "tg", href: "https://t.me/nintendo_shop_support" },
+                                { icon: Youtube, color: "hover:bg-[#FF0000]", id: "yt", href: "https://youtube.com" },
+                                { icon: Instagram, color: "hover:bg-pink-600", id: "ig", href: "https://instagram.com" },
                             ].map((s) => (
                                 <Link
                                     key={s.id}
-                                    href="#"
+                                    href={s.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className={`w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center transition-all ${s.color} hover:text-white text-neutral-400`}
                                 >
                                     <s.icon size={15} />
