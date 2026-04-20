@@ -160,7 +160,7 @@ export const Search = () => {
           </div>
           
           <div className="mt-6 pt-5 border-t border-neutral-50">
-             <Link href="/catalog/all" onClick={() => setIsOpen(false)} className="block text-center text-xs font-black text-primary uppercase tracking-[0.1em] hover:text-red-700 transition-colors">
+             <Link href="/" onClick={() => setIsOpen(false)} className="block text-center text-xs font-black text-primary uppercase tracking-[0.1em] hover:text-red-700 transition-colors">
                 Смотреть все результаты в каталоге
              </Link>
           </div>

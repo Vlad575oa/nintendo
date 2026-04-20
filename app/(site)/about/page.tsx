@@ -1,9 +1,10 @@
 import { Metadata } from "next";
 import {
   Gamepad2, Users, ShieldCheck, Truck,
-  Star, Zap, Heart, Trophy, ArrowRight
+  Star, Zap, Heart, Trophy, ArrowRight, Award
 } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "О компании | Nintendo Shop",
@@ -12,139 +13,183 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: "7+", label: "лет на рынке", icon: Trophy },
-  { value: "12 000+", label: "довольных клиентов", icon: Users },
-  { value: "4.9", label: "рейтинг на Яндексе", icon: Star },
-  { value: "24/7", label: "поддержка", icon: Zap },
+  { value: "7+", label: "лет на рынке", icon: Trophy, color: "text-primary bg-primary/5" },
+  { value: "12k+", label: "клиентов", icon: Users, color: "text-primary bg-primary/5" },
+  { value: "4.9", label: "рейтинг", icon: Star, color: "text-primary bg-primary/10" },
+  { value: "24/7", label: "поддержка", icon: Zap, color: "text-orange-500 bg-orange-500/10" },
+  { value: "100%", label: "оригинал", icon: ShieldCheck, color: "text-green-600 bg-green-600/10" },
+  { value: "1 год", label: "гарантия", icon: Award, color: "text-blue-500 bg-blue-500/10" },
+  { value: "РФ", label: "доставка", icon: Truck, color: "text-primary bg-primary/5" },
 ];
 
 const values = [
   {
     icon: ShieldCheck,
     title: "Только оригинал",
-    desc: "Мы не торгуем репликами и «серыми» поставками. Каждая консоль — прямо из официальных каналов дистрибуции, с заводскими пломбами и документами.",
+    desc: "Мы не торгуем репликами, «серыми» поставками или восстановленными устройствами под видом новых. Каждая консоль проходит трехэтапную проверку перед продажей: серийный номер, целостность пломб и комплектация. Мы работаем только с проверенными поставщиками.",
   },
   {
     icon: Heart,
     title: "Геймеры для геймеров",
-    desc: "Наша команда сама играет. Мы знаем, что значит ждать релиза, радоваться распаковке и злиться на дрейф стика Joy-Con. Поэтому говорим с вами на одном языке.",
+    desc: "Nintendo Shop — это не просто бизнес. Наша команда сама тестирует каждый аксессуар и играет в каждую новинку. Мы выпустили десятки гайдов по выбору консолей и защите экранов. Мы говорим с вами на одном языке, потому что сами горим тем же.",
   },
   {
     icon: Truck,
-    title: "Скорость — это уважение",
-    desc: "Заказ до 14:00 — сегодня у вас дома. Мы не оставляем посылки «на складе до выяснения». Каждый заказ отслеживается, и вы всегда знаете, где ваша консоль.",
+    title: "Скорость и Бережность",
+    desc: "Ваш заказ не валяется на складе. Курьер забирает его сразу после сборки. Мы используем усиленную упаковку «в три слоя», чтобы коробка доехала до вас в идеальном коллекционном состоянии. По Москве доставляем день в день, по РФ — за 2-4 дня.",
   },
   {
     icon: Users,
-    title: "Поддержка, которая помогает",
-    desc: "Не скрипты и не автоответы. Живые люди, которые решают проблему, а не перекладывают её. Средний ответ — 15 минут. Потому что так должно быть.",
+    title: "Поддержка и Сервис",
+    desc: "Проблема с дрейфом стика? Сложности с регионами в eShop? Мы не отправляем вас в Google. Наши эксперты по поддержке на связи в Telegram и по телефону, чтобы помочь делом. У нас есть свой сервисный центр — единственный в городе, который специализируется именно на Nintendo.",
   },
 ];
 
 const timeline = [
   {
     year: "2017",
-    title: "Начало",
-    desc: "Максим и Денис — два друга-геймера — устали ждать официальных поставок Nintendo и решили привозить консоли сами. Первые 10 Switch продали за 3 дня через группу ВКонтакте.",
+    title: "Эпоха ВКонтакте",
+    desc: "Руслан и Сергей — два друга и фаната Zelda — решили привезти первые 10 консолей Nintendo Switch прямо из Европы. Первая партия разлетелась за 72 часа через группу в ВК. Мы поняли: живое комьюнити в России существует и оно огромно.",
   },
   {
     year: "2019",
-    title: "Первый шоурум",
-    desc: "Открылась точка самовывоза в Митино. Клиенты могли прийти, подержать консоль в руках и уйти с покупкой. В очереди стояли до 20 человек в выходной день.",
+    title: "Первый «Оффлайн»",
+    desc: "Открыли шоурум в Митино. Тогда мы поняли, что геймерам важно пощупать консоль, сравнить экраны V1 и V2 вживую. В выходные дни очередь на консультации растягивалась на часы, и мы решили масштабироваться.",
   },
   {
     year: "2021",
-    title: "Сайт и масштаб",
-    desc: "Запустили интернет-магазин с доставкой по всей России. Подключили СДЭК и собственную курьерскую службу. Перевалили за 3 000 выполненных заказов.",
+    title: "Выход на Россию",
+    desc: "Запустили полноценный интернет-магазин с автоматизированной логистикой по всей стране. Подключили СДЭК и собственную курьерскую службу. Число выполненных заказов перевалило за 3 000, а ассортимент пополнился редкими лимитированными изданиями.",
   },
   {
     year: "2023",
-    title: "PS5 Pro в ассортименте",
-    desc: "Добавили PlayStation 5 Pro и расширили линейку аксессуаров. Открыли сервисный центр для гарантийного обслуживания — теперь не нужно искать мастера на стороне.",
+    title: "Сервис и PlayStation",
+    desc: "Учитывая спрос, добавили PlayStation 5 Pro и расширили линейку аксессуаров. Но главное — открыли свой специализированный сервисный центр для постгарантийного обслуживания. Теперь мы закрываем весь цикл: от покупки до ремонта.",
   },
   {
     year: "2025",
-    title: "Nintendo Switch 2",
-    desc: "Одними из первых в России привезли Nintendo Switch 2. 200 предзаказов за первые сутки. Комьюнити выросло до 12 000 постоянных клиентов.",
+    title: "Новая Эра",
+    desc: "Встретили запуск Nintendo Switch 2 (Switch Successor). Более 200 предзаказов за первые сутки. Наше комьюнити выросло до 12 000 постоянных клиентов. Мы продолжаем привозить новинки одними из первых в стране, сохраняя адекватные цены.",
   },
 ];
 
+import Image from "next/image";
+
 export default function AboutPage() {
   return (
-    <div className="bg-white min-h-screen pt-6 pb-28">
-      <div className="container max-w-5xl">
+    <div className="bg-[#fcfcfc] min-h-screen pt-12 pb-28">
+      <div className="container max-w-6xl px-4 lg:px-8">
 
-        {/* Hero */}
-        <div className="mb-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-primary/10 rounded-full text-primary text-[11px] font-black uppercase tracking-[0.2em] mb-8">
-            <Gamepad2 size={14} />
-            О компании
+        {/* --- HERO SECTION: EDITORIAL REDESIGN --- */}
+        <div className="mb-32">
+          {/* Top Metadata */}
+          <div className="flex items-center gap-4 mb-8">
+             <div className="h-px w-12 bg-primary/30" />
+             <span className="text-[11px] font-black text-primary uppercase tracking-[0.3em]">История бренда</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-            <div>
-              <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-secondary leading-[0.9] uppercase mb-6">
-                Живём<br />
-                <span className="text-primary">играми</span><br />
-                с 2017
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            {/* Left Content */}
+            <div className="lg:col-span-7">
+              <h1 className="text-[clamp(3.5rem,10vw,7rem)] font-black tracking-tighter text-secondary leading-[0.82] uppercase mb-10">
+                Живём <span className="text-primary italic">играми</span><br />
+                с <span className="text-neutral-200">2017</span> года
               </h1>
-              <p className="text-lg text-neutral-400 font-bold leading-relaxed">
-                Nintendo Shop начинался с двух друзей и десяти консолей. Сегодня — это команда из 15 человек, собственный сервисный центр и 12 000 геймеров, которым мы не подвели.
-              </p>
+              
+              <div className="max-w-xl space-y-6">
+                <p className="text-xl md:text-2xl text-secondary font-black leading-[1.3] tracking-tight">
+                  Nintendo Shop начинался с двух друзей и десяти консолей, привезенных из Европы. Мы прошли путь от маленькой группы в VK до крупнейшего специализированного магазина в РФ.
+                </p>
+                <div className="h-px w-20 bg-neutral-100" />
+                <p className="text-base text-neutral-500 font-bold leading-relaxed">
+                  Сегодня — это команда из 15 профессиональных геймеров, собственный авторизованный сервисный центр и более 12 000 клиентов, которые доверяют нам свой досуг. Мы знаем о Switch всё — и делимся этими знаниями с вами.
+                </p>
+                
+                {/* Stats row inside hero */}
+                <div className="flex flex-wrap gap-8 pt-6">
+                   {stats.slice(0, 3).map(s => (
+                     <div key={s.label}>
+                        <p className="text-2xl font-black text-secondary leading-none mb-1">{s.value}</p>
+                        <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">{s.label}</p>
+                     </div>
+                   ))}
+                </div>
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <div key={s.label} className="bg-neutral-50 rounded-[24px] p-6 border border-neutral-100">
-                    <Icon size={20} className="text-primary mb-3" />
-                    <p className="text-3xl font-black text-secondary leading-none mb-1">{s.value}</p>
-                    <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">{s.label}</p>
-                  </div>
-                );
-              })}
+
+            {/* Right: CINEMATIC IMAGE */}
+            <div className="lg:col-span-5 pt-8">
+               <div className="relative aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl shadow-neutral-200">
+                  <Image 
+                    src="/about_hero_cinematic.png" 
+                    alt="Nintendo Shop Heritage" 
+                    fill 
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+               </div>
             </div>
           </div>
         </div>
 
-        {/* Story */}
-        <div className="mb-20">
-          <div className="bg-secondary rounded-[40px] p-10 md:p-14 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-primary/20 rounded-full blur-[80px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-            <div className="relative z-10 max-w-2xl">
-              <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">Наша история</p>
-              <p className="text-2xl md:text-3xl font-black text-white leading-snug mb-6">
-                «Мы не хотели быть просто магазином. Мы хотели быть местом, где геймеры чувствуют себя своими.»
-              </p>
-              <p className="text-neutral-400 font-bold leading-relaxed">
-                В 2017 году официальных поставок Nintendo в Россию почти не было. Максим и Денис — студенты, фанаты Mario и Zelda — решили исправить это сами. Они скинулись на первую партию Switch, продали всё за три дня и поняли: это работает.
-              </p>
-              <p className="text-neutral-400 font-bold leading-relaxed mt-4">
-                Сегодня Nintendo Shop — это не просто магазин. Это сообщество людей, которые понимают, что такое «ещё одна попытка» в 3 ночи и почему новый релиз важнее любого совещания. Мы продаём не железо — мы продаём впечатления.
-              </p>
+        {/* --- IMMERSIVE STORY BLOCK --- */}
+        <div className="mb-32 grayscale-hover">
+          <div className="bg-[#1a1a1c] rounded-[64px] p-12 md:p-20 relative overflow-hidden group">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px]" />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-8">
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] block mb-6 px-1">Миссия и ценности</span>
+                <h2 className="text-3xl md:text-5xl font-black text-white leading-[1.05] mb-10 max-w-2xl">
+                  «Мы не хотели быть просто магазином. Мы строили место, где геймеры чувствуют себя дома.»
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <p className="text-neutral-400 text-sm font-bold leading-relaxed">
+                    В 2017 году официальных поставок Nintendo в Россию почти не было. Руслан и Сергей — два друга и фаната Zelda — решили исправить это сами. Они продали первую партию за три дня и поняли главное: комьюнити жаждет качественного сервиса и живого общения.
+                  </p>
+                  <p className="text-neutral-400 text-sm font-bold leading-relaxed">
+                    Сегодня Nintendo Shop — это сообщество людей, которые понимают, почему новый релиз важнее любого совещания. Мы продаём не просто электронику, а входной билет в миры, которые меняют жизни. Мы геймеры, и это наш главный залог честности.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="lg:col-span-4 flex items-center justify-center lg:justify-end">
+                 <div className="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center text-primary animate-pulse">
+                    <Heart size={32} fill="currentColor" />
+                 </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Timeline */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-black text-secondary uppercase tracking-tighter mb-10">
-            Как мы росли
-          </h2>
+        {/* --- TIMELINE: ARCHITECTURAL REDESIGN --- */}
+        <div className="mb-32">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-4xl font-black text-secondary uppercase tracking-tighter">Как мы росли</h2>
+            <div className="hidden md:block text-[10px] font-black text-neutral-300 uppercase tracking-widest">2017 — 2025</div>
+          </div>
+          
           <div className="relative">
-            {/* vertical line */}
-            <div className="absolute left-[26px] top-0 bottom-0 w-px bg-neutral-100 hidden sm:block" />
-            <div className="space-y-6">
+            {/* vertical track */}
+            <div className="absolute left-[31px] top-6 bottom-6 w-px bg-neutral-100 hidden md:block" />
+            
+            <div className="space-y-4">
               {timeline.map((item, i) => (
-                <div key={item.year} className="sm:pl-16 relative">
-                  <div className="hidden sm:flex absolute left-0 top-1 w-[52px] h-[52px] rounded-full bg-white border-2 border-neutral-100 items-center justify-center">
-                    <span className="text-[10px] font-black text-primary">{item.year}</span>
+                <div key={item.year} className="md:pl-20 relative group">
+                  {/* Point */}
+                  <div className="hidden md:flex absolute left-0 top-6 w-16 h-16 rounded-full bg-white border border-neutral-100 items-center justify-center z-10 transition-all duration-500 group-hover:border-primary group-hover:shadow-xl group-hover:shadow-primary/20 group-hover:scale-110">
+                    <span className="text-[11px] font-black text-secondary group-hover:text-primary transition-colors">{item.year}</span>
                   </div>
-                  <div className="bg-neutral-50 rounded-[24px] p-7 border border-neutral-100 hover:border-primary/20 hover:shadow-lg hover:shadow-neutral-200/40 transition-all duration-300">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="sm:hidden text-[10px] font-black text-primary bg-primary/10 px-2.5 py-1 rounded-full">{item.year}</span>
-                      <h3 className="font-black text-secondary">{item.title}</h3>
+                  
+                  <div className="bg-white rounded-[32px] p-8 border border-neutral-100/60 hover:border-primary/20 hover:shadow-2xl hover:shadow-neutral-200/50 transition-all duration-500">
+                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                       <span className="md:hidden text-[10px] font-black text-primary bg-primary/5 px-3 py-1 rounded-full">{item.year}</span>
+                       <h3 className="text-xl font-black text-secondary uppercase tracking-tight">{item.title}</h3>
                     </div>
-                    <p className="text-sm text-neutral-500 font-medium leading-relaxed">{item.desc}</p>
+                    <p className="text-neutral-500 font-medium leading-relaxed max-w-3xl">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -152,46 +197,51 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Values */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-black text-secondary uppercase tracking-tighter mb-8">
-            Наши принципы
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {values.map((v) => {
-              const Icon = v.icon;
-              return (
-                <div key={v.title} className="group bg-neutral-50 rounded-[28px] p-8 border border-transparent hover:bg-white hover:border-neutral-100 hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-[16px] bg-white shadow-sm group-hover:bg-primary group-hover:shadow-xl group-hover:shadow-primary/30 flex items-center justify-center mb-6 transition-all duration-300">
-                    <Icon size={20} className="text-neutral-300 group-hover:text-white transition-colors" />
+        {/* --- VALUES: PREMIUM GRID --- */}
+        <div className="mb-32">
+           <div className="max-w-2xl mb-12">
+              <h2 className="text-4xl font-black text-secondary uppercase tracking-tighter mb-4">Наши принципы</h2>
+              <p className="text-neutral-400 font-bold">Мы не просто магазин электроники. Мы — часть игрового наследия, и наши правила отражают это.</p>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {values.map((v) => {
+                const Icon = v.icon;
+                return (
+                  <div key={v.title} className="group p-10 rounded-[40px] bg-white border border-neutral-100 hover:border-primary/20 hover:shadow-2xl hover:shadow-neutral-200/40 transition-all duration-500 relative overflow-hidden">
+                    {/* Hover Decoration */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="w-14 h-14 rounded-2xl bg-neutral-50 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-500">
+                       <Icon size={24} className="text-neutral-300 group-hover:text-white transition-colors" />
+                    </div>
+                    <h3 className="text-2xl font-black text-secondary mb-4 uppercase tracking-tight">{v.title}</h3>
+                    <p className="text-neutral-500 font-medium leading-relaxed">{v.desc}</p>
                   </div>
-                  <h3 className="font-black text-secondary text-lg mb-3">{v.title}</h3>
-                  <p className="text-sm text-neutral-500 font-medium leading-relaxed">{v.desc}</p>
-                </div>
-              );
-            })}
-          </div>
+                )
+              })}
+           </div>
         </div>
 
-        {/* CTA */}
-        <div className="bg-neutral-50 rounded-[32px] p-10 flex flex-col sm:flex-row items-center justify-between gap-8 border border-neutral-100">
-          <div>
-            <h3 className="text-2xl font-black text-secondary mb-2">Готовы к покупке?</h3>
-            <p className="text-neutral-400 font-bold">Перейдите в каталог или напишите — поможем выбрать.</p>
+        {/* --- FINAL CTA --- */}
+        <div className="bg-secondary rounded-[56px] p-12 md:p-20 flex flex-col lg:flex-row items-center justify-between gap-12 border border-secondary shadow-2xl shadow-neutral-900/10">
+          <div className="max-w-md">
+            <h3 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase leading-none">Готовы к новой главе?</h3>
+            <p className="text-neutral-400 font-bold text-lg">Загляните в каталог или свяжитесь с нашими экспертами — мы поможем сделать правильный выбор.</p>
           </div>
-          <div className="flex gap-4 shrink-0">
+          <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full lg:w-auto">
             <Link
-              href="/catalog/consoles"
-              className="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
+              href="/catalog/all"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-3 px-10 h-16 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/30"
             >
-              Каталог
-              <ArrowRight size={16} />
+              В каталог
+              <ArrowRight size={18} />
             </Link>
             <Link
               href="/contacts"
-              className="px-8 py-4 bg-white border border-neutral-200 text-secondary rounded-2xl font-black uppercase tracking-widest text-sm hover:border-primary/30 hover:shadow-lg transition-all"
+              className="flex-1 lg:flex-none flex items-center justify-center px-10 h-16 bg-white/[0.03] border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/[0.08] transition-all"
             >
-              Контакты
+              Связаться с нами
             </Link>
           </div>
         </div>

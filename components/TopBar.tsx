@@ -43,6 +43,13 @@ export const TopBar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-5">
+            <Link 
+              href="/about" 
+              className="group flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all active:scale-95"
+            >
+              <Award size={12} className="shrink-0 group-hover:rotate-12 transition-transform" />
+              <span className="text-[9px] font-black uppercase tracking-tight">Почему мы</span>
+            </Link>
             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-50/50 text-blue-600 border border-blue-100/50">
               <ShieldCheck size={12} className="shrink-0" />
               <span className="text-[9px] font-black uppercase tracking-tight">100% Оригинал</span>

@@ -48,8 +48,8 @@ export const useCartStore = create<CartStore>()(
         });
       },
       clearCart: () => set({ items: [] }),
-      totalItems: () => get().items.reduce((acc, item) => acc + item.quantity, 0),
-      totalPrice: () => get().items.reduce((acc, item) => acc + item.price * item.quantity, 0),
+      totalItems: () => get().items.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0),
+      totalPrice: () => get().items.reduce((acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0),
     }),
     {
       name: "cart-storage",

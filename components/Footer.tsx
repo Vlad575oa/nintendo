@@ -128,7 +128,7 @@ export const Footer = () => {
                             { name: "Конфиденциальность", href: "/legal/privacy" },
                             { name: "Условия использования", href: "/legal/terms" },
                             { name: "Файлы Cookie", href: "/legal/cookies" },
-                            { name: "Возврат", href: "/warranty" },
+                            { name: "Контакты", href: "/contacts" },
                         ].map((link) => (
                             <Link key={link.name} href={link.href} className="text-[10px] font-bold text-neutral-600 hover:text-neutral-400 transition-colors uppercase tracking-widest">
                                 {link.name}

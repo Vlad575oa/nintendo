@@ -75,12 +75,14 @@ export const Header = () => {
 
         {/* Catalog */}
         <Link
-          href="/catalog/all"
+          href="/"
           className="hidden lg:flex items-center gap-2 px-4 h-9 bg-white/[0.06] border border-white/[0.08] text-white/70 rounded-xl font-black text-[12px] uppercase tracking-tight hover:bg-white/10 hover:text-white hover:border-white/15 transition-all group shrink-0"
         >
           <Menu size={14} className="transition-transform group-hover:rotate-90" />
           <span>Каталог</span>
         </Link>
+
+
 
         {/* Search */}
         <div className="flex-1 min-w-[200px] max-w-3xl">

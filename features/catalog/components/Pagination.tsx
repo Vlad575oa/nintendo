@@ -57,9 +57,9 @@ export function Pagination({ totalPages }: PaginationProps) {
           key={page}
           href={createPageURL(page)}
           className={cn(
-            "w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all duration-200",
+            "w-10 h-10 flex items-center justify-center rounded-xl font-black transition-all duration-300",
             isActive
-              ? "bg-[#1da1f2] text-white shadow-[0_4px_12px_rgba(29,161,242,0.3)]"
+              ? "bg-primary text-white shadow-xl shadow-primary/30"
               : "text-neutral-500 hover:bg-neutral-100"
           )}
         >
@@ -76,7 +76,7 @@ export function Pagination({ totalPages }: PaginationProps) {
       {currentPage > 1 && (
         <Link
           href={createPageURL(currentPage - 1)}
-          className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#e1f3ff] text-[#1da1f2] hover:bg-[#d0ebff] transition-colors"
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all active:scale-95 shadow-sm"
         >
           <ChevronLeft size={20} />
         </Link>
@@ -87,7 +87,7 @@ export function Pagination({ totalPages }: PaginationProps) {
       {currentPage < totalPages && (
         <Link
           href={createPageURL(currentPage + 1)}
-          className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#e1f3ff] text-[#1da1f2] hover:bg-[#d0ebff] transition-colors"
+          className="w-10 h-10 flex items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-all active:scale-95 shadow-sm"
         >
           <ChevronRight size={20} />
         </Link>

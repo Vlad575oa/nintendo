@@ -24,7 +24,7 @@ export const FinalCta = () => {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link 
-            href="/catalog" 
+            href="/" 
             className="w-full sm:w-auto px-10 h-14 bg-white text-primary rounded-2xl flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest hover:bg-[var(--bg-base)] hover:shadow-lg transition-all duration-300"
           >
             Перейти в каталог

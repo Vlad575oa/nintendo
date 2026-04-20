@@ -84,7 +84,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   });
 
   return (
-    <article className="bg-[#fcfcfd] min-h-screen pt-12 pb-20">
+    <article className="bg-[#fcfcfd] min-h-screen pt-6 pb-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -100,15 +100,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
              <span className="text-neutral-500 truncate max-w-[200px]">{post.category || "Материал"}</span>
           </div>
 
-          <Link href="/blog" className="inline-flex items-center gap-3 text-neutral-400 font-black text-[10px] uppercase tracking-[0.2em] hover:text-primary transition-all mb-8 group">
-            <div className="w-8 h-8 rounded-full border border-neutral-100 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ArrowLeft size={14} />
-            </div>
-            К списку статей
-          </Link>
 
           {/* Premium Refined Header */}
-          <header className="space-y-6 mb-12">
+          <header className="space-y-3 mb-0">
             <div className="flex items-center gap-3">
                <span className="px-3 py-1 bg-primary text-white rounded-md text-[9px] font-black uppercase tracking-widest">
                  {post.category || "Материал"}
@@ -146,7 +140,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
 
         {/* Cinematic Main Image */}
-        <div className="max-w-5xl mx-auto mb-16 px-0 md:px-4">
+        <div className="max-w-5xl mx-auto mb-8 px-0 md:px-4">
           <div className="relative aspect-video md:aspect-[21/9] md:rounded-[40px] overflow-hidden shadow-2xl group transition-transform duration-700 hover:scale-[1.01]">
             <img
               src={post.image || "/images/placeholder.jpg"}
@@ -162,21 +156,21 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             prose prose-neutral max-w-none text-base leading-relaxed
 
             prose-h2:text-2xl prose-h2:font-black prose-h2:text-secondary
-            prose-h2:tracking-tight prose-h2:mt-14 prose-h2:mb-5
+            prose-h2:tracking-tight prose-h2:mt-6 prose-h2:mb-4
             prose-h2:pb-3 prose-h2:border-b prose-h2:border-neutral-100
 
             prose-h3:text-lg prose-h3:font-black prose-h3:text-secondary
-            prose-h3:mt-8 prose-h3:mb-3
+            prose-h3:mt-4 prose-h3:mb-3
 
-            prose-p:text-neutral-600 prose-p:leading-[1.85] prose-p:mb-5
+            prose-p:text-neutral-600 prose-p:leading-[1.85] prose-p:mb-3
 
             prose-a:text-primary prose-a:font-bold prose-a:no-underline
             hover:prose-a:underline
 
             prose-strong:text-secondary prose-strong:font-black
 
-            prose-ul:my-5 prose-ul:space-y-2
-            prose-ol:my-5 prose-ol:space-y-2
+            prose-ul:my-3 prose-ul:space-y-1.5
+            prose-ol:my-3 prose-ol:space-y-1.5
             prose-li:text-neutral-600 prose-li:leading-relaxed
 
             prose-table:w-full prose-table:text-sm
@@ -189,13 +183,15 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-2xl
             prose-blockquote:text-secondary prose-blockquote:font-semibold
 
-            prose-hr:border-neutral-100 prose-hr:my-10
+            prose-hr:border-neutral-100 prose-hr:my-8
 
-            prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-8
+            prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-4
 
             prose-code:text-primary prose-code:bg-neutral-100
             prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
             prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+            
+            [&_>_div_>_*:first-child]:mt-0
           ">
             <div dangerouslySetInnerHTML={{ __html: marked(post.content) as string }} />
           </div>

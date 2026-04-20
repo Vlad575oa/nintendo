@@ -71,7 +71,7 @@ export default function OrdersPage() {
           <p className="text-xl font-black text-secondary mb-2">Заказов пока нет</p>
           <p className="text-neutral-400 font-bold text-sm mb-6">Оформите первый заказ и он появится здесь</p>
           <Link
-            href="/catalog/all"
+            href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-2xl font-black text-sm hover:scale-[1.02] active:scale-95 transition-all"
           >
             Перейти в каталог

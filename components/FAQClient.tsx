@@ -104,42 +104,6 @@ export default function FAQClient({ faqs }: { faqs: FAQ[] }) {
 
   return (
     <>
-      {/* Search bar */}
-      <div className="relative mb-10">
-        <div className="bg-white rounded-[28px] shadow-2xl shadow-neutral-200/60 border border-neutral-100 flex items-center gap-5 px-6 py-5">
-          <div className="w-12 h-12 rounded-[16px] bg-secondary flex items-center justify-center shrink-0">
-            <Search size={20} className="text-white" />
-          </div>
-          <div className="flex-grow">
-            <p className="text-[9px] uppercase font-black tracking-widest text-neutral-400 mb-1">
-              Поиск по базе
-            </p>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Начните вводить ваш вопрос..."
-              className="w-full text-base font-bold placeholder:text-neutral-300 focus:outline-none text-secondary bg-transparent"
-              autoComplete="off"
-            />
-          </div>
-          {isSearching && (
-            <button
-              onClick={() => setQuery("")}
-              className="w-9 h-9 rounded-xl bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center transition-colors shrink-0"
-            >
-              <X size={15} className="text-neutral-500" />
-            </button>
-          )}
-        </div>
-
-        {/* Live results count badge */}
-        {isSearching && (
-          <div className="absolute -bottom-4 left-6 px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-primary/30 animate-in fade-in duration-200">
-            {filtered.length === 0 ? "Ничего не найдено" : `${filtered.length} ${filtered.length === 1 ? "вопрос" : filtered.length < 5 ? "вопроса" : "вопросов"}`}
-          </div>
-        )}
-      </div>
 
       {/* Category Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-12 mt-6">

@@ -26,7 +26,7 @@ export default function SuccessPage() {
         <Link href="/">
           <Button size="lg" className="rounded-2xl">На главную</Button>
         </Link>
-        <Link href="/catalog">
+        <Link href="/">
           <Button variant="outline" size="lg" className="rounded-2xl">В каталог</Button>
         </Link>
       </div>

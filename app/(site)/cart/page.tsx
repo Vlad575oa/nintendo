@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { formatPrice } from "@/lib/utils";
 
 export default function CartPage() {
   const [mounted, setMounted] = useState(false);
@@ -25,7 +26,7 @@ export default function CartPage() {
         </div>
         <h1 className="text-3xl font-black text-secondary mb-4">Ваша корзина пуста</h1>
         <p className="text-neutral-500 mb-10">Но это никогда не поздно исправить!</p>
-        <Link href="/catalog">
+        <Link href="/">
           <Button size="lg" className="rounded-2xl">Перейти в каталог</Button>
         </Link>
       </main>
@@ -51,7 +52,7 @@ export default function CartPage() {
                     {item.name}
                   </Link>
                   <p className="text-sm font-bold text-primary mt-1">
-                    {item.price.toLocaleString("ru-RU")} ₽
+                    {formatPrice(item.price)}
                   </p>
                 </div>
 
@@ -63,7 +64,7 @@ export default function CartPage() {
                     >
                       <Minus size={16} />
                     </button>
-                    <span className="w-8 text-center text-sm font-black text-secondary">{item.quantity}</span>
+                    <span className="w-8 text-center text-sm font-black text-secondary">{item.quantity || 1}</span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="p-2 hover:bg-white rounded-lg transition-colors text-neutral-500"
@@ -84,7 +85,7 @@ export default function CartPage() {
 
               <div className="text-right hidden sm:block">
                 <p className="text-lg font-black text-secondary">
-                  {(item.price * item.quantity).toLocaleString("ru-RU")} ₽
+                  {formatPrice((item.price) * (item.quantity || 1))}
                 </p>
               </div>
             </div>
@@ -99,7 +100,7 @@ export default function CartPage() {
             <div className="space-y-4 mb-10">
               <div className="flex justify-between text-neutral-500 font-bold">
                 <span>Товары ({totalItems()})</span>
-                <span>{totalPrice().toLocaleString("ru-RU")} ₽</span>
+                <span>{formatPrice(totalPrice())}</span>
               </div>
               <div className="flex justify-between text-neutral-500 font-bold">
                 <span>Доставка</span>
@@ -108,7 +109,7 @@ export default function CartPage() {
               <div className="pt-4 border-t border-neutral-200 flex justify-between">
                 <span className="text-lg font-black text-secondary">К оплате</span>
                 <span className="text-2xl font-black text-primary">
-                  {totalPrice().toLocaleString("ru-RU")} ₽
+                  {formatPrice(totalPrice())}
                 </span>
               </div>
             </div>
