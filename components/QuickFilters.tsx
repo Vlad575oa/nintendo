@@ -13,16 +13,12 @@ const SPECIAL_FILTERS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Игровые приставки",   href: "/catalog/all",                    slug: "all" },
-  { label: "PS5",                 href: "/catalog/playstation",            slug: "playstation" },
-  { label: "PS5 Pro",             href: "/catalog/playstation?q=PS5+Pro",  slug: null },
-  { label: "PS5 Slim",            href: "/catalog/playstation?q=PS5+Slim", slug: null },
-  { label: "Xbox Series X",       href: "/catalog/xbox?q=Series+X",        slug: null },
-  { label: "Xbox Series S",       href: "/catalog/xbox?q=Series+S",        slug: null },
-  { label: "Nintendo Switch",     href: "/catalog/nintendo",               slug: "nintendo" },
-  { label: "Steam Deck",          href: "/catalog/all?q=Steam+Deck",       slug: null },
-  { label: "Геймпады",            href: "/catalog/gamepads",               slug: "gamepads" },
-  { label: "Аксессуары",          href: "/catalog/accessories",            slug: "accessories" },
+  { label: "Все товары",      href: "/catalog/all",          slug: "all" },
+  { label: "PlayStation",     href: "/catalog/playstation",  slug: "playstation" },
+  { label: "Xbox",            href: "/catalog/xbox",         slug: "xbox" },
+  { label: "Nintendo Switch", href: "/catalog/nintendo",     slug: "nintendo" },
+  { label: "Геймпады",        href: "/catalog/gamepads",     slug: "gamepads" },
+  { label: "Аксессуары",      href: "/catalog/accessories",  slug: "accessories" },
 ];
 
 export const QuickFilters = () => {
