@@ -77,20 +77,40 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
   if (sort === "newest") orderBy = { createdAt: "desc" };
 
   // ── Data Fetching ─────────────────────────────────────────────────────────
-  const [products, totalCount, categoryData, categoryTree] = await Promise.all([
-    getProducts(where, orderBy, skip, pageSize),
-    getProductsCount(where),
-    category !== "all"
-      ? getCategoryBySlug(category)
-      : Promise.resolve({ name: "Весь каталог" }),
-    getCategoryTree()
-  ]);
+  let products: Awaited<ReturnType<typeof getProducts>> = [];
+  let totalCount = 0;
+  let categoryData: { name: string } | null = { name: "Весь каталог" };
+  let categoryTree: Awaited<ReturnType<typeof getCategoryTree>> = [];
+  let dbError = false;
+
+  try {
+    [products, totalCount, categoryData, categoryTree] = await Promise.all([
+      getProducts(where, orderBy, skip, pageSize),
+      getProductsCount(where),
+      category !== "all"
+        ? getCategoryBySlug(category)
+        : Promise.resolve({ name: "Весь каталог" }),
+      getCategoryTree(),
+    ]);
+  } catch {
+    dbError = true;
+  }
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
   const hasFilters = Object.keys(searchParams).some(
     (k) => k !== "sort" && k !== "page" && searchParams[k]
   );
+
+  if (dbError) {
+    return (
+      <div className="py-32 text-center">
+        <p className="text-4xl mb-4">⚙️</p>
+        <p className="text-xl font-black text-secondary mb-2">Каталог временно недоступен</p>
+        <p className="text-sm text-neutral-400 font-medium">Мы уже работаем над устранением проблемы. Попробуйте позже.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-12">
