@@ -90,7 +90,7 @@ export default function WishlistPage() {
               Нажмите <Heart size={14} className="inline text-red-400" /> на карточке товара, чтобы сохранить его сюда
             </p>
             <Link
-              href="/catalog/all"
+              href="/"
               className="px-8 py-3 bg-primary text-white font-black rounded-2xl hover:bg-red-700 transition-all shadow-lg shadow-primary/20"
             >
               Перейти в каталог
@@ -169,7 +169,7 @@ export default function WishlistPage() {
                   {/* Actions */}
                   <div className="flex gap-2 mt-auto">
                     <button
-                      onClick={() => addToCart(p as any)}
+                      onClick={() => addToCart({ id: p.id, name: p.name, slug: p.slug, price: p.price, image: p.images[0] || "/placeholder.jpg", quantity: 1 })}
                       className="flex-1 h-10 bg-orange-500 text-white rounded-xl text-[11px] font-black hover:bg-orange-600 transition-all flex items-center justify-center gap-1.5"
                     >
                       <ShoppingCart size={14} />

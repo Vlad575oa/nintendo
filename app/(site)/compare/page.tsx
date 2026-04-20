@@ -117,7 +117,7 @@ export default function ComparePage() {
               Добавляйте товары нажав <Scale size={14} className="inline" /> на карточке товара — до 4 позиций
             </p>
             <Link
-              href="/catalog/all"
+              href="/"
               className="px-8 py-3 bg-primary text-white font-black rounded-2xl hover:bg-red-700 transition-all shadow-lg shadow-primary/20"
             >
               Перейти в каталог
@@ -179,7 +179,7 @@ export default function ComparePage() {
                         {/* Actions */}
                         <div className="flex gap-2">
                           <button
-                            onClick={() => addToCart(p as any)}
+                            onClick={() => addToCart({ id: p.id, name: p.name, slug: p.slug, price: p.price, image: p.images[0] || "/placeholder.jpg", quantity: 1 })}
                             className="flex-1 h-9 bg-orange-500 text-white rounded-xl text-[10px] font-black hover:bg-orange-600 transition-all flex items-center justify-center gap-1.5"
                           >
                             <ShoppingCart size={14} />
