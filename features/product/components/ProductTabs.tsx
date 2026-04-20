@@ -166,7 +166,7 @@ export function ProductTabs({ description, attributes, productName }: ProductTab
                         )}
                       >
                         {/* Icon + Key */}
-                        <div className="flex items-center gap-2 w-[200px] shrink-0">
+                        <div className="flex items-center gap-2 w-[120px] sm:w-[200px] shrink-0">
                           <span className="text-neutral-300">{getAttrIcon(key)}</span>
                           <span className="text-[12px] font-bold text-neutral-400 leading-snug">{key}</span>
                         </div>

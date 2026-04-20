@@ -7,13 +7,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
 
   // Get all products
-  const products = await prisma.product.findMany({ 
-    select: { slug: true, updatedAt: true, category: { select: { slug: true } } } 
+  const products = await prisma.product.findMany({
+    select: { slug: true, updatedAt: true, category: { select: { slug: true } } }
   });
-  
+
   // Get all categories
-  const categories = await prisma.category.findMany({ 
-    select: { slug: true } 
+  const categories = await prisma.category.findMany({
+    select: { slug: true }
   });
 
   // Get all blog posts

@@ -135,16 +135,16 @@ export default function ComparePage() {
 
         {/* Compare Table */}
         {!loading && products.length > 0 && (
-          <div className="overflow-x-auto rounded-3xl pb-4">
-            <table className="w-full border-collapse min-w-[640px]">
+          <div className="overflow-x-auto rounded-3xl pb-4 -mx-4 px-4 md:mx-0 md:px-0">
+            <table className="w-full border-collapse" style={{ minWidth: Math.max(products.length * 220 + 180, 0) + "px" }}>
               {/* Product Cards Row */}
               <thead>
                 <tr>
-                  <th className="w-[180px] text-left pr-4 align-top py-4">
+                  <th className="w-[140px] md:w-[180px] text-left pr-4 align-top py-4 hidden md:table-cell">
                     <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Характеристика</span>
                   </th>
                   {products.map((p) => (
-                    <th key={p.id} className="align-top px-3 py-4 min-w-[220px]">
+                    <th key={p.id} className="align-top px-3 py-4 min-w-[180px] md:min-w-[220px]">
                       <div className="bg-white rounded-3xl border border-neutral-100 p-4 relative shadow-sm hover:shadow-md transition-shadow">
                         {/* Remove */}
                         <button
@@ -210,7 +210,7 @@ export default function ComparePage() {
                     key={attr.key}
                     className={idx % 2 === 0 ? "bg-white" : "bg-neutral-50/60"}
                   >
-                    <td className="py-4 pr-4 pl-4 rounded-l-2xl align-top">
+                    <td className="py-4 pr-4 pl-4 rounded-l-2xl align-top hidden md:table-cell">
                       <span className="text-[11px] font-black text-neutral-400 uppercase tracking-wider">
                         {attr.label}
                       </span>

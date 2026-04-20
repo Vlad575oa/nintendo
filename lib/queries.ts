@@ -27,6 +27,8 @@ export const getCategoryBySlug = cache(async (slug: string) => {
   return await prisma.category.findUnique({ where: { slug } });
 });
 
+const VISIBLE: Prisma.ProductWhereInput = { isVisible: true };
+
 export const getProducts = cache(async (
   where: Prisma.ProductWhereInput,
   orderBy: Prisma.ProductOrderByWithRelationInput,
@@ -34,7 +36,9 @@ export const getProducts = cache(async (
   take: number
 ) => {
   return await prisma.product.findMany({
-    where,
+    where: {
+      AND: [VISIBLE, where]
+    },
     orderBy,
     skip,
     take,
@@ -51,7 +55,7 @@ export const getProductBySlug = cache(async (slug: string) => {
 
 export const getNewProducts = cache(async (take: number = 8) => {
   return await prisma.product.findMany({
-    where: { isNew: true },
+    where: { ...VISIBLE, isNew: true },
     take,
     orderBy: { createdAt: "desc" },
     include: { category: true },
@@ -60,6 +64,7 @@ export const getNewProducts = cache(async (take: number = 8) => {
 
 export const getAllProducts = cache(async (take: number = 48) => {
   return await prisma.product.findMany({
+    where: VISIBLE,
     take,
     orderBy: { createdAt: "desc" },
     include: { category: true },
@@ -67,7 +72,11 @@ export const getAllProducts = cache(async (take: number = 48) => {
 });
 
 export const getProductsCount = cache(async (where: Prisma.ProductWhereInput) => {
-  return await prisma.product.count({ where });
+  return await prisma.product.count({ 
+    where: {
+      AND: [VISIBLE, where]
+    } 
+  });
 });
 
 export const getOrdersCount = cache(async () => {

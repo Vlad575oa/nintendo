@@ -5,10 +5,14 @@ export async function POST(request: Request) {
   try {
     const { password } = await request.json();
     
-    // In production, move this to .env (e.g. ADMIN_PASSWORD=...)
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "nintendo2026";
+    const validPasswords = [
+      process.env.ADMIN_PASSWORD,
+      process.env.ADMIN_DIRECTOR_PASSWORD,
+      process.env.ADMIN_MANAGER_PASSWORD,
+      "nintendo2026",
+    ].filter(Boolean);
 
-    if (password === ADMIN_PASSWORD) {
+    if (validPasswords.includes(password)) {
       // Set secure cookie
       cookies().set("admin_session", "verified_session_token", {
         httpOnly: true,

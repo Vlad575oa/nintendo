@@ -28,16 +28,16 @@ const MaxIcon = () => (
 export const TopBar = () => {
   return (
     <div className="bg-[var(--bg-surface)] border-b border-[var(--bg-elevated)] transition-colors">
-      <div className="container px-4 h-10 flex items-center justify-between gap-4">
+      <div className="container px-4 h-10 flex items-center justify-between gap-2 sm:gap-4">
         {/* Left: Location, Time & Trust Badges */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4 border-r border-[var(--bg-elevated)] pr-6">
+        <div className="flex items-center gap-3 sm:gap-6 overflow-hidden">
+          <div className="flex items-center gap-3 sm:gap-4 sm:border-r sm:border-[var(--bg-elevated)] sm:pr-6 shrink-0">
             <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
-              <MapPin size={14} className="text-secondary shrink-0" />
-              <span className="text-[11px] font-black uppercase tracking-wider">Москва</span>
+              <MapPin size={13} className="text-secondary shrink-0" />
+              <span className="text-[11px] font-black uppercase tracking-wider hidden sm:inline">Москва</span>
             </div>
             <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
-              <Clock size={14} className="text-secondary shrink-0" />
+              <Clock size={13} className="text-secondary shrink-0" />
               <span className="text-[11px] font-black uppercase tracking-wider">09:00 — 21:00</span>
             </div>
           </div>
@@ -62,20 +62,24 @@ export const TopBar = () => {
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           <a
             href="tel:84952259922"
-            className="text-[11px] font-black text-[var(--text-primary)] hover:text-primary transition-colors tracking-widest uppercase"
+            className="text-[11px] font-black text-[var(--text-primary)] hover:text-primary transition-colors tracking-widest uppercase hidden sm:inline"
           >
             8 495 225-99-22
           </a>
+          {/* Mobile: phone icon link */}
+          <a href="tel:84952259922" className="sm:hidden flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary" aria-label="Позвонить">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .86h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </a>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <Link
               href="https://wa.me/84952259922"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-7 h-7 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
+              className="w-8 h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
               title="WhatsApp"
             >
               <WhatsAppIcon />
@@ -84,7 +88,7 @@ export const TopBar = () => {
               href="https://t.me/nintendoshop"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-7 h-7 rounded-full bg-[#2AABEE] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
+              className="w-8 h-8 rounded-full bg-[#2AABEE] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
               title="Telegram"
             >
               <TelegramIcon />
@@ -93,7 +97,7 @@ export const TopBar = () => {
               href="https://vk.com/nintendoshop"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-7 h-7 rounded-full bg-[#0077FF] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
+              className="w-8 h-8 rounded-full bg-[#0077FF] text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
               title="ВКонтакте"
             >
               <VKIcon />
@@ -102,7 +106,7 @@ export const TopBar = () => {
               href="https://max.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-7 h-7 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
+              className="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all"
               title="MAX"
             >
               <MaxIcon />

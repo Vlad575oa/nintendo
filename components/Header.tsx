@@ -53,11 +53,11 @@ export const Header = () => {
   };
 
   const iconBtn = "flex flex-col items-center justify-center w-12 h-12 rounded-xl hover:bg-white/[0.07] transition-all group relative";
-  const iconLabel = "text-[7px] font-black text-white/25 uppercase tracking-widest mt-1 group-hover:text-white/50 transition-colors";
+  const iconLabel = "text-[7.5px] font-black text-white/30 uppercase tracking-wide mt-1 group-hover:text-white/60 transition-colors text-center";
 
   return (
     <header className="sticky top-0 z-50 h-[68px] flex items-center bg-[#2c2c30] border-b border-white/[0.07]" style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.25)" }}>
-      <div className="container px-4 flex items-center gap-3 xl:gap-6">
+      <div className="container px-4 flex items-center gap-2 xl:gap-4">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
@@ -85,12 +85,12 @@ export const Header = () => {
 
 
         {/* Search */}
-        <div className="flex-1 min-w-[200px] max-w-3xl">
+        <div className="flex-1 min-w-[150px] max-w-2xl">
           <Search />
         </div>
 
         {/* Icons */}
-        <div className="flex items-center gap-0.5 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
 
           {/* Auth */}
           <div className="relative" ref={menuRef}>

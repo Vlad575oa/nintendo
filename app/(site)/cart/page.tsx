@@ -41,8 +41,8 @@ export default function CartPage() {
         {/* Items List */}
         <div className="lg:col-span-2 space-y-8">
           {items.map((item) => (
-            <div key={item.id} className="flex gap-6 pb-8 border-b border-neutral-100 last:border-0 relative">
-              <div className="w-32 h-32 bg-neutral-50 rounded-3xl overflow-hidden border border-neutral-100 flex-shrink-0 relative">
+            <div key={item.id} className="flex gap-3 sm:gap-6 pb-8 border-b border-neutral-100 last:border-0 relative">
+              <div className="w-20 h-20 sm:w-32 sm:h-32 bg-neutral-50 rounded-2xl sm:rounded-3xl overflow-hidden border border-neutral-100 flex-shrink-0 relative">
                 <Image src={item.image} alt={item.name} fill className="object-contain p-4" />
               </div>
 
@@ -83,8 +83,8 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <div className="text-right hidden sm:block">
-                <p className="text-lg font-black text-secondary">
+              <div className="text-right shrink-0">
+                <p className="text-base sm:text-lg font-black text-secondary">
                   {formatPrice((item.price) * (item.quantity || 1))}
                 </p>
               </div>

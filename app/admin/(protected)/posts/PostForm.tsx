@@ -35,6 +35,7 @@ export const PostForm = ({ initial = defaultInitial }: PostFormProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(initial.image ?? "");
   const [saving, setSaving] = useState(false);
+  const [showSEO, setShowSEO] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -215,28 +216,44 @@ export const PostForm = ({ initial = defaultInitial }: PostFormProps) => {
             <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
           </section>
 
-          <section className="bg-[#111827] rounded-2xl p-6 space-y-4">
-            <h2 className="text-sm font-black text-white flex items-center gap-2">
-              <Search size={15} className="text-neutral-400" /> SEO
+          {/* SEO toggle */}
+          <div className="flex items-center justify-between pb-2">
+            <h2 className="text-sm font-black text-[#111827] flex items-center gap-2">
+              <Search size={15} className="text-neutral-400" /> SEO настройки
             </h2>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Title</label>
-              <input
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none"
-                value={form.metaTitle}
-                onChange={(e) => set("metaTitle", e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Description</label>
-              <textarea
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none resize-none"
-                rows={3}
-                value={form.metaDesc}
-                onChange={(e) => set("metaDesc", e.target.value)}
-              />
-            </div>
-          </section>
+            <button
+              type="button"
+              onClick={() => setShowSEO(!showSEO)}
+              className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/5 px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              {showSEO ? "Скрыть" : "Настроить"}
+            </button>
+          </div>
+
+          {showSEO && (
+            <section className="bg-[#111827] rounded-2xl p-6 space-y-4">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Title</label>
+                <input
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none focus:border-white/20"
+                  value={form.metaTitle}
+                  onChange={(e) => set("metaTitle", e.target.value)}
+                  placeholder="SEO заголовок"
+                />
+                <p className="text-[9px] text-neutral-600 font-bold mt-2">Если пусто, будет использован заголовок статьи</p>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Description</label>
+                <textarea
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none resize-none focus:border-white/20"
+                  rows={3}
+                  value={form.metaDesc}
+                  onChange={(e) => set("metaDesc", e.target.value)}
+                  placeholder="Краткое SEO описание"
+                />
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

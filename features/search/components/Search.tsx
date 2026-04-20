@@ -19,8 +19,25 @@ export const Search = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
+  const [popularItems, setPopularItems] = useState<any[]>(POPULAR_ITEMS);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchPopular = async () => {
+      try {
+        const res = await fetch("/api/products/recent?ids=1,2,3"); // Just a placeholder, better logic below
+        // Actually, let's fetch real "New" products for popular section
+        const data = await searchProductsAction(""); // I'll update the action to return defaults if empty
+        if (data && data.length > 0) {
+          setPopularItems(data.slice(0, 3));
+        }
+      } catch (e) {
+        console.error("Failed to fetch popular items", e);
+      }
+    };
+    fetchPopular();
+  }, []);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -62,9 +79,12 @@ export const Search = () => {
         isOpen ? "border-primary shadow-[0_0_0_4px_rgba(230,0,18,0.1)]" : "border-neutral-200"
       )}>
         {/* Category Selector */}
-        <button className="flex items-center gap-1.5 px-4 h-full bg-neutral-50 hover:bg-neutral-100 border-r border-neutral-200 transition-colors group">
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-1.5 px-4 h-full bg-neutral-50 hover:bg-neutral-100 border-r border-neutral-200 transition-colors group"
+        >
           <span className="text-[13px] font-bold text-secondary">Везде</span>
-          <ChevronDown size={14} className="text-neutral-400 group-hover:text-secondary transition-colors" />
+          <ChevronDown size={14} className={cn("text-neutral-400 group-hover:text-secondary transition-transform", isOpen && "rotate-180")} />
         </button>
 
         {/* Input Area */}
@@ -88,7 +108,13 @@ export const Search = () => {
         </div>
 
         {/* Search Button */}
-        <button className="flex items-center justify-center w-14 h-full bg-primary hover:bg-red-700 transition-all group shrink-0">
+        <button 
+          onClick={() => {
+            if (!isOpen) setIsOpen(true);
+            // If query is present, it might trigger actual search page navigation later
+          }}
+          className="flex items-center justify-center w-14 h-full bg-primary hover:bg-red-700 transition-all group shrink-0"
+        >
           {isLoading ? (
             <Loader2 size={20} className="text-white animate-spin" />
           ) : (
@@ -122,7 +148,7 @@ export const Search = () => {
               </h3>
               
               <div className="space-y-1">
-                {(query.length >= 2 ? results : POPULAR_ITEMS).map((item) => (
+                {(query.length >= 2 ? results : popularItems).map((item) => (
                   <Link 
                     key={item.id} 
                     href={`/catalog/${item.categorySlug || "any"}/${item.slug || ""}`}
@@ -130,7 +156,7 @@ export const Search = () => {
                     className="flex items-center gap-4 p-2.5 rounded-2xl hover:bg-neutral-50 transition-all group"
                   >
                     <div className="w-11 h-11 relative rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-neutral-100">
-                      <Image src={item.image} alt={item.name} fill className="object-cover" />
+                      <Image src={item.image || (item.images && item.images[0]) || ""} alt={item.name} fill className="object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-secondary group-hover:text-primary transition-colors truncate">{item.name}</h4>

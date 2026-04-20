@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Pencil, FileText } from "lucide-react";
+import { Plus, Pencil, FileText, Eye } from "lucide-react";
 import { PostDeleteButton } from "./PostDeleteButton";
+import { PostPublishToggle } from "./PostPublishToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,7 @@ export default async function PostsPage() {
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2 justify-end">
+                        <PostPublishToggle postId={p.id} isPublished={p.isPublished} />
                         <Link
                           href={`/admin/posts/${p.id}/edit`}
                           className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-blue-500 hover:border-blue-200 hover:bg-blue-50 transition-all"

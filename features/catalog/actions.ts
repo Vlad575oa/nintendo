@@ -80,7 +80,7 @@ export async function getFilteredProductsCountAction(params: FilterParams) {
   }
 
   const where: Prisma.ProductWhereInput =
-    andConditions.length > 0 ? { AND: andConditions } : {};
+    andConditions.length > 0 ? { isVisible: true, AND: andConditions } : { isVisible: true };
 
   try {
     const count = await prisma.product.count({ where });

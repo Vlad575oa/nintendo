@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { TopBar } from "@/components/TopBar";
-import { Header } from "@/components/Header";
-import { QuickFilters } from "@/components/QuickFilters";
-import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
-import { CookieBanner } from "@/components/CookieBanner";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 
@@ -156,18 +150,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body className={`${inter.className} bg-[var(--bg-base)] text-[var(--text-primary)] antialiased flex flex-col min-h-screen`}>
-        <TopBar />
-        <Header />
-        <Suspense fallback={null}>
-          <QuickFilters />
-        </Suspense>
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
-        <FloatingContact />
-        <CookieBanner />
+      <body className={`${inter.className} bg-[var(--bg-base)] text-[var(--text-primary)] antialiased min-h-screen`}>
+        {children}
         <Toaster position="bottom-right" richColors closeButton />
       </body>
     </html>

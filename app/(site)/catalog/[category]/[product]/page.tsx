@@ -26,8 +26,9 @@ export async function generateMetadata({
   const product = await getProductBySlug(params.product);
   if (!product) return { title: "Товар не найден" };
 
-  const title = `${product.name} — Купить в Nintendo Shop`;
+  const title = product.metaTitle || `${product.name} — Купить в Nintendo Shop`;
   const description =
+    product.metaDesc ||
     product.description?.replace(/<[^>]*>/g, "").slice(0, 160) ||
     `Закажите ${product.name} по выгодной цене с доставкой по всей России. Официальная гарантия и сервис.`;
 

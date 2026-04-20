@@ -126,7 +126,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <div className="flex flex-col flex-1">
         {/* Price */}
         <div className="mb-2">
-          <p className="text-[8px] text-neutral-400 font-bold uppercase leading-tight tracking-wide">При оплате наличными</p>
+          <p className="text-[10px] text-neutral-400 font-bold uppercase leading-tight tracking-wide">При оплате наличными</p>
           <p className="text-lg font-black text-secondary leading-none my-1">
             {formatPrice(product.price)}
           </p>
@@ -140,10 +140,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
 
-        {/* Cashback */}
-        <div className="flex items-center gap-1 text-[8px] font-black text-blue-500 mb-2 uppercase">
-          <TrendingUp size={10} />
-          <span>{Math.floor(product.price / 10000)} кэшбэк</span>
+        {/* Cashback + Stock */}
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-1 text-[10px] font-black text-blue-500 uppercase">
+            <TrendingUp size={10} />
+            <span>{Math.floor(product.price / 10000)} кэшбэк</span>
+          </div>
+          {product.inStock !== false ? (
+            <span className="text-[9px] font-black uppercase tracking-wider text-green-500">● В наличии</span>
+          ) : (
+            <span className="text-[9px] font-black uppercase tracking-wider text-orange-400">● Под заказ</span>
+          )}
         </div>
 
         {/* Title */}

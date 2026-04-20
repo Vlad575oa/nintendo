@@ -35,7 +35,7 @@ export function MobileStickyCart({ product }: MobileStickyCartProps) {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white border-t border-neutral-100 px-4 py-3 flex items-center gap-4 shadow-xl">
+    <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white border-t border-neutral-100 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] flex items-center gap-4 shadow-xl">
       <div className="flex-1 min-w-0">
         <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider truncate">{product.name}</p>
         <p className="text-lg font-black text-secondary leading-tight">{formatPrice(product.price)}</p>

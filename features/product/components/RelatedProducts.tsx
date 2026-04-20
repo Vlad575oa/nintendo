@@ -10,7 +10,7 @@ export async function RelatedProducts({ categorySlug, excludeId }: RelatedProduc
   let products: any[] = [];
   try {
     products = await prisma.product.findMany({
-      where: { category: { slug: categorySlug }, NOT: { id: excludeId } },
+      where: { isVisible: true, category: { slug: categorySlug }, NOT: { id: excludeId } },
       take: 4,
       orderBy: { createdAt: "desc" },
       include: { category: true },

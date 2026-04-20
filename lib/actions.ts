@@ -17,7 +17,7 @@ interface CreateOrderInput {
   totalAmount: number;
 }
 
-export type ActionResponse<T> = 
+export type ActionResponse<T> =
   | { success: true; data: T }
   | { success: false; error: string };
 
@@ -44,7 +44,7 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Action
             stock: { decrement: item.quantity },
           },
         });
-        
+
         const updatedProduct = await tx.product.findUnique({ where: { id: item.productId } });
         if (updatedProduct && updatedProduct.stock <= 0) {
           await tx.product.update({
@@ -86,32 +86,95 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Action
 }
 
 export async function searchProductsAction(query: string) {
-  if (!query || query.length < 2) return [];
-
   try {
     const products = await prisma.product.findMany({
       where: {
-        OR: [
-          { name: { contains: query, mode: "insensitive" } },
-          { category: { name: { contains: query, mode: "insensitive" } } },
-        ],
+        isVisible: true,
+        ...(query && query.length >= 2 ? {
+          OR: [
+            { name: { contains: query, mode: "insensitive" } },
+            { category: { name: { contains: query, mode: "insensitive" } } },
+          ],
+        } : {}),
       },
-      take: 8,
+      take: query && query.length >= 2 ? 8 : 4,
+      orderBy: { createdAt: "desc" },
       include: {
         category: { select: { name: true, slug: true } },
       },
     });
 
     return products.map(p => ({
-        id: p.id,
-        name: p.name,
-        slug: p.slug,
-        category: p.category.name,
-        categorySlug: p.category.slug,
-        image: p.images[0] || "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=200",
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      category: p.category.name,
+      categorySlug: p.category.slug,
+      image: p.images[0] || "",
     }));
-  } catch (error) {
+  } catch (error: any) {
     console.error("Search Error:", error);
     return [];
+  }
+}
+
+export async function duplicateProductAction(id: number): Promise<ActionResponse<any>> {
+  try {
+    const original = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!original) {
+      throw new Error("Товар не найден");
+    }
+
+    // Generate unique slug
+    const suffix = Math.random().toString(36).substring(2, 6);
+    const newSlug = `${original.slug}-copy-${suffix}`;
+
+    // Create duplicate (excluding ID and timestamps)
+    const { id: _, createdAt, updatedAt, ...rest } = original as any;
+
+    const duplicate = await prisma.product.create({
+      data: {
+        ...rest,
+        slug: newSlug,
+        name: `${original.name} (Копия)`,
+      },
+    });
+
+    revalidatePath("/admin/products");
+    revalidatePath("/catalog");
+
+    return { success: true, data: duplicate };
+  } catch (error: any) {
+    console.error("Duplication Error:", error);
+    return { success: false, error: error.message || "Failed to duplicate product" };
+  }
+}
+
+export async function togglePostPublishAction(id: number): Promise<ActionResponse<any>> {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      select: { isPublished: true },
+    });
+
+    if (!post) {
+      throw new Error("Статья не найдена");
+    }
+
+    const updated = await prisma.post.update({
+      where: { id },
+      data: { isPublished: !post.isPublished },
+    });
+
+    revalidatePath("/admin/posts");
+    revalidatePath("/blog");
+
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("Toggle Publish Error:", error);
+    return { success: false, error: error.message || "Failed to toggle status" };
   }
 }

@@ -83,6 +83,7 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
   let categoryTree: Awaited<ReturnType<typeof getCategoryTree>> = [];
   let dbError = false;
 
+  let errorMsg = "";
   try {
     [products, totalCount, categoryData, categoryTree] = await Promise.all([
       getProducts(where, orderBy, skip, pageSize),
@@ -92,8 +93,10 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
         : Promise.resolve({ name: "Весь каталог" }),
       getCategoryTree(),
     ]);
-  } catch {
+  } catch (err: any) {
     dbError = true;
+    errorMsg = err.message || "Unknown error";
+    console.error("CATALOG FETCH ERROR:", err);
   }
 
   const totalPages = Math.ceil(totalCount / pageSize);

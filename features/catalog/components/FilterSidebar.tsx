@@ -147,6 +147,8 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
   // ── Common filter state ────────────────────────────────────────────────────
   const [priceMin, setPriceMin] = useState(Number(searchParams.get("priceMin") ?? 0));
   const [priceMax, setPriceMax] = useState(Number(searchParams.get("priceMax") ?? MAX_PRICE));
+  const [priceMinInput, setPriceMinInput] = useState(searchParams.get("priceMin") ?? "");
+  const [priceMaxInput, setPriceMaxInput] = useState(searchParams.get("priceMax") ?? "");
   const [colors, setColors] = useState<string[]>(
     searchParams.get("color")?.split(",").filter(Boolean) ?? []
   );
@@ -338,10 +340,12 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
               <input
                 type="number"
                 placeholder="0"
-                value={priceMin === 0 ? "" : priceMin}
-                onChange={(e) => {
-                  const v = Math.max(0, Math.min(Number(e.target.value) || 0, priceMax - 1000));
+                value={priceMinInput}
+                onChange={(e) => setPriceMinInput(e.target.value)}
+                onBlur={() => {
+                  const v = Math.max(0, Math.min(Number(priceMinInput) || 0, priceMax - 1));
                   setPriceMin(v);
+                  setPriceMinInput(v === 0 ? "" : String(v));
                 }}
                 className="w-full pl-4 pr-7 py-3 bg-neutral-50 border border-neutral-100 focus:border-primary/30 focus:bg-white rounded-2xl text-[13px] font-black transition-all placeholder:text-neutral-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
@@ -352,10 +356,13 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
               <input
                 type="number"
                 placeholder={MAX_PRICE.toLocaleString("ru-RU")}
-                value={priceMax === MAX_PRICE ? "" : priceMax}
-                onChange={(e) => {
-                  const v = Math.min(MAX_PRICE, Math.max(Number(e.target.value) || MAX_PRICE, priceMin + 1000));
+                value={priceMaxInput}
+                onChange={(e) => setPriceMaxInput(e.target.value)}
+                onBlur={() => {
+                  const raw = Number(priceMaxInput);
+                  const v = priceMaxInput === "" ? MAX_PRICE : Math.min(MAX_PRICE, Math.max(raw, priceMin + 1));
                   setPriceMax(v);
+                  setPriceMaxInput(v === MAX_PRICE ? "" : String(v));
                 }}
                 className="w-full pl-4 pr-7 py-3 bg-neutral-50 border border-neutral-100 focus:border-primary/30 focus:bg-white rounded-2xl text-[13px] font-black transition-all placeholder:text-neutral-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
@@ -367,8 +374,8 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
             max={MAX_PRICE}
             valueMin={priceMin}
             valueMax={priceMax}
-            onChangeMin={setPriceMin}
-            onChangeMax={setPriceMax}
+            onChangeMin={(v) => { setPriceMin(v); setPriceMinInput(v === 0 ? "" : String(v)); }}
+            onChangeMax={(v) => { setPriceMax(v); setPriceMaxInput(v === MAX_PRICE ? "" : String(v)); }}
           />
         </div>
       </FilterSection>

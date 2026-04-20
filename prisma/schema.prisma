@@ -37,6 +37,7 @@ model Product {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   stock       Int         @default(10)
+  isVisible   Boolean     @default(true)
   orderItems  OrderItem[]
   category    Category    @relation(fields: [categoryId], references: [id])
 
@@ -47,20 +48,20 @@ model Product {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  status      String      @default("pending")
+  id          Int     @id @default(autoincrement())
+  status      String  @default("pending")
   totalAmount Int
   name        String
   phone       String
   address     String
-  paymentId   String?     @unique
-  
-  userId      Int?
-  user        User?       @relation(fields: [userId], references: [id])
-  
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  items       OrderItem[]
+  paymentId   String? @unique
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  items     OrderItem[]
 }
 
 model OrderItem {

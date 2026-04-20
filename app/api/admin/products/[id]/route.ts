@@ -70,6 +70,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  try {
+    const id = parseInt(params.id);
+    const { isVisible } = await request.json();
+    const product = await prisma.product.update({ where: { id }, data: { isVisible } });
+    return NextResponse.json({ success: true, isVisible: product.isVisible });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   try {
     await prisma.product.delete({ where: { id: parseInt(params.id) } });

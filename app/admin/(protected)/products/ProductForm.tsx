@@ -58,6 +58,7 @@ export const ProductForm = ({ categories, initial = defaultInitial }: ProductFor
   const [removedImages, setRemovedImages] = useState<string[]>([]);
   const [attrs, setAttrs] = useState<Attribute[]>(initial.attributes ?? []);
   const [saving, setSaving] = useState(false);
+  const [showSEO, setShowSEO] = useState(false);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -351,31 +352,44 @@ export const ProductForm = ({ categories, initial = defaultInitial }: ProductFor
             </div>
           </section>
 
-          {/* SEO */}
-          <section className="bg-[#111827] rounded-2xl p-6 space-y-4">
-            <h2 className="text-sm font-black text-white flex items-center gap-2">
-              <Search size={15} className="text-neutral-400" /> SEO
+          {/* SEO toggle */}
+          <div className="flex items-center justify-between pb-2">
+            <h2 className="text-sm font-black text-[#111827] flex items-center gap-2">
+              <Search size={15} className="text-neutral-400" /> SEO настройки
             </h2>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Title</label>
-              <input
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none focus:border-white/20"
-                value={form.metaTitle}
-                onChange={(e) => set("metaTitle", e.target.value)}
-                placeholder="SEO заголовок"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Description</label>
-              <textarea
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none resize-none"
-                rows={4}
-                value={form.metaDesc}
-                onChange={(e) => set("metaDesc", e.target.value)}
-                placeholder="Краткое SEO описание"
-              />
-            </div>
-          </section>
+            <button
+              type="button"
+              onClick={() => setShowSEO(!showSEO)}
+              className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/5 px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              {showSEO ? "Скрыть" : "Настроить"}
+            </button>
+          </div>
+
+          {showSEO && (
+            <section className="bg-[#111827] rounded-2xl p-6 space-y-4">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Title</label>
+                <input
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none focus:border-white/20"
+                  value={form.metaTitle}
+                  onChange={(e) => set("metaTitle", e.target.value)}
+                  placeholder="SEO заголовок"
+                />
+                <p className="text-[9px] text-neutral-600 font-bold mt-2">Если пусто, будет использовано название товара</p>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1.5">Meta Description</label>
+                <textarea
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold text-white placeholder:text-neutral-600 outline-none resize-none"
+                  rows={4}
+                  value={form.metaDesc}
+                  onChange={(e) => set("metaDesc", e.target.value)}
+                  placeholder="Краткое SEO описание"
+                />
+              </div>
+            </section>
+          )}
 
           {isEdit && (
             <section className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-6">

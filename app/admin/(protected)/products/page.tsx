@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, Search, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { ProductDeleteButton } from "./ProductDeleteButton";
+import { ProductDuplicateButton } from "./ProductDuplicateButton";
+import { ProductHideButton } from "./ProductHideButton";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +45,36 @@ export default async function ProductsPage({ searchParams }: Props) {
       </header>
 
       <div className="p-8 space-y-5">
+
+        {/* Category Pills */}
+        <div className="flex flex-wrap gap-2 pb-1 overflow-x-auto no-scrollbar">
+          <Link
+            href="/admin/products"
+            className={cn(
+              "px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all",
+              !categorySlug
+                ? "bg-[#111827] text-white shadow-lg shadow-black/10"
+                : "bg-white border border-neutral-200 text-neutral-400 hover:text-[#111827] hover:border-neutral-300"
+            )}
+          >
+            Все
+          </Link>
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/admin/products?category=${cat.slug}${q ? `&q=${q}` : ""}`}
+              className={cn(
+                "px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all",
+                categorySlug === cat.slug
+                  ? "bg-primary text-white shadow-lg shadow-primary/20"
+                  : "bg-white border border-neutral-200 text-neutral-400 hover:text-primary hover:border-primary/30"
+              )}
+            >
+              {cat.name}
+            </Link>
+          ))}
+        </div>
+
         {/* Filters */}
         <form method="get" className="flex gap-3">
           <div className="flex-1 relative">
@@ -53,16 +86,7 @@ export default async function ProductsPage({ searchParams }: Props) {
               className="w-full pl-9 pr-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-bold text-[#111827] placeholder:text-neutral-300 outline-none focus:border-primary/30"
             />
           </div>
-          <select
-            name="category"
-            defaultValue={categorySlug}
-            className="px-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-bold text-neutral-500 outline-none"
-          >
-            <option value="">Все категории</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.slug}>{c.name}</option>
-            ))}
-          </select>
+          {categorySlug && <input type="hidden" name="category" value={categorySlug} />}
           <button type="submit" className="px-5 py-2.5 bg-[#111827] text-white text-xs font-black rounded-xl hover:bg-neutral-800 transition-all">
             Найти
           </button>
@@ -88,7 +112,7 @@ export default async function ProductsPage({ searchParams }: Props) {
                 </tr>
               ) : (
                 products.map((p) => (
-                  <tr key={p.id} className="border-b border-neutral-50 last:border-0 hover:bg-neutral-50/50 transition-colors">
+                  <tr key={p.id} className={`border-b border-neutral-50 last:border-0 transition-colors ${p.isVisible === false ? "opacity-50 bg-neutral-50/80" : "hover:bg-neutral-50/50"}`}>
                     <td className="px-5 py-3">
                       <div className="w-12 h-12 rounded-xl overflow-hidden bg-neutral-50 border border-neutral-100 flex-shrink-0">
                         {p.images[0] ? (
@@ -116,6 +140,8 @@ export default async function ProductsPage({ searchParams }: Props) {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2 justify-end">
+                        <ProductDuplicateButton productId={p.id} />
+                        <ProductHideButton productId={p.id} isVisible={p.isVisible !== false} />
                         <Link
                           href={`/admin/products/${p.id}/edit`}
                           className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-blue-500 hover:border-blue-200 hover:bg-blue-50 transition-all"
