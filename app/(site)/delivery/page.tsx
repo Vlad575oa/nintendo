@@ -5,7 +5,7 @@ import {
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Доставка и оплата | Nintendo Shop",
+  title: "Доставка и оплата | Gameshop24",
   description: "Доставка по Москве в день заказа. СДЭК, Boxberry, самовывоз. Оплата картой, СБП, наличными и в рассрочку 0%.",
   alternates: { canonical: "/delivery" },
 };

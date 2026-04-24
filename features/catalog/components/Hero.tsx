@@ -8,7 +8,7 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent z-10" />
         <Image
-          src="https://images.unsplash.com/photo-1605901309584-818e25960a8f?q=80&w=2000"
+          src="/images/placeholder.webp"
           alt="Gaming Hero"
           fill
           className="object-cover object-right opacity-60"

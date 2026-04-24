@@ -1,11 +1,13 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Search, Package } from "lucide-react";
+import { Plus, Pencil, Search, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { ProductDeleteButton } from "./ProductDeleteButton";
 import { ProductDuplicateButton } from "./ProductDuplicateButton";
 import { ProductHideButton } from "./ProductHideButton";
 import { cn } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { ADMIN_COOKIE, verifyAdminSession } from "@/lib/adminSession";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +18,8 @@ interface Props {
 export default async function ProductsPage({ searchParams }: Props) {
   const q = searchParams.q ?? "";
   const categorySlug = searchParams.category ?? "";
+  const session = await verifyAdminSession(cookies().get(ADMIN_COOKIE)?.value);
+  const canDeleteProducts = session?.r !== "MANAGER";
 
   const [products, categories] = await Promise.all([
     prisma.product.findMany({
@@ -148,7 +152,9 @@ export default async function ProductsPage({ searchParams }: Props) {
                         >
                           <Pencil size={13} />
                         </Link>
-                        <ProductDeleteButton productId={p.id} productName={p.name} />
+                        {canDeleteProducts && (
+                          <ProductDeleteButton productId={p.id} productName={p.name} />
+                        )}
                       </div>
                     </td>
                   </tr>

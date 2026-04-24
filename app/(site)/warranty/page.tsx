@@ -5,7 +5,7 @@ import {
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Гарантия и возврат | Nintendo Shop",
+  title: "Гарантия и возврат | Gameshop24",
   description: "Гарантия 12 месяцев на консоли. Возврат в течение 14 дней. Бесплатный сервис при заводском браке.",
   alternates: { canonical: "/warranty" },
 };
@@ -38,7 +38,7 @@ const returnSteps = [
   {
     num: "01",
     title: "Свяжитесь с нами",
-    desc: "Напишите в Telegram @nintendo_shop_support или на email. Укажите номер заказа и опишите ситуацию.",
+    desc: "Напишите в Telegram 7(926)676-34-88 или на email. Укажите номер заказа и опишите ситуацию.",
   },
   {
     num: "02",
@@ -186,13 +186,13 @@ export default function WarrantyPage() {
           </div>
           <div className="flex gap-4 shrink-0">
             <a
-              href="https://t.me/nintendo_shop_support"
+              href="https://t.me/+79266763488"
               className="px-8 py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
             >
               Telegram
             </a>
             <a
-              href="mailto:support@nintendo-shop.ru"
+              href="mailto:shop@gameshop24.ru"
               className="px-8 py-4 bg-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-white/20 transition-all border border-white/10"
             >
               Email

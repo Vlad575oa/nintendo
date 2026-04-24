@@ -10,28 +10,28 @@ const channels = [
   {
     icon: MessageCircle,
     label: "Telegram",
-    value: "@nintendo_shop_support",
+    value: "7(926)676-34-88",
     sub: "Ответ до 15 минут",
     badge: "24/7",
-    href: "https://t.me/nintendo_shop_support",
+    href: "https://t.me/+79266763488",
     accent: true,
   },
   {
     icon: Phone,
     label: "Телефон",
-    value: "+7 (495) 123-45-67",
+    value: "7(926)676-34-88",
     sub: "Пн–Вс, 10:00–21:00",
     badge: "Бесплатно",
-    href: "tel:+74951234567",
+    href: "tel:+79266763488",
     accent: false,
   },
   {
     icon: Mail,
     label: "Email",
-    value: "support@nintendo-shop.ru",
+    value: "shop@gameshop24.ru",
     sub: "Ответ до 2 часов",
     badge: "24/7",
-    href: "mailto:support@nintendo-shop.ru",
+    href: "mailto:shop@gameshop24.ru",
     accent: false,
   },
   {
@@ -245,16 +245,29 @@ export default function ContactsPage() {
               </div>
               <div className="space-y-3">
                 {[
-                  { label: "Компания", value: "ООО «ГЕЙМПРО»" },
-                  { label: "ИНН", value: "7743891254" },
-                  { label: "ОГРН", value: "1177746382091" },
-                  { label: "Адрес", value: "125438, г. Москва, пер. 4-й Лихачёвский, д. 4" },
+                  { label: "Компания", value: "ИП Якубов Р.В." },
+                  { label: "ФИО", value: "Якубов Руслан Вячеславович" },
+                  { label: "ИНН", value: "773370847288" },
+                  { label: "ОГРНИП", value: "323774600158589" },
+                  { label: "Адрес", value: "125368, Россия, г. Москва" },
                 ].map((row) => (
                   <div key={row.label}>
                     <p className="text-[9px] font-black uppercase tracking-widest text-neutral-400 mb-0.5">{row.label}</p>
                     <p className="text-sm font-bold text-secondary">{row.value}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            <div className="bg-neutral-50 rounded-[28px] p-8">
+              <h3 className="font-black text-secondary mb-4">По вопросам сотрудничества</h3>
+              <div className="space-y-3">
+                <a href="tel:+79266763488" className="block text-sm font-bold text-secondary hover:text-primary transition-colors">
+                  Тел.: 8 (926) 676-34-88
+                </a>
+                <a href="mailto:partner@gameshop24.ru" className="block text-sm font-bold text-secondary hover:text-primary transition-colors">
+                  E-mail: partner@gameshop24.ru
+                </a>
               </div>
             </div>
           </div>

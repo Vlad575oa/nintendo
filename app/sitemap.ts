@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://gameshop24.ru";
 
   // Get all products
   const products = await prisma.product.findMany({

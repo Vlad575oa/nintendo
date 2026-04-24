@@ -9,15 +9,25 @@ export const CookieBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
-      const timer = setTimeout(() => setIsVisible(true), 2000);
-      return () => clearTimeout(timer);
+    let consent: string | null = null;
+    try {
+      consent = localStorage.getItem("cookie-consent");
+    } catch {
+      // Some browsers/privacy modes can throw on storage access.
     }
+
+    if (consent) return;
+
+    const timer = setTimeout(() => setIsVisible(true), 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("cookie-consent", "accepted");
+    try {
+      localStorage.setItem("cookie-consent", "accepted");
+    } catch {
+      // Ignore storage write errors and just hide the banner.
+    }
     setIsVisible(false);
   };
 

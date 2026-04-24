@@ -1,27 +1,39 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
+import { z } from "zod";
 import {
   verifyPassword,
   generateSessionToken,
   getSessionExpiry,
   SESSION_COOKIE,
 } from "@/lib/auth";
+import { buildRateLimitKey, rateLimit } from "@/lib/rateLimit";
+
+const LoginSchema = z.object({
+  identifier: z.string().trim().min(3).max(120),
+  password: z.string().min(8).max(128),
+});
 
 export async function POST(request: Request) {
   try {
-    const { identifier, password } = await request.json();
-
-    if (!identifier || !password) {
-      return NextResponse.json(
-        { error: "Заполните все поля" },
-        { status: 400 }
-      );
+    const limit = rateLimit(buildRateLimitKey("auth-login", request), 10, 15 * 60 * 1000);
+    if (!limit.allowed) {
+      return NextResponse.json({ error: "Слишком много попыток. Попробуйте позже." }, { status: 429 });
     }
+
+    const parsed = LoginSchema.safeParse(await request.json());
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Заполните все поля" }, { status: 400 });
+    }
+    const { identifier, password } = parsed.data;
 
     // Determine if identifier is email or phone
     const isEmail = identifier.includes("@");
     const normalized = isEmail ? identifier.toLowerCase() : identifier.replace(/\D/g, "");
+    if (!isEmail && (normalized.length < 10 || normalized.length > 15)) {
+      return NextResponse.json({ error: "Неверный логин или пароль" }, { status: 401 });
+    }
 
     const user = await prisma.user.findFirst({
       where: isEmail ? { email: normalized } : { phone: normalized },

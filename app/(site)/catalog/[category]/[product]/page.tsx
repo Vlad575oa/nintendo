@@ -1,4 +1,4 @@
-import { getProductBySlug } from "@/lib/queries";
+import { getProductBySlug, getProductVariants } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
@@ -14,7 +14,7 @@ import { RelatedProducts } from "@/features/product/components/RelatedProducts";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://gameshop24.ru";
 
 export const revalidate = 1800;
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
   const product = await getProductBySlug(params.product);
   if (!product) return { title: "Товар не найден" };
 
-  const title = product.metaTitle || `${product.name} — Купить в Nintendo Shop`;
+  const title = product.metaTitle || `${product.name} — Купить в Gameshop24`;
   const description =
     product.metaDesc ||
     product.description?.replace(/<[^>]*>/g, "").slice(0, 160) ||
@@ -52,6 +52,7 @@ export default async function ProductPage({
 }) {
   const product = await getProductBySlug(params.product);
   if (!product) notFound();
+  const variants = await getProductVariants(product.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -127,7 +128,7 @@ export default async function ProductPage({
           {/* Right — Sticky purchase block */}
           <aside className="w-full lg:w-[380px] flex-shrink-0">
             <div className="lg:sticky lg:top-24">
-              <PurchaseBlock product={product} />
+              <PurchaseBlock product={product} variants={variants} categorySlug={product.category.slug} />
             </div>
           </aside>
         </div>

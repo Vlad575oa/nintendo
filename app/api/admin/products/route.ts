@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import prisma from "@/lib/prisma";
+import crypto from "crypto";
+
+const ALLOWED_IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
 function slugify(str: string) {
   return str
@@ -18,8 +22,15 @@ async function saveImages(files: File[]): Promise<string[]> {
   await mkdir(uploadDir, { recursive: true });
   const urls: string[] = [];
   for (const file of files) {
+    if (!ALLOWED_IMAGE_MIME.has(file.type)) {
+      throw new Error("Недопустимый формат файла. Разрешены JPG/PNG/WEBP");
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      throw new Error("Файл слишком большой. Максимум 5MB");
+    }
     const buf = Buffer.from(await file.arrayBuffer());
-    const name = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const name = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
     await writeFile(join(uploadDir, name), buf);
     urls.push(`/uploads/products/${name}`);
   }

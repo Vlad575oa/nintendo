@@ -7,7 +7,7 @@ import { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Блог игромана | Новости, обзоры и гайды | Nintendo Shop",
+  title: "Блог игромана | Новости, обзоры и гайды | Gameshop24",
   description: "Самые свежие новости из мира консолей, подробные обзоры PS5 Pro, Nintendo Switch 2 и ретро-гейминга.",
   alternates: { canonical: "/blog" },
 };

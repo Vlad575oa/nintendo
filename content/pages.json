@@ -1,10 +1,10 @@
 {
   "about": {
-    "hero_title": "О нас — Nintendo Shop",
+    "hero_title": "О нас — Gameshop24",
     "hero_subtitle": "Мы команда фанатов игровой культуры, работающая с 2018 года",
-    "story": "Nintendo Shop — это специализированный магазин игровых консолей и аксессуаров в Москве. Мы работаем напрямую с официальными дистрибьюторами, гарантируя 100% оригинальность каждого товара.",
-    "phone": "8 495 225-99-22",
-    "email": "info@nintendo-shop.ru",
+    "story": "Gameshop24 — это специализированный магазин игровых консолей и аксессуаров в Москве. Мы работаем напрямую с официальными дистрибьюторами, гарантируя 100% оригинальность каждого товара.",
+    "phone": "7(926)676-34-88",
+    "email": "shop@gameshop24.ru",
     "address": "Москва, ул. Примерная, д. 1"
   },
   "delivery": {
@@ -14,12 +14,12 @@
     "payment_methods": "Наличные, карта, СБП, рассрочка"
   },
   "contacts": {
-    "phone": "8 495 225-99-22",
-    "email": "info@nintendo-shop.ru",
+    "phone": "7(926)676-34-88",
+    "email": "shop@gameshop24.ru",
     "address": "Москва, ул. Примерная, д. 1",
     "schedule": "Пн–Вс: 09:00 – 21:00",
-    "telegram": "https://t.me/nintendoshop",
-    "whatsapp": "https://wa.me/84952259922",
+    "telegram": "https://t.me/+79266763488",
+    "whatsapp": "https://wa.me/79266763488",
     "vk": "https://vk.com/nintendoshop"
   },
   "warranty": {

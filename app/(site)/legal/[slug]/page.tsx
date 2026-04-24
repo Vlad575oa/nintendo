@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
   if (!pageContent) return {};
 
   return {
-    title: `${pageContent.title} | Nintendo Shop`,
+    title: `${pageContent.title} | Gameshop24`,
     description: pageContent.description,
     alternates: {
       canonical: `/legal/${params.slug}`

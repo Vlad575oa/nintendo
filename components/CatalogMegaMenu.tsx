@@ -19,34 +19,7 @@ interface PlatformGroup {
 }
 
 const PLATFORMS: PlatformGroup[][] = [
-  // Column 1 — Nintendo (PRIORITY)
-  [
-    {
-      title: "Nintendo Switch 2",
-      href: "/catalog/nintendo",
-      emoji: "⚡",
-      color: "bg-red-50 text-red-500",
-      links: [
-        { label: "Консоли Switch 2", href: "/catalog/nintendo", badge: "NEW" },
-        { label: "Аксессуары Switch 2", href: "/catalog/accessories?q=switch2" },
-        { label: "Игры Switch 2", href: "/catalog/games?q=switch2" },
-      ],
-    },
-    {
-      title: "Nintendo Switch",
-      href: "/catalog/nintendo",
-      emoji: "🔴",
-      color: "bg-red-50 text-red-400",
-      links: [
-        { label: "Консоли Switch", href: "/catalog/nintendo" },
-        { label: "Switch OLED", href: "/catalog/nintendo?q=oled" },
-        { label: "Switch Lite", href: "/catalog/nintendo?q=lite" },
-        { label: "Аксессуары Switch", href: "/catalog/accessories?q=switch" },
-        { label: "Игры Switch", href: "/catalog/games?q=switch" },
-      ],
-    },
-  ],
-  // Column 2 — PlayStation
+  // Column 1 — PlayStation
   [
     {
       title: "PlayStation 5",
@@ -70,6 +43,33 @@ const PLATFORMS: PlatformGroup[][] = [
         { label: "Консоли PS4", href: "/catalog/playstation" },
         { label: "Аксессуары PS4", href: "/catalog/accessories?q=ps4" },
         { label: "Игры PS4", href: "/catalog/games?q=ps4" },
+      ],
+    },
+  ],
+  // Column 2 — Nintendo (PRIORITY)
+  [
+    {
+      title: "Nintendo Switch 2",
+      href: "/catalog/nintendo",
+      emoji: "⚡",
+      color: "bg-red-50 text-red-500",
+      links: [
+        { label: "Консоли Switch 2", href: "/catalog/nintendo", badge: "NEW" },
+        { label: "Аксессуары Switch 2", href: "/catalog/accessories?q=switch2" },
+        { label: "Игры Switch 2", href: "/catalog/games?q=switch2" },
+      ],
+    },
+    {
+      title: "Nintendo Switch",
+      href: "/catalog/nintendo",
+      emoji: "🔴",
+      color: "bg-red-50 text-red-400",
+      links: [
+        { label: "Консоли Switch", href: "/catalog/nintendo" },
+        { label: "Switch OLED", href: "/catalog/nintendo?q=oled" },
+        { label: "Switch Lite", href: "/catalog/nintendo?q=lite" },
+        { label: "Аксессуары Switch", href: "/catalog/accessories?q=switch" },
+        { label: "Игры Switch", href: "/catalog/games?q=switch" },
       ],
     },
   ],
@@ -170,7 +170,10 @@ export function CatalogMegaMenu({ onClose }: CatalogMegaMenuProps) {
 
             <div className="grid grid-cols-4 gap-8">
               {PLATFORMS.map((column, colIdx) => (
-                <div key={colIdx} className={`space-y-8 ${colIdx === 0 ? "bg-red-50/40 rounded-2xl p-4 -m-4 border border-red-100/60" : ""}`}>
+                <div
+                  key={colIdx}
+                  className={`space-y-8 ${column.some((group) => group.href === "/catalog/nintendo") ? "bg-red-50/40 rounded-2xl p-4 -m-4 border border-red-100/60" : ""}`}
+                >
                   {column.map((group) => (
                     <div key={group.title}>
                       {/* Platform Header */}

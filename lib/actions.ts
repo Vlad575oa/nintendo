@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 interface OrderItemInput {
   productId: number;
   quantity: number;
-  price: number;
 }
 
 interface CreateOrderInput {
@@ -14,7 +13,6 @@ interface CreateOrderInput {
   phone: string;
   address: string;
   items: OrderItemInput[];
-  totalAmount: number;
 }
 
 export type ActionResponse<T> =
@@ -24,20 +22,34 @@ export type ActionResponse<T> =
 export async function createOrderAction(input: CreateOrderInput): Promise<ActionResponse<any>> {
   try {
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Check stock for all items
-      for (const item of input.items) {
-        const product = await tx.product.findUnique({
-          where: { id: item.productId },
-          select: { stock: true, name: true },
-        });
+      const normalizedItems = input.items.map((item) => ({
+        productId: Number(item.productId),
+        quantity: Number(item.quantity),
+      }));
+      if (!normalizedItems.length) {
+        throw new Error("Корзина пуста");
+      }
+      if (normalizedItems.some((i) => !Number.isInteger(i.productId) || !Number.isInteger(i.quantity) || i.quantity < 1 || i.quantity > 20)) {
+        throw new Error("Некорректные позиции заказа");
+      }
 
-        if (!product || product.stock < item.quantity) {
-          throw new Error(`Товар "${product?.name || "ID " + item.productId}" закончился на складе`);
+      const productIds = Array.from(new Set(normalizedItems.map((i) => i.productId)));
+      const products = await tx.product.findMany({
+        where: { id: { in: productIds } },
+        select: { id: true, stock: true, name: true, price: true, inStock: true, isVisible: true },
+      });
+      const productMap = new Map(products.map((p) => [p.id, p]));
+
+      // 1. Check stock and visibility for all items
+      for (const item of normalizedItems) {
+        const product = productMap.get(item.productId);
+        if (!product || product.isVisible === false || product.inStock === false || product.stock < item.quantity) {
+          throw new Error(`Товар "${product?.name || "ID " + item.productId}" недоступен`);
         }
       }
 
       // 2. Decrement stock
-      for (const item of input.items) {
+      for (const item of normalizedItems) {
         await tx.product.update({
           where: { id: item.productId },
           data: {
@@ -54,20 +66,29 @@ export async function createOrderAction(input: CreateOrderInput): Promise<Action
         }
       }
 
+      const orderItems = normalizedItems.map((item) => {
+        const product = productMap.get(item.productId)!;
+        return {
+          productId: item.productId,
+          quantity: item.quantity,
+          price_at_purchase: product.price,
+        };
+      });
+      const serverTotal = orderItems.reduce((sum, item) => sum + item.price_at_purchase * item.quantity, 0);
+      if (serverTotal <= 0) {
+        throw new Error("Некорректная сумма заказа");
+      }
+
       // 3. Create Order
       const order = await tx.order.create({
         data: {
           name: input.name,
           phone: input.phone,
           address: input.address,
-          totalAmount: input.totalAmount,
+          totalAmount: serverTotal,
           status: "pending",
           items: {
-            create: input.items.map((item) => ({
-              productId: item.productId,
-              quantity: item.quantity,
-              price_at_purchase: item.price,
-            })),
+            create: orderItems,
           },
         },
       });

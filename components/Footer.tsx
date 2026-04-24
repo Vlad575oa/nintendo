@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Send, Phone, Mail, MapPin, Youtube, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 export const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -17,10 +17,10 @@ export const Footer = () => {
                     <div className="flex flex-col gap-4">
                         <Link href="/" className="flex items-center gap-2.5 group">
                             <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-[0_6px_16px_var(--primary-glow)] transition-all group-hover:scale-105">
-                                <span className="text-white font-black text-xl italic leading-none">N</span>
+                                <span className="text-white font-black text-xl italic leading-none">G</span>
                             </div>
                             <span className="text-xl font-black tracking-tighter uppercase italic">
-                                Nintendo<span className="text-primary">.</span>Shop
+                                Gameshop<span className="text-primary">24</span>
                             </span>
                         </Link>
                         <p className="text-neutral-500 text-[12px] font-medium leading-relaxed max-w-xs">
@@ -28,18 +28,22 @@ export const Footer = () => {
                         </p>
                         <div className="flex items-center gap-2.5">
                             {[
-                                { icon: Send, color: "hover:bg-[#26A5E4]", id: "tg", href: "https://t.me/nintendo_shop_support" },
-                                { icon: Youtube, color: "hover:bg-[#FF0000]", id: "yt", href: "https://youtube.com" },
-                                { icon: Instagram, color: "hover:bg-pink-600", id: "ig", href: "https://instagram.com" },
+                                { icon: "/icons/telegram-svgrepo-com.svg", color: "hover:bg-[#26A5E4]/20", id: "tg", href: "https://t.me/+79266763488", newTab: true },
+                                { icon: "/icons/whatsapp-svgrepo-com.svg", color: "hover:bg-[#25D366]/20", id: "wa", href: "https://wa.me/79266763488", newTab: true },
+                                { icon: "/icons/logotip-messendzhera-max.svg", color: "hover:bg-white/20", id: "max", href: "tel:+79266763488" },
                             ].map((s) => (
                                 <Link
                                     key={s.id}
                                     href={s.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center transition-all ${s.color} hover:text-white text-neutral-400`}
+                                    target={s.newTab ? "_blank" : undefined}
+                                    rel={s.newTab ? "noopener noreferrer" : undefined}
+                                    className={`w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center transition-all ${s.color} hover:border-white/10 group/soc`}
                                 >
-                                    <s.icon size={15} />
+                                    <img
+                                        src={s.icon}
+                                        alt={s.id}
+                                        className="w-[18px] h-[18px] object-contain"
+                                    />
                                 </Link>
                             ))}
                         </div>
@@ -89,21 +93,21 @@ export const Footer = () => {
                     <div>
                         <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-primary mb-4">Контакты</h4>
                         <div className="space-y-3">
-                            <Link href="tel:84952259922" className="flex items-center gap-3 group/item">
+                            <Link href="tel:+79266763488" className="flex items-center gap-3 group/item">
                                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
                                     <Phone size={13} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
                                 <div>
-                                    <p className="text-[12px] font-black text-white">8 495 225-99-22</p>
+                                    <p className="text-[12px] font-black text-white">7(926)676-34-88</p>
                                     <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">09:00 — 21:00</p>
                                 </div>
                             </Link>
-                            <Link href="mailto:support@nintendo.shop" className="flex items-center gap-3 group/item">
+                            <Link href="mailto:shop@gameshop24.ru" className="flex items-center gap-3 group/item">
                                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover/item:bg-primary/20 transition-colors">
                                     <Mail size={13} className="text-neutral-400 group-hover/item:text-primary transition-colors" />
                                 </div>
                                 <div>
-                                    <p className="text-[12px] font-black text-white">support@nintendo.shop</p>
+                                    <p className="text-[12px] font-black text-white">shop@gameshop24.ru</p>
                                     <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Email</p>
                                 </div>
                             </Link>
@@ -112,7 +116,7 @@ export const Footer = () => {
                                     <MapPin size={13} className="text-neutral-400" />
                                 </div>
                                 <div>
-                                    <p className="text-[12px] font-black text-white">Москва, Митинская 10</p>
+                                    <p className="text-[12px] font-black text-white">Москва, Митинская 10, корп. 1</p>
                                     <p className="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">Шоурум</p>
                                 </div>
                             </div>
@@ -138,7 +142,7 @@ export const Footer = () => {
 
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <p className="text-[10px] font-black text-neutral-700 uppercase tracking-widest">
-                            © {currentYear} Nintendo Shop · ООО "ГЕЙМПРО" · ИНН 7743891254
+                            © {currentYear} Gameshop24
                         </p>
                         <Link
                             href="https://t.me/vlad557"

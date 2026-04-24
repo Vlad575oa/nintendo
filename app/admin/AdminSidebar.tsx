@@ -45,7 +45,7 @@ export const AdminSidebar = () => {
             <span className="text-white font-black text-sm italic">N</span>
           </div>
           <div>
-            <p className="text-white font-black text-sm tracking-tight leading-none">Nintendo Shop</p>
+            <p className="text-white font-black text-sm tracking-tight leading-none">Gameshop24</p>
             <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-widest mt-0.5">Admin Panel</p>
           </div>
         </Link>

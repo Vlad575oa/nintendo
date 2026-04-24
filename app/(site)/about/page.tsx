@@ -7,8 +7,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "О компании | Nintendo Shop",
-  description: "Nintendo Shop — магазин для тех, кто живёт играми. Основан в 2017 году командой геймеров. Только оригинальная техника, гарантия и поддержка 24/7.",
+  title: "О компании | Gameshop24",
+  description: "Gameshop24 — магазин для тех, кто живёт играми. Основан в 2017 году командой геймеров. Только оригинальная техника, гарантия и поддержка 24/7.",
   alternates: { canonical: "/about" },
 };
 
@@ -31,7 +31,7 @@ const values = [
   {
     icon: Heart,
     title: "Геймеры для геймеров",
-    desc: "Nintendo Shop — это не просто бизнес. Наша команда сама тестирует каждый аксессуар и играет в каждую новинку. Мы выпустили десятки гайдов по выбору консолей и защите экранов. Мы говорим с вами на одном языке, потому что сами горим тем же.",
+    desc: "Gameshop24 — это не просто бизнес. Наша команда сама тестирует каждый аксессуар и играет в каждую новинку. Мы выпустили десятки гайдов по выбору консолей и защите экранов. Мы говорим с вами на одном языке, потому что сами горим тем же.",
   },
   {
     icon: Truck,
@@ -98,7 +98,7 @@ export default function AboutPage() {
               
               <div className="max-w-xl space-y-6">
                 <p className="text-xl md:text-2xl text-secondary font-black leading-[1.3] tracking-tight">
-                  Nintendo Shop начинался с двух друзей и десяти консолей, привезенных из Европы. Мы прошли путь от маленькой группы в VK до крупнейшего специализированного магазина в РФ.
+                  Gameshop24 начинался с двух друзей и десяти консолей, привезенных из Европы. Мы прошли путь от маленькой группы в VK до крупнейшего специализированного магазина в РФ.
                 </p>
                 <div className="h-px w-20 bg-neutral-100" />
                 <p className="text-base text-neutral-500 font-bold leading-relaxed">
@@ -122,7 +122,7 @@ export default function AboutPage() {
                <div className="relative aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl shadow-neutral-200">
                   <Image 
                     src="/about_hero_cinematic.png" 
-                    alt="Nintendo Shop Heritage" 
+                    alt="Gameshop24 Heritage" 
                     fill 
                     className="object-cover"
                   />
@@ -151,7 +151,7 @@ export default function AboutPage() {
                     В 2017 году официальных поставок Nintendo в Россию почти не было. Руслан и Сергей — два друга и фаната Zelda — решили исправить это сами. Они продали первую партию за три дня и поняли главное: комьюнити жаждет качественного сервиса и живого общения.
                   </p>
                   <p className="text-neutral-400 text-sm font-bold leading-relaxed">
-                    Сегодня Nintendo Shop — это сообщество людей, которые понимают, почему новый релиз важнее любого совещания. Мы продаём не просто электронику, а входной билет в миры, которые меняют жизни. Мы геймеры, и это наш главный залог честности.
+                    Сегодня Gameshop24 — это сообщество людей, которые понимают, почему новый релиз важнее любого совещания. Мы продаём не просто электронику, а входной билет в миры, которые меняют жизни. Мы геймеры, и это наш главный залог честности.
                   </p>
                 </div>
               </div>

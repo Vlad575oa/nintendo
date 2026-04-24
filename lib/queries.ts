@@ -7,7 +7,8 @@ const VISIBLE: Prisma.ProductWhereInput = { isVisible: { not: false } };
 const safeQuery = async <T>(fn: () => Promise<T>, fallback: T): Promise<T> => {
   try {
     return await fn();
-  } catch {
+  } catch (error) {
+    console.error("DATABASE QUERY ERROR:", error);
     return fallback;
   }
 };
@@ -126,4 +127,127 @@ export const getRecentOrders = cache(async (take: number = 5) => {
     () => prisma.order.findMany({ take, orderBy: { createdAt: "desc" } }),
     []
   );
+});
+
+export interface ProductVariantOption {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  priceOld: number | null;
+  inStock: boolean;
+  images: string[];
+  memory: string | null;
+  color: string | null;
+}
+
+const ATTRIBUTE_MEMORY_KEYS = ["Накопитель", "Объём", "Объем"] as const;
+const ATTRIBUTE_COLOR_KEYS = ["Цвет"] as const;
+
+const BUNDLE_MARKERS = [
+  "+",
+  "bundle",
+  "бандл",
+  "комплект",
+  "game pass",
+  "геймпад",
+  "подписк",
+  "игра",
+  "edition",
+  "limited",
+  "fifa",
+  "fortnite",
+  "hogwarts",
+  "zelda",
+  "mario",
+  "spider",
+] as const;
+
+const readAttribute = (
+  attributes: Prisma.JsonValue | null,
+  keys: readonly string[]
+): string | null => {
+  if (!attributes || typeof attributes !== "object" || Array.isArray(attributes)) {
+    return null;
+  }
+
+  for (const key of keys) {
+    const value = (attributes as Record<string, unknown>)[key];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+
+  return null;
+};
+
+const isBaseVariantCandidate = (name: string, slug: string) => {
+  const source = `${name} ${slug}`.toLowerCase();
+  return !BUNDLE_MARKERS.some((marker) => source.includes(marker));
+};
+
+const hasVariants = (items: ProductVariantOption[]) => {
+  const memoryCount = new Set(items.map((item) => item.memory).filter(Boolean)).size;
+  const colorCount = new Set(items.map((item) => item.color).filter(Boolean)).size;
+  return memoryCount > 1 || colorCount > 1;
+};
+
+export const getProductVariants = cache(async (productId: number) => {
+  return safeQuery(async () => {
+    const current = await prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        id: true,
+        categoryId: true,
+        attributes: true,
+      },
+    });
+
+    if (!current) return [];
+
+    const platform = readAttribute(current.attributes, ["Платформа"]);
+    if (!platform) return [];
+
+    const familyPool = await prisma.product.findMany({
+      where: {
+        AND: [
+          VISIBLE,
+          { categoryId: current.categoryId },
+          { attributes: { path: ["Платформа"], equals: platform } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        price: true,
+        priceOld: true,
+        inStock: true,
+        images: true,
+        color: true,
+        attributes: true,
+      },
+      orderBy: { price: "asc" },
+    });
+
+    const filtered = familyPool.filter((item) =>
+      isBaseVariantCandidate(item.name, item.slug)
+    );
+
+    if (!filtered.some((item) => item.id === current.id)) return [];
+
+    const variants: ProductVariantOption[] = filtered.map((item) => ({
+      id: item.id,
+      name: item.name,
+      slug: item.slug,
+      price: item.price,
+      priceOld: item.priceOld ?? null,
+      inStock: item.inStock,
+      images: item.images,
+      memory: readAttribute(item.attributes, ATTRIBUTE_MEMORY_KEYS),
+      color: readAttribute(item.attributes, ATTRIBUTE_COLOR_KEYS) ?? item.color ?? null,
+    }));
+
+    return hasVariants(variants) ? variants : [];
+  }, [] as ProductVariantOption[]);
 });

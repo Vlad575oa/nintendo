@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Search as SearchIcon, ChevronDown, X, Loader2, History, TrendingUp } from "lucide-react";
+import { Search as SearchIcon, X, Loader2, History, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -10,9 +10,9 @@ import { searchProductsAction } from "@/lib/actions";
 const POPULAR_TAGS = ["PlayStation 5 Pro", "Xbox Series X", "Nintendo Switch OLED", "DualSense", "Elden Ring"];
 
 const POPULAR_ITEMS = [
-  { id: 1, name: "Sony PlayStation 5", category: "Консоли", image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=200" },
-  { id: 2, name: "Microsoft XBOX Series", category: "Консоли", image: "https://images.unsplash.com/photo-1621259182978-f09e5e2ca09a?q=80&w=200" },
-  { id: 3, name: "Nintendo Switch", category: "Консоли", image: "https://images.unsplash.com/photo-1578303372704-14f2436099ae?q=80&w=200" },
+  { id: 1, name: "Sony PlayStation 5", category: "Консоли", image: "/images/placeholder.webp" },
+  { id: 2, name: "Microsoft XBOX Series", category: "Консоли", image: "/images/placeholder.webp" },
+  { id: 3, name: "Nintendo Switch", category: "Консоли", image: "/images/placeholder.webp" },
 ];
 
 export const Search = () => {
@@ -78,15 +78,6 @@ export const Search = () => {
         "flex items-center h-11 bg-white border-2 rounded-[14px] transition-all duration-300 overflow-hidden",
         isOpen ? "border-primary shadow-[0_0_0_4px_rgba(230,0,18,0.1)]" : "border-neutral-200"
       )}>
-        {/* Category Selector */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-1.5 px-4 h-full bg-neutral-50 hover:bg-neutral-100 border-r border-neutral-200 transition-colors group"
-        >
-          <span className="text-[13px] font-bold text-secondary">Везде</span>
-          <ChevronDown size={14} className={cn("text-neutral-400 group-hover:text-secondary transition-transform", isOpen && "rotate-180")} />
-        </button>
-
         {/* Input Area */}
         <div className="flex-1 relative flex items-center px-3 h-full">
           <input
@@ -94,7 +85,7 @@ export const Search = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsOpen(true)}
-            placeholder="Искать в Nintendo Shop..."
+            placeholder="Искать в Gameshop24..."
             className="w-full bg-transparent border-none focus:ring-0 outline-none text-[14px] font-medium text-secondary ml-1 placeholder:text-neutral-400"
           />
           {query && (

@@ -1,34 +1,45 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
+import { z } from "zod";
 import {
   hashPassword,
   generateSessionToken,
   getSessionExpiry,
   SESSION_COOKIE,
 } from "@/lib/auth";
+import { buildRateLimitKey, rateLimit } from "@/lib/rateLimit";
+
+const RegisterSchema = z.object({
+  name: z.string().trim().min(2).max(80).optional().or(z.literal("")),
+  email: z.string().trim().toLowerCase().email().max(120).optional().or(z.literal("")),
+  phone: z.string().trim().min(10).max(24).optional().or(z.literal("")),
+  password: z.string().min(8).max(128),
+}).refine((d) => Boolean(d.email) || Boolean(d.phone), {
+  message: "Необходимо указать email или телефон",
+  path: ["email"],
+});
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, password } = await request.json();
-
-    if (!password || password.length < 6) {
-      return NextResponse.json(
-        { error: "Пароль должен содержать не менее 6 символов" },
-        { status: 400 }
-      );
+    const limit = rateLimit(buildRateLimitKey("auth-register", request), 5, 60 * 60 * 1000);
+    if (!limit.allowed) {
+      return NextResponse.json({ error: "Слишком много попыток. Попробуйте позже." }, { status: 429 });
     }
-
-    if (!email && !phone) {
-      return NextResponse.json(
-        { error: "Необходимо указать email или телефон" },
-        { status: 400 }
-      );
+    const parsed = RegisterSchema.safeParse(await request.json());
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0]?.message || "Некорректные данные" }, { status: 400 });
+    }
+    const { name, email, phone, password } = parsed.data;
+    const normalizedEmail = email ? email.toLowerCase() : null;
+    const normalizedPhone = phone ? phone.replace(/\D/g, "") : null;
+    if (normalizedPhone && (normalizedPhone.length < 10 || normalizedPhone.length > 15)) {
+      return NextResponse.json({ error: "Некорректный номер телефона" }, { status: 400 });
     }
 
     // Check uniqueness
-    if (email) {
-      const existing = await prisma.user.findUnique({ where: { email } });
+    if (normalizedEmail) {
+      const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
       if (existing) {
         return NextResponse.json(
           { error: "Пользователь с таким email уже существует" },
@@ -37,9 +48,8 @@ export async function POST(request: Request) {
       }
     }
 
-    if (phone) {
-      const normalized = phone.replace(/\D/g, "");
-      const existing = await prisma.user.findUnique({ where: { phone: normalized } });
+    if (normalizedPhone) {
+      const existing = await prisma.user.findUnique({ where: { phone: normalizedPhone } });
       if (existing) {
         return NextResponse.json(
           { error: "Пользователь с таким телефоном уже существует" },
@@ -53,8 +63,8 @@ export async function POST(request: Request) {
     const user = await prisma.user.create({
       data: {
         name: name || null,
-        email: email || null,
-        phone: phone ? phone.replace(/\D/g, "") : null,
+        email: normalizedEmail,
+        phone: normalizedPhone,
         passwordHash: hash,
         passwordSalt: salt,
       },

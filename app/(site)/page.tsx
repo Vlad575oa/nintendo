@@ -16,8 +16,8 @@ const RecentlyViewed = loadDynamic(
 );
 
 export const metadata: Metadata = {
-  title: "Nintendo Shop | Премиальный магазин консолей и игр",
-  description: "Официальные консоли, редкие аксессуары и экспертные обзоры. Nintendo Shop — твой проводник в мир премиального гейминга 2026.",
+  title: "Gameshop24 | Премиальный магазин консолей и игр",
+  description: "Официальные консоли, редкие аксессуары и экспертные обзоры. Gameshop24 — твой проводник в мир премиального гейминга 2026.",
   alternates: {
     canonical: "/",
   },

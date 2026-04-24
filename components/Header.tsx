@@ -64,13 +64,13 @@ export const Header = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-[0_4px_14px_rgba(230,0,18,0.35)] transition-all group-hover:scale-105 active:scale-95 overflow-hidden relative">
-            <span className="text-white font-black text-lg italic leading-none z-10 select-none">N</span>
+            <span className="text-white font-black text-lg italic leading-none z-10 select-none">G</span>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/25 to-white/10" />
           </div>
           <div className="hidden lg:flex flex-col leading-none">
             <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">Premium Store</span>
             <span className="text-[15px] font-black text-white tracking-tighter uppercase leading-tight">
-              Nintendo<span className="text-primary italic">.</span>Shop
+              Gameshop<span className="text-primary italic">24</span>
             </span>
           </div>
         </Link>

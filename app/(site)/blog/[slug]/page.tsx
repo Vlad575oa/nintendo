@@ -10,13 +10,13 @@ import { Metadata } from "next";
 import { marked } from "marked";
 import { BlogShareBar } from "@/components/BlogShareBar";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://nintendo-shop.ru";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://gameshop24.ru";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await prisma.post.findUnique({ where: { slug: params.slug } });
   if (!post) return {};
 
-  const title = `${post.metaTitle || post.title} | Блог Nintendo Shop`;
+  const title = `${post.metaTitle || post.title} | Блог Gameshop24`;
   const description = post.metaDesc || post.excerpt || "";
 
   return {
@@ -61,11 +61,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Nintendo Shop",
+      "name": "Gameshop24",
       "url": baseUrl,
       "logo": {
         "@type": "ImageObject",
-        "url": `${baseUrl}/favicon.png`,
+        "url": `${baseUrl}/favicon.svg`,
       },
     },
     "mainEntityOfPage": {
@@ -228,4 +228,3 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     </article>
   );
 }
-

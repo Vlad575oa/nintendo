@@ -5,7 +5,7 @@ import { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Вопросы и ответы (FAQ) | Поддержка Nintendo Shop",
+  title: "Вопросы и ответы (FAQ) | Поддержка Gameshop24",
   description: "Всё о доставке, гарантии и оплате игровых консолей. Ответы на частые вопросы.",
   alternates: { canonical: "/faq" },
 };
