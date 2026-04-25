@@ -31,7 +31,6 @@ const PLATFORMS: PlatformGroup[][] = [
         { label: "PS5 Pro", href: "/catalog/ps5-pro" },
         { label: "PS5 Slim", href: "/catalog/ps5-slim" },
         { label: "Аксессуары PS5", href: "/catalog/accessories?q=ps5" },
-        { label: "Игры PS5", href: "/catalog/games?q=ps5" },
       ],
     },
     {
@@ -42,7 +41,6 @@ const PLATFORMS: PlatformGroup[][] = [
       links: [
         { label: "Консоли PS4", href: "/catalog/playstation" },
         { label: "Аксессуары PS4", href: "/catalog/accessories?q=ps4" },
-        { label: "Игры PS4", href: "/catalog/games?q=ps4" },
       ],
     },
   ],
@@ -56,7 +54,6 @@ const PLATFORMS: PlatformGroup[][] = [
       links: [
         { label: "Консоли Switch 2", href: "/catalog/nintendo-switch-2", badge: "NEW" },
         { label: "Аксессуары Switch 2", href: "/catalog/accessories?q=switch2" },
-        { label: "Игры Switch 2", href: "/catalog/games?q=switch2" },
       ],
     },
     {
@@ -69,7 +66,6 @@ const PLATFORMS: PlatformGroup[][] = [
         { label: "Switch OLED", href: "/catalog/nintendo-switch-oled" },
         { label: "Switch Lite", href: "/catalog/nintendo-switch-lite" },
         { label: "Аксессуары Switch", href: "/catalog/accessories?q=switch" },
-        { label: "Игры Switch", href: "/catalog/games?q=switch" },
       ],
     },
   ],
@@ -84,7 +80,6 @@ const PLATFORMS: PlatformGroup[][] = [
         { label: "Xbox Series X", href: "/catalog/xbox-series-x" },
         { label: "Xbox Series S", href: "/catalog/xbox-series-s" },
         { label: "Аксессуары Xbox", href: "/catalog/accessories?q=xbox" },
-        { label: "Игры Xbox", href: "/catalog/games?q=xbox" },
         { label: "Game Pass", href: "/catalog/accessories?q=gamepass" },
       ],
     },
@@ -112,14 +107,13 @@ const PLATFORMS: PlatformGroup[][] = [
       ],
     },
     {
-      title: "Аксессуары и игры",
+      title: "Аксессуары",
       href: "/catalog/accessories",
       emoji: "🛒",
       color: "bg-orange-50 text-orange-500",
       links: [
         { label: "Все аксессуары", href: "/catalog/accessories" },
         { label: "Геймпады", href: "/catalog/gamepads" },
-        { label: "Игры", href: "/catalog/games" },
         { label: "Подарочные карты", href: "/catalog/accessories?q=card" },
       ],
     },
