@@ -1,4 +1,5 @@
 import axios from "axios";
+import { randomUUID } from "crypto";
 
 const SHOP_ID = process.env.YOOKASSA_SHOP_ID;
 const SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
@@ -24,7 +25,7 @@ export const yookassa = {
       {
         headers: {
           "Authorization": `Basic ${auth}`,
-          "Idempotence-Key": Math.random().toString(36).substring(7),
+          "Idempotence-Key": randomUUID(),
           "Content-Type": "application/json",
         },
       }

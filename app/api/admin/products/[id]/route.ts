@@ -9,6 +9,9 @@ function normalizeSlug(s: string) {
 }
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
+  const session = await verifyAdminSession(cookies().get(ADMIN_COOKIE)?.value);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const product = await prisma.product.findUnique({
     where: { id: parseInt(params.id) },
     include: { category: true },
@@ -18,6 +21,9 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
+  const authSession = await verifyAdminSession(cookies().get(ADMIN_COOKIE)?.value);
+  if (!authSession) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const id = parseInt(params.id);
     const fd = await request.formData();
@@ -88,6 +94,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const session = await verifyAdminSession(cookies().get(ADMIN_COOKIE)?.value);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const id = parseInt(params.id);
     const { isVisible } = await request.json();
