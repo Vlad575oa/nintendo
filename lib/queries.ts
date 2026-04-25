@@ -38,6 +38,78 @@ export const getCategoryBySlug = cache(async (slug: string) => {
   );
 });
 
+export const getCategoryDescendantIdsBySlug = cache(async (slug: string) => {
+  return safeQuery(async () => {
+    const categories = await prisma.category.findMany({
+      select: { id: true, slug: true, parentId: true },
+    });
+    const root = categories.find((c) => c.slug === slug);
+    if (!root) return [] as number[];
+
+    const byParent = new Map<number, number[]>();
+    for (const category of categories) {
+      if (category.parentId == null) continue;
+      const bucket = byParent.get(category.parentId) ?? [];
+      bucket.push(category.id);
+      byParent.set(category.parentId, bucket);
+    }
+
+    const result: number[] = [];
+    const stack = [root.id];
+    while (stack.length) {
+      const currentId = stack.pop()!;
+      result.push(currentId);
+      const children = byParent.get(currentId) ?? [];
+      for (const childId of children) stack.push(childId);
+    }
+    return result;
+  }, [] as number[]);
+});
+
+export const getCategoryDescendantSlugsBySlug = cache(async (slug: string) => {
+  return safeQuery(async () => {
+    const categories = await prisma.category.findMany({
+      select: { id: true, slug: true, parentId: true },
+    });
+    const root = categories.find((c) => c.slug === slug);
+    if (!root) return [] as string[];
+
+    const byParent = new Map<number, number[]>();
+    const byId = new Map<number, { id: number; slug: string }>();
+    for (const category of categories) {
+      byId.set(category.id, { id: category.id, slug: category.slug });
+      if (category.parentId == null) continue;
+      const bucket = byParent.get(category.parentId) ?? [];
+      bucket.push(category.id);
+      byParent.set(category.parentId, bucket);
+    }
+
+    const result: string[] = [];
+    const stack = [root.id];
+    while (stack.length) {
+      const currentId = stack.pop()!;
+      const current = byId.get(currentId);
+      if (current) result.push(current.slug);
+      const children = byParent.get(currentId) ?? [];
+      for (const childId of children) stack.push(childId);
+    }
+    return result;
+  }, [] as string[]);
+});
+
+export const getCategorySlugsByPrefix = cache(async (prefix: string) => {
+  return safeQuery(
+    async () => {
+      const rows = await prisma.category.findMany({
+        where: { slug: { startsWith: prefix } },
+        select: { slug: true },
+      });
+      return rows.map((r) => r.slug);
+    },
+    [] as string[]
+  );
+});
+
 export const getProducts = cache(async (
   where: Prisma.ProductWhereInput,
   orderBy: Prisma.ProductOrderByWithRelationInput,
@@ -144,6 +216,28 @@ export interface ProductVariantOption {
 const ATTRIBUTE_MEMORY_KEYS = ["Накопитель", "Объём", "Объем"] as const;
 const ATTRIBUTE_COLOR_KEYS = ["Цвет"] as const;
 
+const COLOR_NORMALIZE: Record<string, string> = {
+  white: "Белый",
+  black: "Чёрный",
+  red: "Красный",
+  blue: "Синий",
+  yellow: "Жёлтый",
+  green: "Зелёный",
+  gray: "Серый",
+  grey: "Серый",
+  coral: "Коралловый",
+  pink: "Розовый",
+  purple: "Фиолетовый",
+  gold: "Золотой",
+  silver: "Серебристый",
+};
+
+const normalizeColor = (color: string | null): string | null => {
+  if (!color) return null;
+  const key = color.toLowerCase().trim();
+  return COLOR_NORMALIZE[key] ?? color;
+};
+
 const BUNDLE_MARKERS = [
   "+",
   "bundle",
@@ -198,6 +292,8 @@ export const getProductVariants = cache(async (productId: number) => {
       where: { id: productId },
       select: {
         id: true,
+        name: true,
+        slug: true,
         categoryId: true,
         attributes: true,
       },
@@ -230,13 +326,13 @@ export const getProductVariants = cache(async (productId: number) => {
       orderBy: { price: "asc" },
     });
 
-    const filtered = familyPool.filter((item) =>
+    const baseOnly = familyPool.filter((item) =>
       isBaseVariantCandidate(item.name, item.slug)
     );
+    const currentIsBase = isBaseVariantCandidate(current.name, current.slug);
+    const filtered = currentIsBase ? baseOnly : familyPool;
 
-    if (!filtered.some((item) => item.id === current.id)) return [];
-
-    const variants: ProductVariantOption[] = filtered.map((item) => ({
+    const rawVariants: ProductVariantOption[] = filtered.map((item) => ({
       id: item.id,
       name: item.name,
       slug: item.slug,
@@ -245,8 +341,20 @@ export const getProductVariants = cache(async (productId: number) => {
       inStock: item.inStock,
       images: item.images,
       memory: readAttribute(item.attributes, ATTRIBUTE_MEMORY_KEYS),
-      color: readAttribute(item.attributes, ATTRIBUTE_COLOR_KEYS) ?? item.color ?? null,
+      color: normalizeColor(
+        readAttribute(item.attributes, ATTRIBUTE_COLOR_KEYS) ?? item.color ?? null
+      ),
     }));
+
+    // Deduplicate by (color, memory): keep the current product if duplicated, otherwise first (cheapest)
+    const seen = new Map<string, ProductVariantOption>();
+    for (const v of rawVariants) {
+      const key = `${v.color ?? ""}|${v.memory ?? ""}`;
+      if (!seen.has(key) || v.id === productId) {
+        seen.set(key, v);
+      }
+    }
+    const variants = Array.from(seen.values());
 
     return hasVariants(variants) ? variants : [];
   }, [] as ProductVariantOption[]);
