@@ -30,7 +30,7 @@ export const Footer = () => {
                             {[
                                 { icon: "/icons/telegram-svgrepo-com.svg", color: "hover:bg-[#26A5E4]/20", id: "tg", href: "https://t.me/+79266763488", newTab: true },
                                 { icon: "/icons/whatsapp-svgrepo-com.svg", color: "hover:bg-[#25D366]/20", id: "wa", href: "https://wa.me/79266763488", newTab: true },
-                                { icon: "/icons/logotip-messendzhera-max.svg", color: "hover:bg-white/20", id: "max", href: "tel:+79266763488" },
+                                { icon: "/icons/logotip-messendzhera-max.svg", color: "hover:bg-white/20", id: "max", href: "https://max.ru/u/79266763488", newTab: true },
                             ].map((s) => (
                                 <Link
                                     key={s.id}

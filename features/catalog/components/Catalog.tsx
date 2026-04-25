@@ -1,6 +1,14 @@
-import { getProducts, getProductsNintendoFirst, getProductsCount, getCategoryBySlug, getCategoryTree } from "@/lib/queries";
+import {
+  getProducts,
+  getProductsNintendoFirst,
+  getProductsCount,
+  getCategoryBySlug,
+  getCategoryTree,
+  getCategoryDescendantSlugsBySlug,
+} from "@/lib/queries";
 import { ProductCard } from "@/features/product/components/ProductCard";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
+import { MobileFilterDrawer } from "@/features/catalog/components/MobileFilterDrawer";
 import { SortingSelect } from "@/features/catalog/components/SortingSelect";
 import { ActiveFiltersBar } from "@/features/catalog/components/ActiveFiltersBar";
 import { CATEGORY_FILTERS } from "@/features/catalog/config/categoryFilters";
@@ -14,14 +22,34 @@ interface CatalogProps {
 }
 
 export async function Catalog({ category, searchParams, pageSize = 12 }: CatalogProps) {
-  const { priceMin, priceMax, color, status, sort, page = "1" } = searchParams;
+  const { q, priceMin, priceMax, color, status, sort, page = "1" } = searchParams;
   const skip = (parseInt(page) - 1) * pageSize;
+  let categorySlugs =
+    category !== "all" ? await getCategoryDescendantSlugsBySlug(category) : [];
 
   // ── Build Prisma filters ───────────────────────────────────────────────────
   const andConditions: Prisma.ProductWhereInput[] = [];
 
   if (category !== "all") {
-    andConditions.push({ category: { slug: category } });
+    andConditions.push({
+      category: {
+        slug: categorySlugs.length ? { in: categorySlugs } : category,
+      },
+    });
+  }
+
+  if (q) {
+    const normalized = q.trim().toLowerCase();
+    if (normalized === "switch2") {
+      andConditions.push({
+        OR: [
+          { name: { contains: "switch 2", mode: "insensitive" } },
+          { name: { contains: "switch2", mode: "insensitive" } },
+        ],
+      });
+    } else {
+      andConditions.push({ name: { contains: q.trim(), mode: "insensitive" } });
+    }
   }
 
   if (priceMin || priceMax) {
@@ -109,6 +137,10 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
     (k) => k !== "sort" && k !== "page" && searchParams[k]
   );
 
+  const activeFilterCount = Object.keys(searchParams).filter(
+    (k) => k !== "sort" && k !== "page" && k !== "q" && searchParams[k]
+  ).length;
+
   if (dbError) {
     return (
       <div className="py-32 text-center">
@@ -121,11 +153,11 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
 
   return (
     <div className="flex flex-col lg:flex-row gap-12">
-      {/* Sidebar */}
-      <aside className="w-full lg:w-[280px] flex-shrink-0">
-        <FilterSidebar 
-          currentCategory={category} 
-          totalCount={totalCount} 
+      {/* Sidebar — desktop only */}
+      <aside className="hidden lg:block w-[280px] flex-shrink-0">
+        <FilterSidebar
+          currentCategory={category}
+          totalCount={totalCount}
           categoryTree={categoryTree}
         />
       </aside>
@@ -141,14 +173,24 @@ export async function Catalog({ category, searchParams, pageSize = 12 }: Catalog
               {totalCount} товаров найдено
             </p>
           </div>
-          <SortingSelect />
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="lg:hidden">
+              <MobileFilterDrawer
+                currentCategory={category}
+                totalCount={totalCount}
+                categoryTree={categoryTree}
+                activeFilterCount={activeFilterCount}
+              />
+            </div>
+            <SortingSelect />
+          </div>
         </div>
 
         <ActiveFiltersBar />
 
         {products.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -20,18 +20,42 @@ export default async function ProductsPage({ searchParams }: Props) {
   const categorySlug = searchParams.category ?? "";
   const session = await verifyAdminSession(cookies().get(ADMIN_COOKIE)?.value);
   const canDeleteProducts = session?.r !== "MANAGER";
+  const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
 
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({
-      where: {
-        ...(q ? { name: { contains: q, mode: "insensitive" } } : {}),
-        ...(categorySlug ? { category: { slug: categorySlug } } : {}),
-      },
-      include: { category: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.category.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  let selectedCategoryIds: number[] = [];
+  if (categorySlug) {
+    const root = categories.find((c) => c.slug === categorySlug);
+    if (root) {
+      const byParent = new Map<number, number[]>();
+      for (const c of categories) {
+        if (c.parentId == null) continue;
+        const bucket = byParent.get(c.parentId) ?? [];
+        bucket.push(c.id);
+        byParent.set(c.parentId, bucket);
+      }
+      const stack = [root.id];
+      while (stack.length) {
+        const current = stack.pop()!;
+        selectedCategoryIds.push(current);
+        const children = byParent.get(current) ?? [];
+        for (const childId of children) stack.push(childId);
+      }
+
+    }
+  }
+
+  const products = await prisma.product.findMany({
+    where: {
+      ...(q ? { name: { contains: q, mode: "insensitive" } } : {}),
+      ...(categorySlug
+        ? selectedCategoryIds.length
+          ? { categoryId: { in: selectedCategoryIds } }
+          : { category: { slug: categorySlug } }
+        : {}),
+    },
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <>
@@ -133,9 +157,6 @@ export default async function ProductsPage({ searchParams }: Props) {
                     <td className="px-5 py-3 text-xs font-bold text-neutral-500">{p.category.name}</td>
                     <td className="px-5 py-3">
                       <p className="text-sm font-black text-[#111827]">{formatPrice(p.price)}</p>
-                      {p.priceOld && (
-                        <p className="text-[10px] text-neutral-400 line-through">{formatPrice(p.priceOld)}</p>
-                      )}
                     </td>
                     <td className="px-5 py-3">
                       <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${p.inStock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
