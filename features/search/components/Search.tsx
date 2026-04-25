@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Search as SearchIcon, X, Loader2, History, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { searchProductsAction } from "@/lib/actions";
 
@@ -22,6 +23,14 @@ export const Search = () => {
   const [popularItems, setPopularItems] = useState<any[]>(POPULAR_ITEMS);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleSubmit = () => {
+    if (query.trim()) {
+      setIsOpen(false);
+      router.push(`/catalog/all?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -86,6 +95,7 @@ export const Search = () => {
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsOpen(true)}
             placeholder="Искать в Gameshop24..."
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             className="w-full bg-transparent border-none focus:ring-0 outline-none text-[14px] font-medium text-secondary ml-1 placeholder:text-neutral-400"
           />
           {query && (
@@ -99,10 +109,13 @@ export const Search = () => {
         </div>
 
         {/* Search Button */}
-        <button 
+        <button
           onClick={() => {
-            if (!isOpen) setIsOpen(true);
-            // If query is present, it might trigger actual search page navigation later
+            if (query.trim()) {
+              handleSubmit();
+            } else {
+              setIsOpen(true);
+            }
           }}
           className="flex items-center justify-center w-14 h-full bg-primary hover:bg-red-700 transition-all group shrink-0"
         >
@@ -176,11 +189,16 @@ export const Search = () => {
             )}
           </div>
           
-          <div className="mt-6 pt-5 border-t border-neutral-50">
-             <Link href="/" onClick={() => setIsOpen(false)} className="block text-center text-xs font-black text-primary uppercase tracking-[0.1em] hover:text-red-700 transition-colors">
-                Смотреть все результаты в каталоге
-             </Link>
-          </div>
+          {query.trim() && (
+            <div className="mt-6 pt-5 border-t border-neutral-50">
+              <button
+                onClick={handleSubmit}
+                className="block w-full text-center text-xs font-black text-primary uppercase tracking-[0.1em] hover:text-red-700 transition-colors"
+              >
+                Смотреть все результаты по «{query.trim()}»
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

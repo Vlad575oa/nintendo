@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import prisma from "@/lib/prisma";
-import crypto from "crypto";
-
-const ALLOWED_IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+import { uploadImagesToS3 } from "@/lib/s3";
 
 function slugify(str: string) {
   return str
@@ -35,19 +30,8 @@ export async function POST(request: Request) {
     let imageUrl: string | null = (fd.get("imageUrl") as string) || null;
     const imageFile = fd.get("image") as File | null;
     if (imageFile && imageFile.size > 0) {
-      if (!ALLOWED_IMAGE_MIME.has(imageFile.type)) {
-        return NextResponse.json({ error: "Недопустимый формат файла. Разрешены JPG/PNG/WEBP" }, { status: 400 });
-      }
-      if (imageFile.size > MAX_IMAGE_SIZE) {
-        return NextResponse.json({ error: "Файл слишком большой. Максимум 5MB" }, { status: 400 });
-      }
-      const uploadDir = join(process.cwd(), "public", "uploads", "posts");
-      await mkdir(uploadDir, { recursive: true });
-      const buf = Buffer.from(await imageFile.arrayBuffer());
-      const ext = imageFile.type === "image/png" ? "png" : imageFile.type === "image/webp" ? "webp" : "jpg";
-      const name = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
-      await writeFile(join(uploadDir, name), buf);
-      imageUrl = `/uploads/posts/${name}`;
+      const [url] = await uploadImagesToS3([imageFile], "posts");
+      imageUrl = url;
     }
 
     let slug = slugify(title);

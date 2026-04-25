@@ -8,7 +8,6 @@ import { PurchaseBlock } from "@/features/product/components/PurchaseBlock";
 import { ProductMeta } from "@/features/product/components/ProductMeta";
 import { TrackView } from "@/features/product/components/TrackView";
 import { ProductTabs } from "@/features/product/components/ProductTabs";
-import { SocialProof } from "@/features/product/components/SocialProof";
 import { MobileStickyCart } from "@/features/product/components/MobileStickyCart";
 import { RelatedProducts } from "@/features/product/components/RelatedProducts";
 import Link from "next/link";
@@ -108,7 +107,6 @@ export default async function ProductPage({
             {product.name}
           </h1>
           <ProductMeta productId={product.id} />
-          <SocialProof productId={product.id} />
         </div>
 
         {/* Main grid: Gallery + Tabs | Purchase */}

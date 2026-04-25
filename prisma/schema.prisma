@@ -48,20 +48,18 @@ model Product {
 }
 
 model Order {
-  id          Int     @id @default(autoincrement())
-  status      String  @default("pending")
+  id          Int         @id @default(autoincrement())
+  status      String      @default("pending")
   totalAmount Int
   name        String
   phone       String
   address     String
-  paymentId   String? @unique
-
-  userId Int?
-  user   User? @relation(fields: [userId], references: [id])
-
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  items     OrderItem[]
+  paymentId   String?     @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  userId      Int?
+  user        User?       @relation(fields: [userId], references: [id])
+  items       OrderItem[]
 }
 
 model OrderItem {
@@ -113,8 +111,8 @@ model User {
   emailVerified DateTime?
   lastLogin     DateTime?
   role          String    @default("USER")
-  orders        Order[]
   Account       Account[]
+  orders        Order[]
   sessions      Session[]
 
   @@index([email])

@@ -1,40 +1,9 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import prisma from "@/lib/prisma";
-import crypto from "crypto";
+import { uploadImagesToS3 } from "@/lib/s3";
 
-const ALLOWED_IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-
-function slugify(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/[а-яёa-z0-9]+/gi, (m) => m)
-    .replace(/[^a-z0-9а-яё\s-]/gi, "")
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-
-async function saveImages(files: File[]): Promise<string[]> {
-  const uploadDir = join(process.cwd(), "public", "uploads", "products");
-  await mkdir(uploadDir, { recursive: true });
-  const urls: string[] = [];
-  for (const file of files) {
-    if (!ALLOWED_IMAGE_MIME.has(file.type)) {
-      throw new Error("Недопустимый формат файла. Разрешены JPG/PNG/WEBP");
-    }
-    if (file.size > MAX_IMAGE_SIZE) {
-      throw new Error("Файл слишком большой. Максимум 5MB");
-    }
-    const buf = Buffer.from(await file.arrayBuffer());
-    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
-    const name = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
-    await writeFile(join(uploadDir, name), buf);
-    urls.push(`/uploads/products/${name}`);
-  }
-  return urls;
+function normalizeSlug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 }
 
 export async function GET() {
@@ -68,11 +37,28 @@ export async function POST(request: Request) {
     const attributes = Object.fromEntries(attributesList.map((a) => [a.key, a.value]));
 
     const files = fd.getAll("images") as File[];
-    const imageUrls = files.length ? await saveImages(files) : [];
+    const imageUrls = files.length ? await uploadImagesToS3(files, "products") : [];
 
-    let slug = slugify(name);
+    const childCount = await prisma.category.count({ where: { parentId: categoryId } });
+    if (childCount > 0) {
+      return NextResponse.json(
+        { error: "Для выбранной категории нужно указать подкатегорию" },
+        { status: 400 }
+      );
+    }
+
+    const slugRaw = (fd.get("slug") as string) || "";
+    if (!slugRaw.trim()) {
+      return NextResponse.json({ error: "Slug обязателен" }, { status: 400 });
+    }
+    const slug = normalizeSlug(slugRaw);
     const existing = await prisma.product.findUnique({ where: { slug } });
-    if (existing) slug = `${slug}-${Date.now()}`;
+    if (existing) {
+      return NextResponse.json(
+        { error: `Slug «${slug}» уже занят товаром «${existing.name}»` },
+        { status: 400 }
+      );
+    }
 
     const product = await prisma.product.create({
       data: {

@@ -1,6 +1,7 @@
 import { getCategoryBySlug } from "@/lib/queries";
 import { Catalog } from "@/features/catalog/components/Catalog";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,10 @@ interface CatalogPageProps {
 
 export default async function CategoryPage({ params, searchParams }: CatalogPageProps) {
   const { category } = params;
+  if (category !== "all") {
+    const categoryData = await getCategoryBySlug(category);
+    if (!categoryData) notFound();
+  }
 
   return (
     <main className="container py-12">
@@ -46,4 +51,3 @@ export default async function CategoryPage({ params, searchParams }: CatalogPage
     </main>
   );
 }
-

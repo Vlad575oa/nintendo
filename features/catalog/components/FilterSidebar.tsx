@@ -142,6 +142,7 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+
   const categoryFilterSections = CATEGORY_FILTERS[currentCategory] ?? [];
 
   // ── Common filter state ────────────────────────────────────────────────────
@@ -180,9 +181,12 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
     defaultOpen[section.id] = ["ps_model", "xbox_model", "ns_model"].includes(section.id);
   }
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(defaultOpen);
+  const [collapsedRootCategories, setCollapsedRootCategories] = useState<Record<number, boolean>>({});
 
   const toggleSection = (id: string) =>
     setOpenSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleRootCategory = (id: number) =>
+    setCollapsedRootCategories((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const toggleValue = (arr: string[], setArr: (v: string[]) => void, value: string) =>
     setArr(arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]);
@@ -271,11 +275,12 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
   const CategoryItem = ({ item, depth = 0 }: { item: Category; depth?: number }) => {
     const isActive = currentCategory === item.slug;
     const hasChildren = item.children && item.children.length > 0;
+    const isRoot = depth === 0;
+    const isCollapsed = isRoot && !!collapsedRootCategories[item.id];
     
     return (
       <div className="space-y-1">
-        <button
-          onClick={() => router.push(`/catalog/${item.slug}`)}
+        <div
           className={cn(
             "text-[13px] font-bold transition-all w-full text-left py-2 px-3 rounded-xl flex items-center justify-between group/cat",
             isActive
@@ -284,10 +289,32 @@ export const FilterSidebar = ({ currentCategory, totalCount, categoryTree }: Fil
           )}
           style={{ paddingLeft: `${depth * 12 + 12}px` }}
         >
-          <span>{item.name}</span>
-          {hasChildren && <ChevronDown size={14} className="opacity-0 group-hover/cat:opacity-100 transition-opacity" />}
-        </button>
-        {hasChildren && (
+          <button
+            onClick={() => router.push(`/catalog/${item.slug}`)}
+            className="flex-1 text-left"
+          >
+            <span>{item.name}</span>
+          </button>
+          {hasChildren && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isRoot) toggleRootCategory(item.id);
+              }}
+              className="w-6 h-6 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors"
+              aria-label={isCollapsed ? "Развернуть категорию" : "Свернуть категорию"}
+            >
+              <ChevronDown
+                size={14}
+                className={cn(
+                  "transition-transform",
+                  isRoot && isCollapsed ? "-rotate-90" : "rotate-0"
+                )}
+              />
+            </button>
+          )}
+        </div>
+        {hasChildren && !isCollapsed && (
           <div className="mt-1">
             {item.children?.map(child => (
               <CategoryItem key={child.id} item={child} depth={depth + 1} />

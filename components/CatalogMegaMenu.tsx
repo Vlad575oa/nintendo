@@ -50,24 +50,24 @@ const PLATFORMS: PlatformGroup[][] = [
   [
     {
       title: "Nintendo Switch 2",
-      href: "/catalog/nintendo",
+      href: "/catalog/nintendo-switch-2",
       emoji: "⚡",
       color: "bg-red-50 text-red-500",
       links: [
-        { label: "Консоли Switch 2", href: "/catalog/nintendo", badge: "NEW" },
+        { label: "Консоли Switch 2", href: "/catalog/nintendo-switch-2", badge: "NEW" },
         { label: "Аксессуары Switch 2", href: "/catalog/accessories?q=switch2" },
         { label: "Игры Switch 2", href: "/catalog/games?q=switch2" },
       ],
     },
     {
       title: "Nintendo Switch",
-      href: "/catalog/nintendo",
+      href: "/catalog/nintendo-switch",
       emoji: "🔴",
       color: "bg-red-50 text-red-400",
       links: [
-        { label: "Консоли Switch", href: "/catalog/nintendo" },
-        { label: "Switch OLED", href: "/catalog/nintendo?q=oled" },
-        { label: "Switch Lite", href: "/catalog/nintendo?q=lite" },
+        { label: "Консоли Switch", href: "/catalog/nintendo-switch" },
+        { label: "Switch OLED", href: "/catalog/nintendo-switch-oled" },
+        { label: "Switch Lite", href: "/catalog/nintendo-switch-lite" },
         { label: "Аксессуары Switch", href: "/catalog/accessories?q=switch" },
         { label: "Игры Switch", href: "/catalog/games?q=switch" },
       ],
@@ -216,25 +216,6 @@ export function CatalogMegaMenu({ onClose }: CatalogMegaMenuProps) {
               ))}
             </div>
 
-            {/* Bottom quick links */}
-            <div className="mt-8 pt-6 border-t border-neutral-100 flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] font-black text-neutral-300 uppercase tracking-widest">Быстрый доступ:</span>
-              {[
-                { label: "🔥 Скидки", href: "/catalog/all?sale=true" },
-                { label: "✨ Новинки", href: "/catalog/all?sort=newest" },
-                { label: "🎁 Подарочные карты", href: "/catalog/accessories" },
-                { label: "📦 Все товары", href: "/catalog/all" },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={onClose}
-                  className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-600 text-[11px] font-bold rounded-full transition-all"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </div>

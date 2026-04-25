@@ -1,32 +1,11 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import prisma from "@/lib/prisma";
-import crypto from "crypto";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, verifyAdminSession } from "@/lib/adminSession";
+import { uploadImagesToS3 } from "@/lib/s3";
 
-const ALLOWED_IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-
-async function saveImages(files: File[]): Promise<string[]> {
-  const uploadDir = join(process.cwd(), "public", "uploads", "products");
-  await mkdir(uploadDir, { recursive: true });
-  const urls: string[] = [];
-  for (const file of files) {
-    if (!ALLOWED_IMAGE_MIME.has(file.type)) {
-      throw new Error("Недопустимый формат файла. Разрешены JPG/PNG/WEBP");
-    }
-    if (file.size > MAX_IMAGE_SIZE) {
-      throw new Error("Файл слишком большой. Максимум 5MB");
-    }
-    const buf = Buffer.from(await file.arrayBuffer());
-    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
-    const name = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
-    await writeFile(join(uploadDir, name), buf);
-    urls.push(`/uploads/products/${name}`);
-  }
-  return urls;
+function normalizeSlug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 }
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
@@ -57,6 +36,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const stock = parseInt(fd.get("stock") as string) || 10;
     const metaTitle = (fd.get("metaTitle") as string) || null;
     const metaDesc = (fd.get("metaDesc") as string) || null;
+    const slugRaw = (fd.get("slug") as string) || "";
     const attrsRaw = fd.get("attributes") as string;
     const attributesList: { key: string; value: string }[] = attrsRaw ? JSON.parse(attrsRaw) : [];
     const attributes = Object.fromEntries(attributesList.map((a) => [a.key, a.value]));
@@ -65,8 +45,31 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const existingImages: string[] = existingImagesRaw ? JSON.parse(existingImagesRaw) : [];
 
     const newFiles = fd.getAll("images") as File[];
-    const newUrls = newFiles.length ? await saveImages(newFiles) : [];
+    const newUrls = newFiles.length ? await uploadImagesToS3(newFiles, "products") : [];
     const images = [...existingImages, ...newUrls];
+
+    const childCount = await prisma.category.count({ where: { parentId: categoryId } });
+    if (childCount > 0) {
+      return NextResponse.json(
+        { error: "Для выбранной категории нужно указать подкатегорию" },
+        { status: 400 }
+      );
+    }
+
+    const slug = normalizeSlug(slugRaw);
+    if (!slug) {
+      return NextResponse.json({ error: "Slug обязателен" }, { status: 400 });
+    }
+
+    const conflict = await prisma.product.findFirst({
+      where: { slug, NOT: { id } },
+    });
+    if (conflict) {
+      return NextResponse.json(
+        { error: `Slug «${slug}» уже занят товаром ID ${conflict.id}` },
+        { status: 400 }
+      );
+    }
 
     const product = await prisma.product.update({
       where: { id },
@@ -74,6 +77,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         name, description, price, priceOld, categoryId,
         brand, color, inStock, isNew, isSale, stock,
         images, attributes, metaTitle, metaDesc,
+        slug,
       },
     });
 

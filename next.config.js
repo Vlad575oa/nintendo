@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'igroray.ru',
+        hostname: 's3.ru1.storage.beget.cloud',
       },
     ],
   },

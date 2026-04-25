@@ -1,6 +1,6 @@
 "use client";
 
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { AddToCartButton } from "@/features/cart/components/AddToCartButton";
 import { Info, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -101,6 +101,24 @@ export function PurchaseBlock({ product, variants = [], categorySlug }: Purchase
 
   const canSelectVariants = memoryOptions.length > 1 || colorOptions.length > 1;
 
+  const availableMemories = useMemo(() => {
+    if (!selectedVariant.color) return new Set(memoryOptions);
+    const matches = variantItems
+      .filter((item) => item.color === selectedVariant.color)
+      .map((item) => item.memory)
+      .filter(Boolean) as string[];
+    return matches.length > 0 ? new Set(matches) : new Set(memoryOptions);
+  }, [variantItems, selectedVariant.color, memoryOptions]);
+
+  const availableColors = useMemo(() => {
+    if (!selectedVariant.memory) return new Set(colorOptions);
+    const matches = variantItems
+      .filter((item) => item.memory === selectedVariant.memory)
+      .map((item) => item.color)
+      .filter(Boolean) as string[];
+    return matches.length > 0 ? new Set(matches) : new Set(colorOptions);
+  }, [variantItems, selectedVariant.memory, colorOptions]);
+
   const applyVariant = (next: VariantCardItem) => {
     setSelectedVariantId(next.id);
     if (categorySlug && next.slug !== product.slug) {
@@ -122,15 +140,6 @@ export function PurchaseBlock({ product, variants = [], categorySlug }: Purchase
     <div className="flex flex-col gap-6">
       {/* Main card */}
       <div className="bg-white rounded-3xl border border-neutral-100 p-8 shadow-sm">
-        {/* Bonus */}
-        <div className="flex items-center gap-2 mb-6 text-sm text-neutral-400 font-medium">
-          <span>Бонусов</span>
-          <span className="flex items-center gap-1 text-primary font-bold">
-            <span className="text-xs">✦</span>
-            {Math.floor(selectedVariant.price / 10000)}
-          </span>
-        </div>
-
         {/* Pricing */}
         <div className="space-y-4 mb-8">
           <div>
@@ -188,50 +197,60 @@ export function PurchaseBlock({ product, variants = [], categorySlug }: Purchase
           <div className="space-y-3">
             {memoryOptions.length > 1 && (
               <div className="bg-[#f0f9ff] rounded-2xl p-4">
-                <label className="text-[10px] text-blue-500 font-bold uppercase mb-1 block">
+                <label className="text-[10px] text-blue-500 font-bold uppercase mb-3 block">
                   Объем памяти
                 </label>
-                <div className="relative">
-                  <select
-                    className="w-full bg-transparent text-sm font-black text-secondary appearance-none pr-6 focus:outline-none"
-                    value={selectedVariant.memory ?? memoryOptions[0]}
-                    onChange={(event) => onMemoryChange(event.target.value)}
-                  >
-                    {memoryOptions.map((memory) => (
-                      <option key={memory} value={memory}>
+                <div className="flex flex-wrap gap-2">
+                  {memoryOptions.map((memory) => {
+                    const isSelected = selectedVariant.memory === memory;
+                    const isAvailable = availableMemories.has(memory);
+                    return (
+                      <button
+                        key={memory}
+                        onClick={() => onMemoryChange(memory)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-xl text-xs font-bold border transition-all",
+                          isSelected
+                            ? "bg-secondary text-white border-secondary"
+                            : isAvailable
+                            ? "bg-white text-secondary border-neutral-200 hover:border-secondary hover:shadow-sm"
+                            : "bg-white text-neutral-300 border-neutral-100 line-through"
+                        )}
+                      >
                         {memory}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    size={18}
-                    className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-blue-300"
-                  />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {colorOptions.length > 1 && (
               <div className="bg-[#f0f9ff] rounded-2xl p-4">
-                <label className="text-[10px] text-blue-500 font-bold uppercase mb-1 block">
+                <label className="text-[10px] text-blue-500 font-bold uppercase mb-3 block">
                   Цвет
                 </label>
-                <div className="relative">
-                  <select
-                    className="w-full bg-transparent text-sm font-black text-secondary appearance-none pr-6 focus:outline-none"
-                    value={selectedVariant.color ?? colorOptions[0]}
-                    onChange={(event) => onColorChange(event.target.value)}
-                  >
-                    {colorOptions.map((color) => (
-                      <option key={color} value={color}>
+                <div className="flex flex-wrap gap-2">
+                  {colorOptions.map((color) => {
+                    const isSelected = selectedVariant.color === color;
+                    const isAvailable = availableColors.has(color);
+                    return (
+                      <button
+                        key={color}
+                        onClick={() => onColorChange(color)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-xl text-xs font-bold border transition-all",
+                          isSelected
+                            ? "bg-secondary text-white border-secondary"
+                            : isAvailable
+                            ? "bg-white text-secondary border-neutral-200 hover:border-secondary hover:shadow-sm"
+                            : "bg-white text-neutral-300 border-neutral-100 line-through"
+                        )}
+                      >
                         {color}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown
-                    size={18}
-                    className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-blue-300"
-                  />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -257,10 +276,4 @@ export function PurchaseBlock({ product, variants = [], categorySlug }: Purchase
       </div>
     </div>
   );
-}
-
-function ChevronDown({ size, className }: { size: number, className: string }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>
-    )
 }

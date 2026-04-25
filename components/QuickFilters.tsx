@@ -6,19 +6,17 @@ import { useRef, useState, useEffect } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SPECIAL_FILTERS = [
-  { label: "Скидки",                icon: "🔥", href: "/catalog/all?sale=true",    param: { sale: "true" } },
-  { label: "Подарочные сертификаты",icon: "🎁", href: "/catalog/accessories",      param: null },
-  { label: "Новинки",               icon: "✨", href: "/catalog/all?sort=newest",  param: { sort: "newest" } },
-];
+
 
 const QUICK_LINKS = [
-  { label: "Все товары",        href: "/catalog/all",          slug: "all" },
-  { label: "Nintendo Switch",   href: "/catalog/nintendo",     slug: "nintendo" },
-  { label: "PlayStation",       href: "/catalog/playstation",  slug: "playstation" },
-  { label: "Xbox",              href: "/catalog/xbox",         slug: "xbox" },
-  { label: "Геймпады",          href: "/catalog/gamepads",     slug: "gamepads" },
-  { label: "Аксессуары",        href: "/catalog/accessories",  slug: "accessories" },
+  { label: "Все товары",        href: "/catalog/all",                  slug: "all" },
+  { label: "Nintendo",          href: "/catalog/nintendo",             slug: "nintendo" },
+  { label: "Nintendo Switch 2", href: "/catalog/nintendo-switch-2",    slug: "nintendo-switch-2" },
+  { label: "Nintendo Switch",   href: "/catalog/nintendo-switch",      slug: "nintendo-switch" },
+  { label: "PlayStation",       href: "/catalog/playstation",          slug: "playstation" },
+  { label: "Xbox",              href: "/catalog/xbox",                 slug: "xbox" },
+  { label: "Геймпады",          href: "/catalog/gamepads",             slug: "gamepads" },
+  { label: "Аксессуары",        href: "/catalog/accessories",          slug: "accessories" },
 ];
 
 export const QuickFilters = () => {
@@ -60,19 +58,11 @@ export const QuickFilters = () => {
   const scroll = (dir: "left" | "right") =>
     scrollRef.current?.scrollBy({ left: dir === "left" ? -400 : 400, behavior: "smooth" });
 
-  // Active detection for special filters
-  const isSpecialActive = (item: typeof SPECIAL_FILTERS[0]) => {
-    if (!pathname.startsWith("/catalog")) return false;
-    if (item.param) {
-      return Object.entries(item.param).every(([k, v]) => searchParams.get(k) === v);
-    }
-    return pathname === new URL(item.href, "http://x").pathname;
-  };
+
 
   // Active detection for regular links — match slug only (no query confusion)
   const isLinkActive = (item: typeof QUICK_LINKS[0]) => {
-    if (item.slug) return pathname === `/catalog/${item.slug}`;
-    return false; // query-only links are never "active" highlighted
+    return pathname === `/catalog/${item.slug}`;
   };
 
   const fadeCls = "absolute top-0 bottom-0 z-10 w-16 pointer-events-none flex items-center";
@@ -96,28 +86,7 @@ export const QuickFilters = () => {
           onMouseMove={onMouseMove}
           className={cn("container flex items-center gap-1 overflow-x-auto no-scrollbar py-2 px-4 scroll-smooth", isDragging ? "cursor-grabbing select-none" : "cursor-default")}
         >
-          {/* Special pills — always styled, never "active red" */}
-          {SPECIAL_FILTERS.map((item) => {
-            const active = isSpecialActive(item);
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-bold whitespace-nowrap transition-all shrink-0 active:scale-95",
-                  active
-                    ? "bg-neutral-800 text-white"
-                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-                )}
-              >
-                <span className="text-[13px] leading-none">{item.icon}</span>
-                {item.label}
-              </Link>
-            );
-          })}
 
-          {/* Separator */}
-          <div className="w-px h-4 bg-neutral-200 shrink-0 mx-2" />
 
           {/* Category links — active = bold + underline dot, NOT red */}
           {QUICK_LINKS.map((item) => {
